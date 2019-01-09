@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8da4cd"
-    tools:context=".login"
+    tools:context=".login_activity.login"
     android:orientation="vertical"
     android:gravity="center"
     android:weightSum="10">

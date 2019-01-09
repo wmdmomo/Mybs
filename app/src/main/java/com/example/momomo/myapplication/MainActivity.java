@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.momomo.myapplication.login_activity.login;
+import com.example.momomo.myapplication.login_activity.tologin;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,15 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button sign=(Button) findViewById(R.id.create);
-        Button login=(Button) findViewById(R.id.login);
+        Button Login=(Button) findViewById(R.id.login);
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,login.class);
+                Intent intent=new Intent(MainActivity.this, login.class);
                 startActivity(intent);
             }
         });
-        login.setOnClickListener(new View.OnClickListener() {
+        Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentlogin=new Intent(MainActivity.this,tologin.class);
@@ -29,4 +32,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
