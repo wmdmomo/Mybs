@@ -1,7 +1,7 @@
 package com.example.momomo.myapplication.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,28 +11,33 @@ import android.widget.TextView;
 
 
 import com.example.momomo.myapplication.R;
-import com.example.momomo.myapplication.data_save.foodwatch;
+import com.example.momomo.myapplication.Manager.Fooddatas;
 
-import java.util.List;
-
-public class foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.ViewHolder> {
+public class
+foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.ViewHolder> {
     private Context context;
     private LayoutInflater layoutInflater;
-    private List<foodwatch> foodwatchList;
+    private Fooddatas fooddatas;
     private OnTimeClickListener onTimeClickListener;
+    private foodwatchInsideAdapter foodwatchInsideAdapter;
 
-    public foodwatchAdapter(Context context,List<foodwatch> foodList){
-        this.foodwatchList=foodList;
+    public foodwatchAdapter(Context context,Fooddatas fooddatas){
         this.context=context;
+        this.fooddatas=fooddatas;
         layoutInflater=LayoutInflater.from(context);
-
     }
+    public void setCategoryBean(Fooddatas fooddatas) {
+        this.fooddatas = fooddatas;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends  RecyclerView.ViewHolder{
         View view;
         ImageView weather;
         TextView time;
-        ImageView food1;
-        ImageView food2;
+//        ImageView food1;
+//        ImageView food2;
+        RecyclerView recyclerView;
         ImageView select;
         TextView cal;
         public ViewHolder(View view){
@@ -41,9 +46,9 @@ public class foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.View
             weather=(ImageView)view.findViewById(R.id.weather);
             time=(TextView) view.findViewById(R.id.time);
             cal=(TextView) view.findViewById(R.id.cal);
-            food1=(ImageView)view.findViewById(R.id.food1);
-            food2=(ImageView)view.findViewById(R.id.food2);
+            recyclerView=(RecyclerView) view.findViewById(R.id.insiderv);
             select=(ImageView) view.findViewById(R.id.select);
+
         }
     }
 
@@ -56,7 +61,7 @@ public class foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.View
     public interface OnTimeClickListener{
         void onClick( int position);
     }
-    private int thisposition;
+    private int thisposition=0;
     public int getThisposition(){
         return thisposition;
     }
@@ -69,14 +74,42 @@ public class foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-        final foodwatch foodwatch=foodwatchList.get(i);
-        viewHolder.time.setText(foodwatch.getTime());
-        viewHolder.cal.setText(String.valueOf(foodwatch.getCal()));
-        viewHolder.weather.setImageResource(foodwatch.getWeather());
-        viewHolder.food1.setImageResource(foodwatch.getFood1());
-        viewHolder.food2.setImageResource(foodwatch.getFood2());
+        foodwatchInsideAdapter=new foodwatchInsideAdapter(fooddatas.getMoring());
+//        final foodwatch foodwatch=foodwatchList.get(i);
+//        viewHolder.time.setText(foodwatch.getTime());
+//        viewHolder.cal.setText(String.valueOf(foodwatch.getCal()));
+//        viewHolder.weather.setImageResource(foodwatch.getWeather());
+        if(i==0){
+            viewHolder.time.setText("早上");
+            viewHolder.weather.setImageResource(R.drawable.ic_zaoshang);
+            foodwatchInsideAdapter.setCategoryBeans(fooddatas.getMoring());
+//            viewHolder.cal.setText(String.valueOf(foodwatchInsideAdapter.getCal()));
+
+        }
+        if(i==1){
+            viewHolder.time.setText("中午");
+            viewHolder.weather.setImageResource(R.drawable.ic_zhongwu);
+            foodwatchInsideAdapter.setCategoryBeans(fooddatas.getNoon());
+//            viewHolder.cal.setText(String.valueOf(foodwatchInsideAdapter.getCal()));
+
+        }
+        if(i==2){
+            viewHolder.time.setText("下午");
+            viewHolder.weather.setImageResource(R.drawable.ic_xiawucha);
+            foodwatchInsideAdapter.setCategoryBeans(fooddatas.getAfternoon());
+//            viewHolder.cal.setText(String.valueOf(foodwatchInsideAdapter.getCal()));
+
+        }
+        if(i==3) {
+            viewHolder.time.setText("晚上");
+            viewHolder.weather.setImageResource(R.drawable.ic_wanshang);
+            foodwatchInsideAdapter.setCategoryBeans(fooddatas.getEvening());
+//            viewHolder.cal.setText(String.valueOf(foodwatchInsideAdapter.getCal()));
+        }
+
         if(i==getThisposition()){
             viewHolder.select.setImageResource(R.drawable.ic_wancheng);
+            viewHolder.cal.setText(String.valueOf(foodwatchInsideAdapter.getCal()));
         }else{
             viewHolder.select.setImageResource(R.drawable.ic_uwancheng);
         }
@@ -89,10 +122,12 @@ public class foodwatchAdapter extends RecyclerView.Adapter<foodwatchAdapter.View
             });
 
         }
+        viewHolder.recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
+        viewHolder.recyclerView.setAdapter(foodwatchInsideAdapter);
     }
 
     @Override
     public int getItemCount() {
-        return foodwatchList.size();
+        return 4;
     }
 }

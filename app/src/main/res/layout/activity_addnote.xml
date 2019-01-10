@@ -65,5 +65,4 @@
         android:text="done"
         android:id="@+id/noteDone"/>
 
-
 </LinearLayout>

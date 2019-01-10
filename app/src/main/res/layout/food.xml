@@ -61,18 +61,23 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/food1"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="20dp"
-                android:scaleType="centerCrop" />
+            <!--<ImageView-->
+                <!--android:id="@+id/food1"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:scaleType="centerCrop" />-->
 
-            <ImageView
-                android:id="@+id/food2"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerCrop" />
+            <!--<ImageView-->
+                <!--android:id="@+id/food2"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:scaleType="centerCrop" />-->
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/insiderv">
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
         <LinearLayout

@@ -47,7 +47,7 @@ public class tologin extends AppCompatActivity {
                     }
                 }
                 if (flag) {
-                    Intent intentlogin = new Intent(tologin.this, note.class);
+                    Intent intentlogin = new Intent(tologin.this, food.class);
                     startActivity(intentlogin);
                 } else {
                     Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();

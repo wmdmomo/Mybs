@@ -3,8 +3,7 @@ package com.example.momomo.myapplication.data_save;
 public class foodwatch {
     private String time;
     private int weather;
-    private int food1;
-    private int food2;
+//    private int food1;
     private int cal;
 
     public String getTime() {
@@ -15,13 +14,10 @@ public class foodwatch {
         return weather;
     }
 
-    public int getFood1() {
-        return food1;
-    }
+//    public int getFood1() {
+//        return food1;
+//    }
 
-    public int getFood2() {
-        return food2;
-    }
 
     public int getCal() {
         return cal;
@@ -44,11 +40,8 @@ public class foodwatch {
         this.time = time;
     }
 
-    public void setFood1(int food1) {
-        this.food1 = food1;
-    }
+//    public void setFood1(int food1) {
+//        this.food1 = food1;
+//    }
 
-    public void setFood2(int food2) {
-        this.food2 = food2;
-    }
 }
