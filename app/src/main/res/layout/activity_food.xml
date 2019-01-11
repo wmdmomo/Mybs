@@ -8,13 +8,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_marginTopPercent="10%"
+        android:orientation="horizontal"
+        android:background="@mipmap/bg1"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My plate"
-            android:textSize="22pt"
+            android:textStyle="bold"
+            android:textSize="20pt"
             android:layout_weight="3"/>
         <ImageView
             android:layout_width="wrap_content"
@@ -33,13 +36,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_marginTopPercent="30%"
+        app:layout_marginTopPercent="40%"
         android:gravity="center">
-     <android.support.v7.widget.RecyclerView
-         android:id="@+id/recycler_view"
-         android:layout_height="match_parent"
-         android:layout_width="match_parent">
 
-     </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 </android.support.percent.PercentRelativeLayout>

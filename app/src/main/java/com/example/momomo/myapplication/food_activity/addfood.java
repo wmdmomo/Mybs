@@ -93,6 +93,7 @@ public class addfood extends AppCompatActivity {
         enterfood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                enterfood.setImageResource(R.drawable.ic_tianjia1);
 //                Fooddatas fooddatas=new Fooddatas();
 //                foodwatchAdapter foodwatchAdapter=new foodwatchAdapter(getApplication(),fooddatas);
 //                foodwatchAdapter.setThisposition(sposition);

@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".note_activity.note">
+    tools:context=".note_activity.note"
+    android:orientation="vertical"
+    android:background="@mipmap/bg3"
+    android:id="@+id/bg"
+    >
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@mipmap/bg2">-->
+    <!--</LinearLayout>-->
+
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/noterv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/noterv">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="增加"
-            android:id="@+id/enternote"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:id="@+id/enternote"
+        android:orientation="vertical"
+        >
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

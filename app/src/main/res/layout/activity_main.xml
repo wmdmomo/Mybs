@@ -3,30 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    android:background="@mipmap/signbg1"
     android:orientation="vertical"
-    android:gravity="center"
-    android:weightSum="10">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:layout_marginTop="20dp"
-        android:textSize="30dp"
-        android:text="Launch Your App" />
-
+    android:weightSum="10"
+    tools:context=".MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
-        android:gravity="center"
-        android:weightSum="2">
+        android:layout_weight="7"></LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
 
-        <ImageView
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/plane" />
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="40dp"
+            android:textColor="#fdfbfc"
+            android:text="一起" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="40dp"
+            android:textColor="#fdfbfc"
+            android:text="拼搏努力" />
     </LinearLayout>
 
     <LinearLayout
@@ -34,42 +39,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:weightSum="2">
+        android:orientation="horizontal"
+        android:weightSum="4">
 
         <Button
             android:id="@+id/create"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
-            android:text="CREATE ACCOUNT"
-            android:textSize="17dp"
+            android:background="@drawable/shape"
+            android:text="注册"
+            android:layout_marginRight="40dp"
             android:textColor="#ffff"
-            android:background="@drawable/shape"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:weightSum="2">
-
+            android:textSize="20dp" />
         <Button
             android:id="@+id/login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
-            android:textSize="17dp"
-            android:textColor="#ffff"
-            android:text="SIGN IN"
             android:background="@drawable/red"
-       />
+            android:text="登陆"
+            android:textColor="#ffff"
+            android:textSize="20dp" />
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Your Sports App" />
+
 
 
 

@@ -17,6 +17,7 @@ import org.litepal.LitePal;
 import java.util.List;
 
 import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.note_activity.note;
 
 public class tologin extends AppCompatActivity {
@@ -47,7 +48,7 @@ public class tologin extends AppCompatActivity {
                     }
                 }
                 if (flag) {
-                    Intent intentlogin = new Intent(tologin.this, food.class);
+                    Intent intentlogin = new Intent(tologin.this, home.class);
                     startActivity(intentlogin);
                 } else {
                     Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();

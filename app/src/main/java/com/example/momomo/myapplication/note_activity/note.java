@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.momomo.myapplication.Adapter.noteAdapter;
 import com.example.momomo.myapplication.Manager.myItemTouchHelperCallBack;
@@ -23,15 +24,17 @@ public class note extends AppCompatActivity {
     List<Notes> notesList = new ArrayList<>();
     private noteAdapter noteAdapter;
     private Button addnote;
-    private Button enternote;
+    private LinearLayout enternote;
 //    private Notes notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+        LinearLayout linearLayout=(LinearLayout) findViewById(R.id.bg);
+        linearLayout.getBackground().setAlpha(120);
         initdata();
-        enternote = (Button) findViewById(R.id.enternote);
+        enternote = (LinearLayout) findViewById(R.id.enternote);
         enternote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.momomo.myapplication.R;
@@ -23,7 +24,8 @@ public class addnote extends AppCompatActivity {
     private String nowtime;
     private EditText noteTitle;
     private EditText noteContent;
-    private Button noteDone;
+    private LinearLayout noteDone;
+    private LinearLayout noteBG;
     private String title;
     private String content;
     @Override
@@ -31,7 +33,9 @@ public class addnote extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addnote);
         noteTime=(TextView) findViewById(R.id.noteTime);
-        noteDone=(Button) findViewById(R.id.noteDone);
+        noteDone=(LinearLayout) findViewById(R.id.noteDone);
+        noteBG=(LinearLayout) findViewById(R.id.addnotebg);
+        noteBG.getBackground().setAlpha(80);
         getTime();
         noteDone.setOnClickListener(new View.OnClickListener() {
             @Override
