@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8da4cd"
+    android:background="@mipmap/tosign2"
     tools:context=".login_activity.login"
     android:orientation="vertical"
     android:gravity="center"
@@ -12,24 +12,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="6"
         android:text="Create Account"
-        android:textColor="#fff"
+        android:textColor="#989494"
         android:textSize="40dp"
         android:maxLines="1"
         />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:weightSum="2">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,9 +34,9 @@
             android:background="@drawable/white"
             android:drawableLeft="@drawable/ic_youjian2"
             android:hint="E-Mali"
-            android:textColor="#ffff"
+            android:textColor="#989494"
             android:gravity="center"
-            android:textColorHint="#ffff"
+            android:textColorHint="#989494"
             android:maxLines="1"
             />
     </LinearLayout>
@@ -67,10 +55,10 @@
             android:layout_weight="1.5"
             android:background="@drawable/white"
             android:drawableLeft="@drawable/ic_mima"
-            android:textColor="#ffff"
+            android:textColor="#989494"
             android:hint="Password"
             android:gravity="center"
-            android:textColorHint="#ffff"
+            android:textColorHint="#989494"
             android:inputType="textPassword"/>
     </LinearLayout>
 
@@ -88,10 +76,10 @@
             android:layout_weight="1.5"
             android:background="@drawable/white"
             android:drawableLeft="@drawable/ic_mima"
-            android:textColor="#ffff"
+            android:textColor="#989494"
             android:hint="Confirm Password"
             android:gravity="center"
-            android:textColorHint="#ffff"
+            android:textColorHint="#989494"
             android:inputType="textPassword"/>
     </LinearLayout>
 

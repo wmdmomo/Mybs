@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.momomo.myapplication.R;
+import com.example.momomo.myapplication.chart_activity.chartTest;
 import com.example.momomo.myapplication.food_activity.addfood;
 import com.example.momomo.myapplication.food_activity.food;
 
@@ -48,7 +49,7 @@ public class tologin extends AppCompatActivity {
                     }
                 }
                 if (flag) {
-                    Intent intentlogin = new Intent(tologin.this, home.class);
+                    Intent intentlogin = new Intent(tologin.this, chartTest.class);
                     startActivity(intentlogin);
                 } else {
                     Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();
