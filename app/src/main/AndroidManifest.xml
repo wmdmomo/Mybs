@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.momomo.myapplication">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name=".utils.saveVarible"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -23,7 +27,11 @@
         <activity android:name=".food_activity.addfood" />
         <activity android:name=".note_activity.note" />
         <activity android:name=".note_activity.addnote" />
-        <activity android:name=".chart_activity.chartTest"></activity>
+        <activity android:name=".chart_activity.chartTest" />
+        <activity android:name=".ceshi.running" />
+        <activity android:name=".ceshi.scan_activity" />
+        <activity android:name=".mine_activity.mine" />
+        <activity android:name=".mine_activity.mine_set"></activity>
     </application>
 
 </manifest>

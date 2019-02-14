@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.homeitem;
@@ -20,12 +22,14 @@ public class homeitemAdapter extends RecyclerView.Adapter<homeitemAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         View view;
-        ImageView imageView;
+        LinearLayout imageView;
+        TextView textView;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            imageView = (ImageView) view.findViewById(R.id.homeimg);
+            imageView = (LinearLayout) view.findViewById(R.id.homeimg);
+            textView=(TextView) view.findViewById(R.id.home_word);
         }
 
     }
@@ -48,9 +52,10 @@ public class homeitemAdapter extends RecyclerView.Adapter<homeitemAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final homeitem homeitem = homeitemList.get(position);
-        holder.imageView.setImageResource(homeitem.getImgid());
+        holder.imageView.setBackgroundResource(homeitem.getImgid());
+        holder.textView.setText(homeitem.getWord());
         if (onhomeClickListener != null) {
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
+            holder.textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onhomeClickListener.onClick(position);

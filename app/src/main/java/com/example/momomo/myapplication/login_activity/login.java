@@ -44,6 +44,10 @@ public class login extends AppCompatActivity {
                     User person = new User();
                     person.setName(username);
                     person.setPassword(pas1);
+                    person.setPunch(0);
+                    person.setHeight(0);
+                    person.setWeight(0);
+                    person.setSignature(" ");
                     person.save();
                     Intent intentlogin = new Intent(login.this, tologin.class);
                     startActivity(intentlogin);

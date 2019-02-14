@@ -1,53 +1,86 @@
 package com.example.momomo.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 
 import com.example.momomo.myapplication.Adapter.homeitemAdapter;
-import com.example.momomo.myapplication.Adapter.hometopAdapter;
+import com.example.momomo.myapplication.ceshi.running;
 import com.example.momomo.myapplication.data_save.homeitem;
-import com.example.momomo.myapplication.data_save.hometopitem;
+import com.example.momomo.myapplication.food_activity.food;
+import com.example.momomo.myapplication.mine_activity.mine;
+import com.example.momomo.myapplication.note_activity.note;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class home extends AppCompatActivity {
     private List<homeitem> homeitemList=new ArrayList<>();
-    private List<hometopitem> hometopitemList=new ArrayList<>();
+    private  String[] words={"跑步","心率","记事本","卡路里"};
+    private  int[] imgids={R.mipmap.running,R.mipmap.gym,R.mipmap.work,R.mipmap.eating};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         RecyclerView recyclerView=(RecyclerView) findViewById(R.id.homerv);
-        RecyclerView recyclerView1=(RecyclerView) findViewById(R.id.homerv2);
+        ImageView avatar=(ImageView) findViewById(R.id.avatar);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView1.setLayoutManager(layoutManager);
         initdata();
         homeitemAdapter homeitemAdapter=new homeitemAdapter(homeitemList);
         recyclerView.setAdapter(homeitemAdapter);
-        hometopAdapter hometopAdapter=new hometopAdapter(hometopitemList);
-        recyclerView1.setAdapter(hometopAdapter);
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(home.this, mine.class);
+                startActivity(intent);
+            }
+        });
+        homeitemAdapter.setOnhomeClickListener(new homeitemAdapter.OnhomeClickListener() {
+            @Override
+            public void onClick(int position) {
+                switch (position){
+                    case 0:{
+                        Intent intent = new Intent(home.this, running.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 1:{
+                        Intent intent = new Intent(home.this, running.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 2:{
+                        Intent intent = new Intent(home.this, note.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case 3:{
+                        Intent intent = new Intent(home.this, food.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+            }
+        });
 
     }
     private void initdata(){
         for(int i=0;i<4;i++){
             homeitem homeitem=new homeitem();
-            homeitem.setImgid(R.mipmap.bg1);
+            homeitem.setImgid(imgids[i]);
+            homeitem.setWord(words[i]);
             homeitemList.add(homeitem);
-        }
-        for(int i=0;i<6;i++){
-            hometopitem hometopitem=new hometopitem();
-            hometopitem.setImgid(R.mipmap.bg2);
-            hometopitem.setTitle("饮食");
-            hometopitemList.add(hometopitem);
         }
     }
 }
