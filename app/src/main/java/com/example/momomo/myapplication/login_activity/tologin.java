@@ -13,11 +13,14 @@ import com.example.momomo.myapplication.R;
 
 import org.litepal.LitePal;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.data_save.punchday;
 import com.example.momomo.myapplication.home;
-import com.example.momomo.myapplication.mine_activity.mine;
 import com.example.momomo.myapplication.utils.saveVarible;
 
 public class tologin extends AppCompatActivity {
@@ -26,7 +29,11 @@ public class tologin extends AppCompatActivity {
     private String username;
     private String pass;
     private Boolean flag = false;
+    private Boolean Flag=false;
     private int userId;
+    private int punchId;
+    private punchday punchday;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,6 @@ public class tologin extends AppCompatActivity {
                 List<User> userList = LitePal.findAll(User.class);
                 for (User users : userList) {
                     if (users.getName().equals(username) && users.getPassword().equals(pass)) {
-//                        Log.i("first","flag:"+flag+" "+username);
                         flag = true;
                         userId=users.getId();
                         app.setUserId(userId);
@@ -52,15 +58,43 @@ public class tologin extends AppCompatActivity {
                     }
                 }
                 if (flag) {
+                    getTime();
+                    List<punchday> punchdayList = LitePal.findAll(punchday.class);
+                    if (punchdayList!=null) {
+                        for (punchday punchdays : punchdayList) {
+                            if(punchdays.getUser()!=null&punchdays.getTime()!=null) {
+                                if (punchdays.getUser().equals(username) && punchdays.getTime().equals(time)) {
+                                    Flag = true;
+                                    punchId = punchdays.getId();
+                                    app.setPunchId(punchId);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(Flag==false){
+                        punchday=new punchday();
+                        punchday.setUser(username);
+                        punchday.setFlag(false);
+                        punchday.setTime(time);
+                        punchday.save();
+                        punchId=punchday.getId();
+                        app.setPunchId(punchId);
+                    }
                     Intent intentlogin = new Intent(tologin.this, home.class);
                     startActivity(intentlogin);
-                    Intent intent=new Intent(tologin.this,mine.class);
-                    intent.putExtra("user",userId);
                 } else {
                     Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+    }
+    private void getTime(){
+        long times=System.currentTimeMillis();
+        Date date=new Date(times);
+        SimpleDateFormat now=new SimpleDateFormat("yyyy-MM-dd");
+        now.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        time=now.format(date);
     }
 }

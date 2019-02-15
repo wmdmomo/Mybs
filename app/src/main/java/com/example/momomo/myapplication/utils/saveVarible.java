@@ -6,6 +6,7 @@ import org.litepal.LitePal;
 
 public class saveVarible extends Application {
     private int userId;
+    private int punchId;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -18,5 +19,13 @@ public class saveVarible extends Application {
 
     public int getUserId() {
         return userId;
+    }
+
+    public int getPunchId() {
+        return punchId;
+    }
+
+    public void setPunchId(int punchId) {
+        this.punchId = punchId;
     }
 }

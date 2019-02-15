@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
@@ -15,12 +16,14 @@ import org.litepal.LitePal;
 
 public class mine_set extends AppCompatActivity {
     private EditText signature;
+    private TextView name;
     private EditText weight;
     private EditText height;
     private String sign;
     private int wei;
     private int hei;
     private String sign_set;
+    private String nam;
     private int wei_set;
     private int hei_set;
 
@@ -31,6 +34,7 @@ public class mine_set extends AppCompatActivity {
         Button done=(Button)findViewById(R.id.set_done);
         Intent intent=this.getIntent();
         sign=intent.getStringExtra("sign");
+        nam=intent.getStringExtra("name");
         wei=intent.getIntExtra("weight",0);
         hei=intent.getIntExtra("height",0);
         initSet();
@@ -53,9 +57,11 @@ public class mine_set extends AppCompatActivity {
     }
     private void initSet(){
         signature=(EditText) findViewById(R.id.avatar_word_set);
+        name=(TextView) findViewById(R.id.avatar_name_set);
         weight=(EditText) findViewById(R.id.weight_set);
         height=(EditText) findViewById(R.id.height_set);
         signature.setHint(sign);
+        name.setText(nam);
         weight.setHint(String.valueOf(wei));
         height.setHint(String.valueOf(hei));
     }

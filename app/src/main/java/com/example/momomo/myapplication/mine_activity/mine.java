@@ -3,28 +3,29 @@ package com.example.momomo.myapplication.mine_activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.data_save.punchday;
 import com.example.momomo.myapplication.utils.saveVarible;
 
 import org.litepal.LitePal;
 
-import java.util.List;
+
 
 public class mine extends AppCompatActivity {
     private int userId;
+    private int punchId;
     private TextView name;
     private TextView word;
     private TextView height;
     private TextView weight;
     private TextView days;
     private User user;
+    private punchday punchday;
     private String nam;
     private String sign;
     private int hei;
@@ -37,6 +38,8 @@ public class mine extends AppCompatActivity {
         final saveVarible app=(saveVarible) getApplication();
         userId=app.getUserId();
         user=LitePal.find(User.class,userId);
+        punchId=app.getPunchId();
+        punchday=LitePal.find(punchday.class,punchId);
         initEdit();
         Button punch=(Button) findViewById(R.id.getdays);
         Button setting=(Button) findViewById(R.id.setting);
@@ -44,15 +47,22 @@ public class mine extends AppCompatActivity {
         punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                daycount+=1;
-                user.setPunch(daycount);
-                days.setText(String.valueOf(user.getPunch()));
+                if(punchday.getFlag()==false){
+                    daycount+=1;
+                    user.setPunch(daycount);
+                    user.save();
+                    days.setText(String.valueOf(user.getPunch()));
+                }
+                punchday.setFlag(true);
+                punchday.save();
+
             }
         });
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mine.this,mine_set.class);
+                intent.putExtra("name",nam);
                 intent.putExtra("sign",sign);
                 intent.putExtra("height",hei);
                 intent.putExtra("weight",wei);
