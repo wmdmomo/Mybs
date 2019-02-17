@@ -56,7 +56,6 @@ public class running extends AppCompatActivity {
                     Toast.makeText(running.this,"蓝牙未打开",Toast.LENGTH_SHORT).show();
                     checkAndEnableBt();
                 }
-
             }
         });
         deviceshowAdapter.setOnDeviceClickListener(new deviceshowAdapter.OnDeviceClickListener() {

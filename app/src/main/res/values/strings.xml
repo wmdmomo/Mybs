@@ -1,3 +1,50 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">FitRecord</string>
+
+    <string name="toast_not_support_ble">Your device doesn\'t support BLE!</string>
+    <string name="toast_have_to_enable_bt">You have to enable Bluetooth!</string>
+    <string name="toast_bt_enabled">Bluetooth enabled.</string>
+    <string name="toast_pair_ok">Paired successfully.</string>
+    <string name="toast_pair_fail">Failed to pair!</string>
+    <string name="toast_connect_ok">Connected successfully.</string>
+    <string name="toast_connect_fail">Failed to connect!</string>
+    <string name="toast_disconnect_ok">Disconnected.</string>
+    <string name="toast_disconnect_fail">Failed to disconnect!</string>
+    <string name="toast_export_state_fail">Failed to export database: external storage unavailable!</string>
+    <string name="toast_export_copy_fail">Failed to export database: error occurred when copying the file!</string>
+    <string name="toast_export_succeed">Database exported successfully.</string>
+    <string name="toast_need_location_permission">Location service permission is required for scanning MI Band!</string>
+    <string name="toast_need_write_external">To export data, writing external storage is required!</string>
+
+    <string name="toast_heart_rate_on_failed">Failed to measure heart rate!</string>
+    <string name="toast_heart_rate_off_failed">Failed to turn off heart rate measurement!</string>
+    <string name="toast_acceleration_on_failed">Failed to measure acceleration!</string>
+    <string name="toast_acceleration_off_failed">Failed to turn off acceleration measurement!</string>
+
+    <string name="export_tip">Your data will be exported to\n%1$s</string>
+    <string name="default_heart_rate"> </string>
+    <string name="loading_heart_rate">&#8230;</string>
+
+    <string name="btn_export">EXPORT DATA</string>
+
+    <string name="switch_heart_rate_on">Live heart rate measurement on</string>
+    <string name="switch_heart_rate_off">Live heart rate measurement off</string>
+    <string name="switch_acceleration_on">Live acceleration measurement on</string>
+    <string name="switch_acceleration_off">Live acceleration measurement off</string>
+
+    <string name="label_fitness_recorder">Fitness Recorder</string>
+    <string name="label_pair_band">Pair My Band</string>
+    <string name="label_export_data">Export Data</string>
+    <string name="label_heart_rate">Heart rate</string>
+    <string name="label_acceleration">Acceleration</string>
+
+    <string name="label_table_heart_rate">Heart rate</string>
+    <string name="label_table_acceleration">Acceleration</string>
+
+    <string name="item_pair_band">Pair my band</string>
+    <string name="item_export">Export data</string>
+    <string name="item_scan">Scan</string>
+    <string name="item_stop_scan">Stop Scanning</string>
+
+    <string name="notify_measuring">Measuring</string>
 </resources>

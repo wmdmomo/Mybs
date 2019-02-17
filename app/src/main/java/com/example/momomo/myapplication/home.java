@@ -1,18 +1,16 @@
 package com.example.momomo.myapplication;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-
 import com.example.momomo.myapplication.Adapter.homeitemAdapter;
+import com.example.momomo.myapplication.activities.MainActivity;
 import com.example.momomo.myapplication.ceshi.running;
 import com.example.momomo.myapplication.data_save.homeitem;
 import com.example.momomo.myapplication.food_activity.food;
@@ -51,7 +49,7 @@ public class home extends AppCompatActivity {
             public void onClick(int position) {
                 switch (position){
                     case 0:{
-                        Intent intent = new Intent(home.this, running.class);
+                        Intent intent = new Intent(home.this, MainActivity.class);
                         startActivity(intent);
                         break;
                     }
