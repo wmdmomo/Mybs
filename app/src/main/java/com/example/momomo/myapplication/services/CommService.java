@@ -47,8 +47,9 @@ public final class CommService extends Service {
         mSettings = getSharedPreferences(Constants.Settings.DEVICE, Context.MODE_PRIVATE);
         mBand = loadBandFromSettings();
         mDatabase = new DbTool(this);
+        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "myapp:mywakelocktag");
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -195,7 +196,6 @@ public final class CommService extends Service {
             Log.w(TAG, "startHeartRateMeasure: the last thread is still working, current task canceled");
             return;
         }
-
         lockAwake();
         foregroundNotify();
 
