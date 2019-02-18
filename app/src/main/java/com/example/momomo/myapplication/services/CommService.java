@@ -17,7 +17,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.momomo.myapplication.R;
-import com.example.momomo.myapplication.activities.MainActivity;
+import com.example.momomo.myapplication.activities.SportActivity;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.hardware.BandState;
 import com.example.momomo.myapplication.hardware.MiBand2;
@@ -324,7 +324,7 @@ public final class CommService extends Service {
             NotificationManager notifyMgr = getSystemService(NotificationManager.class);
             if (notifyMgr != null) notifyMgr.createNotificationChannel(channel);
         }
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, SportActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, i, 0);
         Notification notification = new NotificationCompat.Builder(this, ONGOING_CHANNEL)
                 .setSmallIcon(R.drawable.ic_heart_red_64dp)

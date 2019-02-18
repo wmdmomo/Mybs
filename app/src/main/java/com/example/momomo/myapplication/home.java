@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.momomo.myapplication.Adapter.homeitemAdapter;
-import com.example.momomo.myapplication.activities.MainActivity;
+import com.example.momomo.myapplication.activities.SportActivity;
 import com.example.momomo.myapplication.ceshi.running;
 import com.example.momomo.myapplication.data_save.homeitem;
 import com.example.momomo.myapplication.food_activity.food;
@@ -49,7 +49,7 @@ public class home extends AppCompatActivity {
             public void onClick(int position) {
                 switch (position){
                     case 0:{
-                        Intent intent = new Intent(home.this, MainActivity.class);
+                        Intent intent = new Intent(home.this, SportActivity.class);
                         startActivity(intent);
                         break;
                     }
