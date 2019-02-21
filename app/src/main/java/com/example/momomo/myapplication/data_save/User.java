@@ -7,9 +7,27 @@ public class User extends LitePalSupport {
     private String password;
     private int height;
     private int weight;
+    private int goal_weight;
     private String signature;
     private int punch;
     private int id;
+    private String avatar_path;
+
+    public int getGoal_weight() {
+        return goal_weight;
+    }
+
+    public void setGoal_weight(int goal_weight) {
+        this.goal_weight = goal_weight;
+    }
+
+    public String getAvatar_path() {
+        return avatar_path;
+    }
+
+    public void setAvatar_path(String avatar_path) {
+        this.avatar_path = avatar_path;
+    }
 
     public int getId() {
         return id;

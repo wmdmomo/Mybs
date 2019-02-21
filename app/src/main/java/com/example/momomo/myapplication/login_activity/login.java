@@ -49,6 +49,7 @@ public class login extends AppCompatActivity {
                     person.setHeight(0);
                     person.setWeight(0);
                     person.setSignature(" ");
+                    person.setAvatar_path(" ");
                     person.save();
                     Intent intentlogin = new Intent(login.this, tologin.class);
                     startActivity(intentlogin);

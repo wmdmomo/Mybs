@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.punchday;
@@ -31,6 +32,8 @@ public class mine extends AppCompatActivity {
     private int hei;
     private int wei;
     private int daycount;
+    private de.hdodenhof.circleimageview.CircleImageView imageView;
+    private String imgpath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +65,6 @@ public class mine extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mine.this,mine_set.class);
-                intent.putExtra("name",nam);
-                intent.putExtra("sign",sign);
-                intent.putExtra("height",hei);
-                intent.putExtra("weight",wei);
                 startActivity(intent);
             }
         });
@@ -76,11 +75,13 @@ public class mine extends AppCompatActivity {
         height=(TextView) findViewById(R.id.height);
         weight=(TextView) findViewById(R.id.weight);
         days=(TextView) findViewById(R.id.day);
+        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img);
         nam=user.getName();
         sign=user.getSignature();
         hei=user.getHeight();
         wei=user.getWeight();
         daycount=user.getPunch();
+        imgpath=user.getAvatar_path();
     }
     private void setEdit(){
         name.setText(nam);
@@ -91,5 +92,12 @@ public class mine extends AppCompatActivity {
         height.setText(String.valueOf(hei));
         weight.setText(String.valueOf(wei));
         days.setText(String.valueOf(daycount));
+        if(!imgpath.equals(" "))Glide.with(this).load(imgpath).into(imageView);
+        else{
+            int resourceId = R.mipmap.avatar;
+            Glide.with(this)
+                    .load(resourceId)
+                    .into(imageView);
+        }
     }
 }
