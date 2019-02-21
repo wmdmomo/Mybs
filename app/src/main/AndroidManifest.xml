@@ -18,26 +18,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<activity android:name=".MainActivity" />-->
-        <activity android:name=".activities.SportActivity">
+        <activity android:name=".activities.SportActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".login_activity.login" />-->
-        <!--<activity android:name=".home" />-->
-        <!--<activity android:name=".login_activity.tologin" />-->
-        <!--<activity android:name=".food_activity.food" />-->
-        <!--<activity android:name=".food_activity.addfood" />-->
-        <!--<activity android:name=".note_activity.note" />-->
-        <!--<activity android:name=".note_activity.addnote" />-->
-        <!--<activity android:name=".chart_activity.chartTest" />-->
-        <!--<activity android:name=".ceshi.running" />-->
-        <!--<activity android:name=".ceshi.scan_activity" />-->
-        <!--<activity android:name=".mine_activity.mine" />-->
-        <!--<activity android:name=".mine_activity.mine_set" />-->
+        <activity android:name=".login_activity.login" />
+        <activity android:name=".home" />
+        <activity android:name=".login_activity.tologin" />
+        <activity android:name=".food_activity.food" />
+        <activity android:name=".food_activity.addfood" />
+        <activity android:name=".note_activity.note" />
+        <activity android:name=".note_activity.addnote" />
+        <activity android:name=".chart_activity.chartTest" />
+        <activity android:name=".ceshi.running" />
+        <activity android:name=".ceshi.scan_activity" />
+        <activity android:name=".mine_activity.mine" />
+        <activity android:name=".mine_activity.mine_set" />
         <activity
             android:name=".activities.ScanBandActivity"
             android:label="@string/label_pair_band"
