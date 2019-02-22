@@ -2,6 +2,8 @@ package com.example.momomo.myapplication.hardware;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
@@ -20,7 +22,9 @@ import com.example.momomo.myapplication.utils.TimerUtil;
 
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
+import java.util.UUID;
 
 
 import javax.crypto.Cipher;
@@ -234,6 +238,17 @@ public final class MiBand2 {
             @Override public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 mBleDevice = bleDevice;
                 mState.setBleConnected(true);
+                List<BluetoothGattService> serviceList = gatt.getServices();
+                for (BluetoothGattService service : serviceList) {
+                    UUID uuid_service = service.getUuid();
+                    Log.i("TESTTEST","SERVICE:::"+uuid_service);
+
+                    List<BluetoothGattCharacteristic> characteristicList= service.getCharacteristics();
+                    for(BluetoothGattCharacteristic characteristic : characteristicList) {
+                        UUID uuid_chara = characteristic.getUuid();
+                        Log.i("TESTTEST","CHARRR:::"+uuid_chara);
+                    }
+                }
             }
             @Override public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
                 mState.setBleConnected(false);
