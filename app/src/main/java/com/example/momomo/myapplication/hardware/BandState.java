@@ -14,6 +14,8 @@ public final class BandState {
     public static final int HEART_MEASURING         = 0b0001000000;
     public static final int RAW_NOTIFY              = 0b0010000000;
     public static final int ACCELERATION_MEASURING  = 0b0100000000;
+    public static final int STEP_MEASURING          = 0b1000000000;
+    public static final int STEP_NOTIFY             = 0b1000000001;
 
     private int mState;
     private long mUpdateTime;
@@ -83,6 +85,11 @@ public final class BandState {
         return hasAll(BLE_CONNECT | ENCRYPTED | RAW_NOTIFY | ACCELERATION_MEASURING);
     }
 
+    public boolean isMeasuringStep() {
+        return hasAll(BLE_CONNECT | ENCRYPTED | RAW_NOTIFY | STEP_MEASURING);
+    }
+
+
     private boolean hasAll(int conditions) {
         return (mState & conditions) == conditions;
     }
@@ -130,6 +137,14 @@ public final class BandState {
 
     public synchronized void setAccelerationMeasuring(boolean yes) {
         mState = (mState & (~ACCELERATION_MEASURING)) | (yes ? ACCELERATION_MEASURING : 0);
+        mUpdateTime = System.currentTimeMillis();
+    }
+    public synchronized void setStepNotify(boolean enable) {
+        mState = (mState & (~STEP_NOTIFY)) | (enable ? STEP_NOTIFY : 0);
+        mUpdateTime = System.currentTimeMillis();
+    }
+    public synchronized void setStepMeasuring(boolean yes) {
+        mState = (mState & (~STEP_MEASURING)) | (yes ? STEP_MEASURING : 0);
         mUpdateTime = System.currentTimeMillis();
     }
 

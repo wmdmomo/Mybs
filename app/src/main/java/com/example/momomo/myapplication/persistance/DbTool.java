@@ -23,6 +23,13 @@ public final class DbTool {
         Log.d(TAG, "insertHeartRate: inserted " + heartRate);
     }
 
+    public void insertStep(int step) {
+        ContentValues value = new ContentValues();
+        value.put(FitnessDbSchema.StepTable.Cols.stepRate, step);
+        mDb.insert(FitnessDbSchema.StepTable.NAME, null, value);
+        Log.d(TAG, "insertStepRate: inserted " + step);
+    }
+
     public void insertAcceleration(float x, float y, float z) {
         ContentValues values = new ContentValues();
         values.put(FitnessDbSchema.AccelerationTable.Cols.x, x);
@@ -31,6 +38,7 @@ public final class DbTool {
         mDb.insert(FitnessDbSchema.AccelerationTable.NAME, null, values);
         Log.d(TAG, String.format("insertAcceleration: inserted (x=%f, y=%f, z=%f)", x, y, z));
     }
+
 
     public Cursor queryAllHeartRate() {
         return mDb.rawQuery("select * from " + FitnessDbSchema.HeartRateTable.NAME, null);

@@ -35,7 +35,7 @@ public final class CommService extends Service {
     private static final int HR_MEASURE_NOTIFY = 1;
 
     private MiBand2 mBand;
-    private Thread mHeartRateWorkThread, mAccelerationWorkThread;
+    private Thread mHeartRateWorkThread, mAccelerationWorkThread,mStepWorkThread;
     private SharedPreferences mSettings;
     private DbTool mDatabase;
     private PowerManager.WakeLock mWakeLock;
@@ -96,6 +96,13 @@ public final class CommService extends Service {
             case Constants.Action.STOP_ACCELERATION:
                 stopAccelerationMeasure();
                 break;
+            case Constants.Action.START_STEP:
+                startStepMeasure();
+                break;
+            case Constants.Action.STOP_STEP:
+                stopStepMeasure();
+                break;
+
             default:
                 Log.w(TAG, "onStartCommand: Unknown action");
         }
@@ -297,6 +304,61 @@ public final class CommService extends Service {
         });
         mAccelerationWorkThread.start();
     }
+    //test step
+    // TODO: to be refactored
+    private void startStepMeasure() {
+        if (mStepWorkThread != null && mStepWorkThread.isAlive()) {
+            Log.w(TAG, "startStepMeasure: the last thread is still working, current task canceled");
+            return;
+        }
+
+        lockAwake();
+        foregroundNotify();
+
+        mStepWorkThread = new Thread(() -> {
+            boolean success;
+            if (mBand.getState().isMeasuringStep()) {
+                success = true;
+                Log.i(TAG, "startStepMeasure: already measuring");
+            } else {
+                success = mBand.startMeasureStep(step -> {
+                    mDatabase.insertHeartRate(step);
+
+                    Intent i = new Intent(Constants.Action.BROADCAST_STEP)
+                            .putExtra(Constants.Extra.STEP, step);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+                });
+            }
+            Intent response = new Intent(Constants.Action.START_STEP)
+                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
+            mStepWorkThread = null;
+        });
+        mStepWorkThread.start();
+    }
+
+    private void stopStepMeasure() {
+        if (mWakeLock != null && mWakeLock.isHeld()) mWakeLock.release();
+
+        Log.i(TAG, "stopStepMeasure: stopping step measurement");
+
+        // TODO: release lock
+        if (mStepWorkThread != null && mStepWorkThread.isAlive()) {
+            Log.w(TAG, "stopStepMeasure: the last thread is still working, current task canceled");
+            return;
+        }
+
+        stopForeground(true);
+
+        mStepWorkThread = new Thread(() -> {
+            boolean success = mBand.stopMeasureStep();
+            Intent response = new Intent(Constants.Action.STOP_STEP)
+                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
+            mStepWorkThread = null;
+        });
+        mStepWorkThread.start();
+    }
 
     private MiBand2 loadBandFromSettings() {
         String macAddress = mSettings.getString(Constants.Settings.DEVICE_MAC, null);
@@ -379,6 +441,14 @@ public final class CommService extends Service {
 
     public static void startActionStopHeartRateMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_HEART_RATE);
+        context.startService(i);
+    }
+    public static void startActionStartStepMeasure(Context context) {
+        Intent i = new Intent(context, CommService.class).setAction(Constants.Action.START_STEP);
+        context.startService(i);
+    }
+    public static void startActionStopStepMeasure(Context context) {
+        Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_STEP);
         context.startService(i);
     }
 }

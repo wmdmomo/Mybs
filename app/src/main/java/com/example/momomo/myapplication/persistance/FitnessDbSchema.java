@@ -10,6 +10,14 @@ public final class FitnessDbSchema {
             public static final String heartRate = "rate";
         }
     }
+    public static final class StepTable {
+        public static final String NAME = "step_rate";
+
+        public static final class Cols {
+            public static final String timestamp = "timestamp";
+            public static final String stepRate = "step";
+        }
+    }
 
     public static final class AccelerationTable {
         public static final String NAME = "acceleration";

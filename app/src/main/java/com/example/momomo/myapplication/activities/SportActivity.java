@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.clj.fastble.BleManager;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.config.Constants;
-import com.example.momomo.myapplication.databinding.ActivitySportBindingImpl;
+import com.example.momomo.myapplication.databinding.ActivitySportBinding;
 import com.example.momomo.myapplication.hardware.BandState;
 import com.example.momomo.myapplication.services.CommService;
 import com.example.momomo.myapplication.utils.BytesUtil;
@@ -36,7 +36,7 @@ public final class SportActivity extends AppCompatActivity {
     private String mMacAddress;
     private byte[] mAuthKey;
 
-    private ActivitySportBindingImpl mBinding;
+    private ActivitySportBinding mBinding;
     private Messenger mMessenger;
     private FABProgressCircle mFabCircle;
 
@@ -49,6 +49,7 @@ public final class SportActivity extends AppCompatActivity {
         mBinding.setConnectTransaction(mConnectTransaction);
         mBinding.setHeartRateTransaction(mHeartRateTransaction);
         mBinding.setAccelerationTransaction(mAccelerationTransaction);
+        mBinding.setStepTransaction(mStepTransaction);
 
         mFabCircle = mBinding.fabProgressCircle;
 
@@ -57,6 +58,7 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.addHandler(mConnectTransaction);
         mMessenger.addHandler(mHeartRateTransaction);
         mMessenger.addHandler(mAccelerationTransaction);
+        mMessenger.addHandler(mStepTransaction);
 
         initBle();
         mStateUpdateRequest.request();
@@ -163,6 +165,7 @@ public final class SportActivity extends AppCompatActivity {
             mBinding.setConnected(state.isEncrypted());
             mHeartRateTransaction.running.set(state.isMeasuringHeartRate());
             mAccelerationTransaction.running.set(state.isMeasuringAcceleration());
+            mStepTransaction.running.set(state.isMeasuringStep());
         }
     };
 
@@ -282,6 +285,55 @@ public final class SportActivity extends AppCompatActivity {
                         running.set(false);
                     else
                         Snackbar.make(mBinding.getRoot(), R.string.toast_heart_rate_off_failed, Snackbar.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    //step;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    private Transaction mStepTransaction = new Transaction() {
+        @Override public String[] getActions() {
+            return new String[] {
+                    Constants.Action.START_STEP,
+                    Constants.Action.STOP_STEP,
+                    Constants.Action.BROADCAST_STEP
+            };
+        }
+
+        @Override public void start() {
+            Log.i(TAG, "StepRateTransaction starting");
+            CommService.startActionStartStepMeasure(SportActivity.this);
+        }
+
+        @Override public void stop() {
+            Log.i(TAG, "StepRateTransaction stopping");
+            CommService.startActionStopStepMeasure(SportActivity.this);
+        }
+
+        @Override public void handleResponse(Intent response) {
+            super.handleResponse(response);
+            int status;
+            switch (response.getAction()) {
+                case Constants.Action.BROADCAST_STEP:
+                    int step = response.getIntExtra(Constants.Extra.STEP, -1);
+                    mBinding.setStep(step);
+                    Log.i(TAG, "StepTransaction.handleResponse: got step = " + step);
+                    break;
+                case Constants.Action.START_STEP:
+                    status = response.getIntExtra(Constants.Extra.STATUS, Constants.Status.UNKNOWN);
+                    Log.i(TAG, "StepTransaction.handleResponse: START_STEP status=" + status);
+                    boolean success = status == Constants.Status.OK;
+                    running.set(success);
+                    if (!success)
+                        Snackbar.make(mBinding.getRoot(), R.string.toast_step_on_failed, Snackbar.LENGTH_SHORT).show();
+                    break;
+                case Constants.Action.STOP_STEP:
+                    status = response.getIntExtra(Constants.Extra.STATUS, Constants.Status.UNKNOWN);
+                    Log.i(TAG, "StepTransaction.handleResponse: START_STEP status=" + status);
+                    if (status == Constants.Status.OK)
+                        running.set(false);
+                    else
+                        Snackbar.make(mBinding.getRoot(), R.string.toast_step_off_failed, Snackbar.LENGTH_SHORT).show();
                     break;
             }
         }

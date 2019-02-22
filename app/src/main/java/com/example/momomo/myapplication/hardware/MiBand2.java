@@ -2,8 +2,6 @@ package com.example.momomo.myapplication.hardware;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.SparseArray;
@@ -47,8 +45,9 @@ public final class MiBand2 {
     private Consumer<BandState> mDisconnectHandler;
     private SparseArray<Consumer<byte[]>> mNoticeConsumers;
     private IntConsumer mHeartRateHandler;
+    private IntConsumer mStepHandler;
     private TriFloatConsumer mAccelerationHandler;
-    private Timer mHeartRatePingTimer, mAccelerationTimer;
+    private Timer mHeartRatePingTimer, mAccelerationTimer,mStepTimer;
 
     public MiBand2(@Nullable String macAddress, @Nullable byte[] key) {
         mBleDevice = macAddress == null
@@ -166,6 +165,34 @@ public final class MiBand2 {
         disableHeartRatePing();
         return disableHeartRateContinuousMonitor() && turnOffHeartRateNotify();
     }
+    //test
+    public boolean startMeasureStep(IntConsumer stepHandler) {
+        mStepHandler = stepHandler;
+
+        // TODO: check and stop related operations first
+        if (!turnOnStepNotify()) {
+            Log.e(TAG, "enableStep: failed to turn on Step notification");
+            return false;
+        }
+
+//        if (!enableHeartRateContinuousMonitor()) {
+//            Log.e(TAG, "enableStep: failed to enable Step continuous monitor");
+//            return false;
+//        }
+
+//        enableStepPing();
+        return true;
+    }
+
+    public boolean stopMeasureStep() {
+        Log.i(TAG, "stopMeasureHeartRate");
+        if (!mState.isBleConnected()) {
+            Log.i(TAG, "stopMeasureHeartRate: already disconnected");
+            return true;
+        }
+        disableHeartRatePing();
+        return disableHeartRateContinuousMonitor() && turnOffHeartRateNotify();
+    }
 
     public boolean startMeasureAcceleration(TriFloatConsumer accelerationHandler) {
         mAccelerationHandler = accelerationHandler;
@@ -238,17 +265,6 @@ public final class MiBand2 {
             @Override public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 mBleDevice = bleDevice;
                 mState.setBleConnected(true);
-                List<BluetoothGattService> serviceList = gatt.getServices();
-                for (BluetoothGattService service : serviceList) {
-                    UUID uuid_service = service.getUuid();
-                    Log.i("TESTTEST","SERVICE:::"+uuid_service);
-
-                    List<BluetoothGattCharacteristic> characteristicList= service.getCharacteristics();
-                    for(BluetoothGattCharacteristic characteristic : characteristicList) {
-                        UUID uuid_chara = characteristic.getUuid();
-                        Log.i("TESTTEST","CHARRR:::"+uuid_chara);
-                    }
-                }
             }
             @Override public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
                 mState.setBleConnected(false);
@@ -386,6 +402,33 @@ public final class MiBand2 {
         );
         return waiter.work();
     }
+    //test
+    private boolean turnOnStepNotify() {
+        Log.i(TAG, "turning on step notification");
+        ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
+        BleManager.getInstance().notify(
+                mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.STEPS,
+                new BleNotifyCallback() {
+                    @Override public void onNotifySuccess() {
+                        if (!mState.isMeasuringStep()) mState.setStepNotify(true);
+                        waiter.ok();
+                        Log.i(TAG, "turnOnStepNotify: succeed");
+                    }
+                    @Override public void onNotifyFailure(BleException exception) {
+                        waiter.fail();
+                        mState.setStepNotify(false);
+                        Log.i(TAG, "turnOnStepNotify: failed");
+                    }
+                    @Override public void onCharacteristicChanged(byte[] data) {
+                        mState.setStepMeasuring(true);
+                        Log.i("STEPSTEP", "步数："+data);
+                        parseStep(data);
+                    }
+                }
+        );
+        return waiter.work();
+    }
+//step
 
     private boolean turnOffHeartRateNotify() {
         Log.i(TAG, "turning off heart rate notification");
@@ -394,12 +437,28 @@ public final class MiBand2 {
         if (success) mState.setHeartNotify(false);
         return success;
     }
+    //offff
+    private boolean turnOffStepNotify() {
+        Log.i(TAG, "turning off step notification");
+        boolean success = BleManager.getInstance().stopNotify(mBleDevice,
+                Protocol.Service.BASIC, Protocol.Characteristic.STEPS);
+        if (success) mState.setStepNotify(false);
+        return success;
+    }
+    //pppppp
 
     private void parseHeartRate(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
         int heartRate = (int)data[0] * 0x100 + data[1];
         Log.i(TAG, "parseHeartRate: heartRate=" + heartRate);
         if (mHeartRateHandler != null) mHeartRateHandler.accept(heartRate);
+    }
+    //test
+    private void parseStep(byte[] data) {
+        // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
+        int step = (int)data[0] * 0x100 + data[1];
+        Log.i(TAG, "parseStep: step=" + step);
+        if (mStepHandler != null) mStepHandler.accept(step);
     }
 
     private boolean enableHeartRateContinuousMonitor() {
@@ -462,6 +521,26 @@ public final class MiBand2 {
                     });
         });
     }
+
+//    private void enableStepPing() {
+//        mStepTimer = TimerUtil.repeatPer(Protocol.Time.STEP_KEEP_ALIVE_PERIOD, () -> {
+//            Log.i(TAG, "pinging heart rate monitor...");
+//            BleManager.getInstance().write(
+//                    mBleDevice,
+//                    Protocol.Service.BASIC, Protocol.Characteristic.STEPS,
+//                    Protocol.Command.HEART_KEEP_ALIVE,
+//                    new BleWriteCallback() {
+//                        @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
+//                            Log.i(TAG, "pingHeartRate :)");
+//                            mState.setHeartMeasuring(true);
+//                        }
+//                        @Override public void onWriteFailure(BleException exception) {
+//                            Log.i(TAG, "pingHeartRate :(");
+//                            mState.setHeartMeasuring(false);
+//                        }
+//                    });
+//        });
+//    }
 
     private void disableHeartRatePing() {
         if (mHeartRatePingTimer != null) {

@@ -24,6 +24,8 @@
     <string name="export_tip">Your data will be exported to\n%1$s</string>
     <string name="default_heart_rate"> </string>
     <string name="loading_heart_rate">&#8230;</string>
+    <string name="toast_step_on_failed">Failed to measure step rate!</string>
+    <string name="toast_step_off_failed">Failed to turn off step rate measurement!</string>
 
     <string name="btn_export">EXPORT DATA</string>
 
@@ -31,12 +33,15 @@
     <string name="switch_heart_rate_off">Live heart rate measurement off</string>
     <string name="switch_acceleration_on">Live acceleration measurement on</string>
     <string name="switch_acceleration_off">Live acceleration measurement off</string>
+    <string name="switch_step_on">Live step rate measurement on</string>
+    <string name="switch_step_off">Live step rate measurement off</string>
 
     <string name="label_fitness_recorder">Fitness Recorder</string>
     <string name="label_pair_band">Pair My Band</string>
     <string name="label_export_data">Export Data</string>
     <string name="label_heart_rate">Heart rate</string>
     <string name="label_acceleration">Acceleration</string>
+    <string name="label_step_rate">Step rate</string>
 
     <string name="label_table_heart_rate">Heart rate</string>
     <string name="label_table_acceleration">Acceleration</string>

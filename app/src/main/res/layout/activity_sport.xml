@@ -8,6 +8,7 @@
 
         <variable name="connected" type="boolean" />
         <variable name="heartRate" type="int" />
+        <variable name="step" type="int" />
         <variable name="accelerationX" type="float" />
         <variable name="accelerationY" type="float" />
         <variable name="accelerationZ" type="float" />
@@ -15,6 +16,7 @@
         <variable name="connectTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
         <variable name="heartRateTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
         <variable name="accelerationTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
+        <variable name="stepTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
 
     </data>
 
@@ -85,6 +87,17 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:typeface="monospace"
                     android:visibility="@{accelerationTransaction.running ? View.VISIBLE : View.GONE}" />
+                <!--STEP-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/label_step_rate"
+                    android:padding="16dp"
+                    android:text="@{Integer.toString(step)}"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                    android:visibility="@{stepTransaction.running ? (step >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
+                    tools:text="65" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,6 +157,29 @@
                         android:checked="@{accelerationTransaction.running}"
                         android:enabled="@{connected}"
                         android:onCheckedChanged="@{(cb, checked) -> checked ? accelerationTransaction.start() : accelerationTransaction.stop()}"
+                        android:switchMinWidth="56dp" />
+                </LinearLayout>
+
+                <!--step control-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@{stepTransaction.running ? @string/switch_step_on : @string/switch_step_off}" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="@{stepTransaction.running}"
+                        android:enabled="@{connected}"
+                        android:onCheckedChanged="@{(cb, checked) -> checked ? stepTransaction.start() : stepTransaction.stop()}"
                         android:switchMinWidth="56dp" />
                 </LinearLayout>
             </LinearLayout>
