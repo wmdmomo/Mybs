@@ -11,6 +11,7 @@ import com.annimon.stream.function.IntConsumer;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
+import com.clj.fastble.callback.BleReadCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
@@ -46,8 +47,9 @@ public final class MiBand2 {
     private SparseArray<Consumer<byte[]>> mNoticeConsumers;
     private IntConsumer mHeartRateHandler;
     private IntConsumer mStepHandler;
-    private TriFloatConsumer mAccelerationHandler;
-    private Timer mHeartRatePingTimer, mAccelerationTimer,mStepTimer;
+    private IntConsumer mBatteryHandler;
+    private Timer mHeartRatePingTimer,mStepTimer,mBatteryTimer;
+    private Boolean battery_flag=false;
 
     public MiBand2(@Nullable String macAddress, @Nullable byte[] key) {
         mBleDevice = macAddress == null
@@ -134,7 +136,8 @@ public final class MiBand2 {
     public void disconnect() {
         // TODO: stop working task
         if (mState.isMeasuringHeartRate()) stopMeasureHeartRate();
-        if (mState.isMeasuringAcceleration()) stopMeasureAcceleration();
+        if(mState.isMeasuringBattery()) stopMeasureBattery();
+        if(mState.isMeasuringStep()) stopMeasureStep();
         BleManager.getInstance().disconnect(mBleDevice);
     }
 
@@ -152,7 +155,7 @@ public final class MiBand2 {
             return false;
         }
 
-        enableHeartRatePing();
+//        enableHeartRatePing();
         return true;
     }
 
@@ -174,58 +177,43 @@ public final class MiBand2 {
             Log.e(TAG, "enableStep: failed to turn on Step notification");
             return false;
         }
-
-//        if (!enableHeartRateContinuousMonitor()) {
-//            Log.e(TAG, "enableStep: failed to enable Step continuous monitor");
-//            return false;
-//        }
-
-//        enableStepPing();
         return true;
     }
 
     public boolean stopMeasureStep() {
-        Log.i(TAG, "stopMeasureHeartRate");
+        Log.i(TAG, "stopMeasureStep");
         if (!mState.isBleConnected()) {
-            Log.i(TAG, "stopMeasureHeartRate: already disconnected");
+            Log.i(TAG, "stopMeasureStep: already disconnected");
             return true;
         }
-        disableHeartRatePing();
-        return disableHeartRateContinuousMonitor() && turnOffHeartRateNotify();
+        disableStep();
+        return turnOffStepNotify();
     }
+    ///battery
+    //test
+    public boolean startMeasureBattery(IntConsumer batteryHandler) {
+        mBatteryHandler=batteryHandler;
 
-    public boolean startMeasureAcceleration(TriFloatConsumer accelerationHandler) {
-        mAccelerationHandler = accelerationHandler;
-        if (!turnOnRawDataNotify()) return false;
-        mAccelerationTimer = TimerUtil.repeatPer(Protocol.Time.ACCELERATION_PERIOD, this::enableAcceleration);
-        return enableAcceleration();
-    }
+        // TODO: check and stop related operations first
 
-    public boolean stopMeasureAcceleration() {
-        if (mAccelerationTimer != null) {
-            mAccelerationTimer.cancel();
-            mAccelerationTimer = null;
+        if (!turnOnBatteryNotify()) {
+            Log.e(TAG, "enableBattery: failed to turn on Battery notification");
+            return false;
         }
+        if(!battery_flag) enableBattery();
+        return true;
+    }
+
+    public boolean stopMeasureBattery() {
+        Log.i(TAG, "stopMeasureBattery");
         if (!mState.isBleConnected()) {
-            Log.i(TAG, "stopMeasureAcceleration: already disconnected");
+            Log.i(TAG, "stopMeasureBattery: already disconnected");
             return true;
         }
-        final ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
-        BleManager.getInstance().write(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.SENSOR_CONTROL,
-                Protocol.Command.ACCELERATION_STOP,
-                new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                        mState.setAccelerationMeasuring(false);
-                        waiter.ok();
-                        Log.i(TAG, "stopMeasureAcceleration: succeeded");
-                    }
-                    @Override public void onWriteFailure(BleException exception) {
-                        waiter.fail();
-                        Log.i(TAG, "stopMeasureAcceleration: failed");
-                    }
-                });
-        return waiter.work();
+        disableBattery();
+        return turnOffBatteryNotify();
     }
+
 
     private void initAuthNoticeConsumer() {
         mNoticeConsumers = new SparseArray<>();
@@ -430,6 +418,35 @@ public final class MiBand2 {
     }
 //step
 
+    //test
+    private boolean turnOnBatteryNotify() {
+        Log.i(TAG, "turning on Battery notification");
+        ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
+        BleManager.getInstance().notify(
+                            mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY,
+                new BleNotifyCallback() {
+                        @Override public void onNotifySuccess() {
+//                            if (!mState.isMeasuringBattery())
+                            mState.setBatteryNotify(true);
+                            waiter.ok();
+                            Log.i(TAG, "turnOnBatteryNotify: succeed");
+                        }
+                        @Override public void onNotifyFailure(BleException exception) {
+                        waiter.fail();
+                        mState.setBatteryNotify(false);
+                        Log.i(TAG, "turnOnBatteryNotify: failed");
+                    }
+                    @Override public void onCharacteristicChanged(byte[] data) {
+                        mState.setBatteryMeasuring(true);
+                        Log.i(TAG, "电量："+data);
+                        parseBattery(data);
+                    }
+                }
+        );
+        return waiter.work();
+    }
+//battery
+
     private boolean turnOffHeartRateNotify() {
         Log.i(TAG, "turning off heart rate notification");
         boolean success = BleManager.getInstance().stopNotify(mBleDevice,
@@ -446,6 +463,15 @@ public final class MiBand2 {
         return success;
     }
     //pppppp
+    //offff
+    private boolean turnOffBatteryNotify() {
+        Log.i(TAG, "turning off Battery notification");
+        boolean success = BleManager.getInstance().stopNotify(mBleDevice,
+                Protocol.Service.BASIC, Protocol.Characteristic.BATTERY);
+        if (success) mState.setBatteryNotify(false);
+        return success;
+    }
+    //pppppp
 
     private void parseHeartRate(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
@@ -459,6 +485,12 @@ public final class MiBand2 {
         int step = (int)data[0] * 0x100 + data[1];
         Log.i(TAG, "parseStep: step=" + step);
         if (mStepHandler != null) mStepHandler.accept(step);
+    }
+    private void parseBattery(byte[] data) {
+        // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
+        int info = data[1];
+        Log.i(TAG, "parseBattery: Battery=" + info);
+        if (mBatteryHandler != null)mBatteryHandler.accept(info);
     }
 
     private boolean enableHeartRateContinuousMonitor() {
@@ -522,25 +554,21 @@ public final class MiBand2 {
         });
     }
 
-//    private void enableStepPing() {
-//        mStepTimer = TimerUtil.repeatPer(Protocol.Time.STEP_KEEP_ALIVE_PERIOD, () -> {
-//            Log.i(TAG, "pinging heart rate monitor...");
-//            BleManager.getInstance().write(
-//                    mBleDevice,
-//                    Protocol.Service.BASIC, Protocol.Characteristic.STEPS,
-//                    Protocol.Command.HEART_KEEP_ALIVE,
-//                    new BleWriteCallback() {
-//                        @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
-//                            Log.i(TAG, "pingHeartRate :)");
-//                            mState.setHeartMeasuring(true);
-//                        }
-//                        @Override public void onWriteFailure(BleException exception) {
-//                            Log.i(TAG, "pingHeartRate :(");
-//                            mState.setHeartMeasuring(false);
-//                        }
-//                    });
-//        });
-//    }
+private void enableBattery() {
+           BleManager.getInstance().read(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY, new BleReadCallback() {
+               @Override
+               public void onReadSuccess(byte[] data) {
+                   Log.i(TAG, "电量读取成功："+data);
+                   parseBattery(data);
+                   battery_flag=true;
+
+               }
+               @Override
+               public void onReadFailure(BleException exception) {
+                   Log.i(TAG, "电量读取失败");
+               }
+           });
+    }
 
     private void disableHeartRatePing() {
         if (mHeartRatePingTimer != null) {
@@ -549,82 +577,19 @@ public final class MiBand2 {
             mState.setHeartMeasuring(false);
         }
     }
-
-    // see https://github.com/Freeyourgadget/Gadgetbridge/pull/703/files for details
-    private void parseAcceleration(byte[] value) {
-        if (value.length <= 2 || (value.length - 2) % 6 != 0) {
-            Log.w(TAG, "parseAcceleration: got unexpected sensor data with length: " + value.length);
-            return;
+    private void disableStep() {
+        if (mStepTimer != null) {
+            mStepTimer.cancel();
+            mStepTimer = null;
+            mState.setStepMeasuring(false);
         }
-        float count = 0;
-        float x = 0, y = 0, z = 0;
-        for (int i = 2; i < value.length; i += 6, count += 1) {
-            x += (value[i]   | (value[i+1] << 8));
-            y += (value[i+2] | (value[i+3] << 8));
-            z += (value[i+4] | (value[i+5] << 8));
+    }
+    private void disableBattery() {
+        if (mBatteryTimer != null) {
+            mBatteryTimer.cancel();
+            mBatteryTimer = null;
+            mState.setBatteryMeasuring(false);
         }
-        x /= count; y /= count; z /= count;
-        Log.i(TAG, String.format("parseAcceleration: x=%.3f, y=%.3f, z=%.3f, total=%.3f", x, y, z, Math.sqrt(x*x + y*y + z*z)));
-        if (mAccelerationHandler != null) mAccelerationHandler.accept(x, y, z);
     }
 
-    private boolean turnOnRawDataNotify() {
-        ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
-        BleManager.getInstance().notify(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.SENSOR_DATA,
-                new BleNotifyCallback() {
-                    @Override public void onNotifySuccess() {
-                        mState.setRawNotify(true);
-                        waiter.ok();
-                        Log.i(TAG, "turnOnRawDataNotify: succeeded");
-                    }
-                    @Override public void onNotifyFailure(BleException exception) {
-                        mState.setRawNotify(false);
-                        waiter.fail();
-                        Log.e(TAG, "turnOnRawDataNotify: failed");
-                    }
-                    @Override public void onCharacteristicChanged(byte[] data) {
-                        mState.setAccelerationMeasuring(true);
-                        Log.i(TAG, "received raw data: length=" + data.length + ", data=" + BytesUtil.toHexStr(data));
-                        parseAcceleration(data);
-                    }
-                });
-        return waiter.work();
-    }
-
-    // https://github.com/Freeyourgadget/Gadgetbridge/pull/894
-    private boolean enableAcceleration() {
-        ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
-        BleManager.getInstance().write(
-                mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.SENSOR_CONTROL,
-                Protocol.Command.ACCELERATION_INIT,
-                new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                        waiter.ok();
-                        Log.i(TAG, "enableAcceleration step 1: succeeded");
-                    }
-                    @Override public void onWriteFailure(BleException exception) {
-                        mState.setAccelerationMeasuring(false);
-                        waiter.fail();
-                        Log.e(TAG, "enableAcceleration step 1: failed");
-                    }
-                });
-        if (!waiter.work()) return false;
-
-        waiter.reset();
-        BleManager.getInstance().write(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.SENSOR_CONTROL,
-                Protocol.Command.ACCELERATION_START,
-                new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                        mState.setAccelerationMeasuring(true);
-                        waiter.ok();
-                        Log.i(TAG, "enableAcceleration step 2: succeeded");
-                    }
-                    @Override public void onWriteFailure(BleException exception) {
-                        mState.setAccelerationMeasuring(false);
-                        waiter.fail();
-                        Log.i(TAG, "enableAcceleration step 2: failed");
-                    }
-                });
-        return waiter.work();
-    }
 }

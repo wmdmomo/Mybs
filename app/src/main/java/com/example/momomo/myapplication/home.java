@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.momomo.myapplication.Adapter.homeitemAdapter;
 import com.example.momomo.myapplication.activities.SportActivity;
-import com.example.momomo.myapplication.ceshi.running;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.homeitem;
 import com.example.momomo.myapplication.food_activity.food;
@@ -71,7 +70,7 @@ public class home extends AppCompatActivity {
                         break;
                     }
                     case 1:{
-                        Intent intent = new Intent(home.this, running.class);
+                        Intent intent = new Intent(home.this, SportActivity.class);
                         startActivity(intent);
                         break;
                     }

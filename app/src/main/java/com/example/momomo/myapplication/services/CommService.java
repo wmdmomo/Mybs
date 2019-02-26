@@ -19,10 +19,20 @@ import android.util.Log;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.activities.SportActivity;
 import com.example.momomo.myapplication.config.Constants;
+import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.data_save.batteryData;
+import com.example.momomo.myapplication.data_save.heartData;
+import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.hardware.BandState;
 import com.example.momomo.myapplication.hardware.MiBand2;
-import com.example.momomo.myapplication.persistance.DbTool;
 import com.example.momomo.myapplication.utils.BytesUtil;
+import com.example.momomo.myapplication.utils.saveVarible;
+
+import org.litepal.LitePal;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public final class CommService extends Service {
@@ -35,10 +45,13 @@ public final class CommService extends Service {
     private static final int HR_MEASURE_NOTIFY = 1;
 
     private MiBand2 mBand;
-    private Thread mHeartRateWorkThread, mAccelerationWorkThread,mStepWorkThread;
+    private Thread mHeartRateWorkThread,mStepWorkThread,mBatteryThread;
     private SharedPreferences mSettings;
-    private DbTool mDatabase;
     private PowerManager.WakeLock mWakeLock;
+    private heartData heartData;
+    private stepData stepData;
+    private batteryData batteryData;
+    private String username;
 
     @Override
     public void onCreate() {
@@ -46,9 +59,12 @@ public final class CommService extends Service {
         Log.i(TAG, "onCreate");
         mSettings = getSharedPreferences(Constants.Settings.DEVICE, Context.MODE_PRIVATE);
         mBand = loadBandFromSettings();
-        mDatabase = new DbTool(this);
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "myapp:mywakelocktag");
+        final saveVarible app = (saveVarible) getApplication();
+        int userId = app.getUserId();
+        User user = LitePal.find(User.class, userId);
+        username=user.getName();
     }
     @Override
     public void onDestroy() {
@@ -90,17 +106,17 @@ public final class CommService extends Service {
             case Constants.Action.STOP_HEART_RATE:
                 stopHeartRateMeasure();
                 break;
-            case Constants.Action.START_ACCELERATION:
-                startAccelerationMeasure();
-                break;
-            case Constants.Action.STOP_ACCELERATION:
-                stopAccelerationMeasure();
-                break;
             case Constants.Action.START_STEP:
                 startStepMeasure();
                 break;
             case Constants.Action.STOP_STEP:
                 stopStepMeasure();
+                break;
+            case Constants.Action.START_BATTERY:
+                startBatteryMeasure();
+                break;
+            case Constants.Action.STOP_BATTERY:
+                stopBatteryMeasure();
                 break;
 
             default:
@@ -213,8 +229,11 @@ public final class CommService extends Service {
                 Log.i(TAG, "startHeartRateMeasure: already measuring");
             } else {
                 success = mBand.startMeasureHeartRate(heartRate -> {
-                    mDatabase.insertHeartRate(heartRate);
-
+                    heartData=new heartData();
+                    heartData.setUser(username);
+                    heartData.setTime(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()));
+                    heartData.setHeart(heartRate);
+                    heartData.save();
                     Intent i = new Intent(Constants.Action.BROADCAST_HEART_RATE)
                             .putExtra(Constants.Extra.HEART_RATE, heartRate);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(i);
@@ -247,63 +266,6 @@ public final class CommService extends Service {
         });
         mHeartRateWorkThread.start();
     }
-
-    // TODO: to be refactored
-    private void startAccelerationMeasure() {
-        if (mAccelerationWorkThread != null && mAccelerationWorkThread.isAlive()) {
-            Log.w(TAG, "startAccelerationMeasure: the last thread is still working, current task canceled");
-            return;
-        }
-
-        lockAwake();
-        foregroundNotify();
-
-        mAccelerationWorkThread = new Thread(() -> {
-            boolean success;
-            if (mBand.getState().isMeasuringAcceleration()) {
-                success = true;
-                Log.i(TAG, "startAccelerationMeasure: already measuring");
-            } else {
-                success = mBand.startMeasureAcceleration((x, y, z) -> {
-                    mDatabase.insertAcceleration(x, y, z);
-
-                    Intent i = new Intent(Constants.Action.BROADCAST_ACCELERATION)
-                            .putExtra(Constants.Extra.ACCELERATION_X, x)
-                            .putExtra(Constants.Extra.ACCELERATION_Y, y)
-                            .putExtra(Constants.Extra.ACCELERATION_Z, z);
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(i);
-                });
-            }
-            Intent response = new Intent(Constants.Action.START_ACCELERATION)
-                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
-            mAccelerationWorkThread = null;
-        });
-        mAccelerationWorkThread.start();
-    }
-
-    private void stopAccelerationMeasure() {
-        if (mWakeLock != null && mWakeLock.isHeld()) mWakeLock.release();
-
-        Log.i(TAG, "stopAccelerationMeasure: stopping acceleration measurement");
-
-        // TODO: release lock
-        if (mAccelerationWorkThread != null && mAccelerationWorkThread.isAlive()) {
-            Log.w(TAG, "stopAccelerationMeasure: the last thread is still working, current task canceled");
-            return;
-        }
-
-        stopForeground(true);
-
-        mAccelerationWorkThread = new Thread(() -> {
-            boolean success = mBand.stopMeasureAcceleration();
-            Intent response = new Intent(Constants.Action.STOP_ACCELERATION)
-                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
-            mAccelerationWorkThread = null;
-        });
-        mAccelerationWorkThread.start();
-    }
     //test step
     // TODO: to be refactored
     private void startStepMeasure() {
@@ -322,7 +284,11 @@ public final class CommService extends Service {
                 Log.i(TAG, "startStepMeasure: already measuring");
             } else {
                 success = mBand.startMeasureStep(step -> {
-                    mDatabase.insertHeartRate(step);
+                    stepData=new stepData();
+                    stepData.setUser(username);
+                    stepData.setStep(step);
+                    stepData.setTime(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()));
+                    stepData.save();
 
                     Intent i = new Intent(Constants.Action.BROADCAST_STEP)
                             .putExtra(Constants.Extra.STEP, step);
@@ -358,6 +324,66 @@ public final class CommService extends Service {
             mStepWorkThread = null;
         });
         mStepWorkThread.start();
+    }
+
+    //test baterry
+    // TODO: to be refactored
+    private void startBatteryMeasure() {
+        if (mBatteryThread != null && mBatteryThread.isAlive()) {
+            Log.w(TAG, "startBatteryMeasure: the last thread is still working, current task canceled");
+            return;
+        }
+
+        lockAwake();
+        foregroundNotify();
+
+        mBatteryThread = new Thread(() -> {
+            boolean success;
+            if (mBand.getState().isMeasuringBattery()) {
+                success = true;
+                Log.i(TAG, "startBatteryMeasure: already measuring");
+            } else {
+                success = mBand.startMeasureBattery(info -> {
+                    batteryData=new batteryData();
+                    batteryData.setUser(username);
+                    batteryData.setBattery(info);
+                    batteryData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+
+                    Intent i = new Intent(Constants.Action.BROADCAST_BATTERY)
+                            .putExtra(Constants.Extra.BATTERY, info);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(i);
+                });
+            }
+            Intent response = new Intent(Constants.Action.START_BATTERY)
+                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
+            mBatteryThread = null;
+        });
+        mBatteryThread.start();
+    }
+
+    private void stopBatteryMeasure() {
+        if (mWakeLock != null && mWakeLock.isHeld()) mWakeLock.release();
+
+        Log.i(TAG, "stopBatteryMeasure: stopping battery measurement");
+
+        // TODO: release lock
+        if (mBatteryThread != null && mBatteryThread.isAlive()) {
+            Log.w(TAG, "stopBatteryMeasure: the last thread is still working, current task canceled");
+            return;
+        }
+
+        stopForeground(true);
+
+        mBatteryThread = new Thread(() -> {
+            boolean success = mBand.stopMeasureBattery();
+            Intent response = new Intent(Constants.Action.STOP_BATTERY)
+                    .putExtra(Constants.Extra.STATUS, success ? Constants.Status.OK : Constants.Status.FAILED);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(response);
+            mBatteryThread = null;
+        });
+        mBatteryThread.start();
     }
 
     private MiBand2 loadBandFromSettings() {
@@ -449,6 +475,14 @@ public final class CommService extends Service {
     }
     public static void startActionStopStepMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_STEP);
+        context.startService(i);
+    }
+    public static void startActionStartBatteryMeasure(Context context) {
+        Intent i = new Intent(context, CommService.class).setAction(Constants.Action.START_BATTERY);
+        context.startService(i);
+    }
+    public static void startActionStopBatteryMeasure(Context context) {
+        Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_BATTERY);
         context.startService(i);
     }
 }

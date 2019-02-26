@@ -19,6 +19,8 @@
     <string name="toast_heart_rate_off_failed">未顺利关闭心率测量</string>
     <string name="toast_step_on_failed">步数测量失败</string>
     <string name="toast_step_off_failed">未顺利关闭步数测量</string>
+    <string name="toast_battery_on_failed">电量测量失败</string>
+    <string name="toast_battery_off_failed">未顺利关闭电量测量</string>
     <string name="toast_acceleration_on_failed">加速度测量失败</string>
     <string name="toast_acceleration_off_failed">未顺利关闭加速度测量</string>
     <string name="export_tip">您的数据将被导出到 %1$s</string>
@@ -29,6 +31,8 @@
     <string name="switch_acceleration_off">实时加速度测量已关闭</string>
     <string name="switch_step_on">实时步数测量已打开</string>
     <string name="switch_step_off">实时步数测量已关闭</string>
+    <string name="switch_battery_on">实时电量已打开</string>
+    <string name="switch_battery_off">实时电量已关闭</string>
     <string name="label_fitness_recorder">健康记录</string>
     <string name="label_pair_band">手环配对</string>
     <string name="label_export_data">数据导出</string>
@@ -37,5 +41,12 @@
     <string name="item_scan">扫描</string>
     <string name="item_stop_scan">停止扫描</string>
     <string name="notify_measuring">正在测量</string>
+    <string name="label_heart_rate">心率</string>
+    <string name="label_acceleration">加速度</string>
+    <string name="label_step_rate">步数</string>
+    <string name="label_battery">电量</string>
+
+    <string name="label_table_heart_rate">心率</string>
+    <string name="label_table_acceleration">加速度</string>
     <!--<string name="label_step_rate">Step rate</string>-->
 </resources>

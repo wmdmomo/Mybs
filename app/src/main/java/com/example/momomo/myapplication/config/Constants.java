@@ -19,6 +19,10 @@ public final class Constants {
         public static final String START_STEP = BASE + "services.action.START_STEP";
         public static final String STOP_STEP = BASE + "services.action.STOP_STEP";
         public static final String BROADCAST_STEP = BASE + "services.action.BROADCAST_STEP";
+
+        public static final String START_BATTERY = BASE + "services.action.START_BATTERY";
+        public static final String STOP_BATTERY = BASE + "services.action.STOP_BATTERY";
+        public static final String BROADCAST_BATTERY = BASE + "services.action.BROADCAST_BATTERY";
     }
 
     public static final class Extra {
@@ -33,6 +37,7 @@ public final class Constants {
         public static final String ACCELERATION_Z = "extra.data.acceleration_z";
 
         public static final String STEP = "extra.data.STEP";
+        public static final String BATTERY = "extra.data.BATTERY";
     }
 
     public static final class Status {

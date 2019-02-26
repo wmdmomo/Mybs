@@ -27,6 +27,9 @@
     <string name="toast_step_on_failed">Failed to measure step rate!</string>
     <string name="toast_step_off_failed">Failed to turn off step rate measurement!</string>
 
+    <string name="toast_battery_on_failed">Failed to measure battery!</string>
+    <string name="toast_battery_off_failed">Failed to turn off battery measurement!</string>
+
     <string name="btn_export">EXPORT DATA</string>
 
     <string name="switch_heart_rate_on">Live heart rate measurement on</string>
@@ -35,6 +38,8 @@
     <string name="switch_acceleration_off">Live acceleration measurement off</string>
     <string name="switch_step_on">Live step rate measurement on</string>
     <string name="switch_step_off">Live step rate measurement off</string>
+    <string name="switch_battery_on">Live battery measurement on</string>
+    <string name="switch_battery_off">Live battery measurement off</string>
 
     <string name="label_fitness_recorder">Fitness Recorder</string>
     <string name="label_pair_band">Pair My Band</string>
@@ -42,6 +47,7 @@
     <string name="label_heart_rate">Heart rate</string>
     <string name="label_acceleration">Acceleration</string>
     <string name="label_step_rate">Step rate</string>
+    <string name="label_battery">Battery</string>
 
     <string name="label_table_heart_rate">Heart rate</string>
     <string name="label_table_acceleration">Acceleration</string>

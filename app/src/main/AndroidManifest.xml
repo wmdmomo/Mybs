@@ -45,11 +45,6 @@
             android:label="@string/label_pair_band"
             android:parentActivityName=".activities.SportActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ExportDataActivity"
-            android:label="@string/label_export_data"
-            android:parentActivityName=".activities.SportActivity"
-            android:screenOrientation="portrait" />
 
         <service
             android:name=".services.CommService"

@@ -48,8 +48,8 @@ public final class SportActivity extends AppCompatActivity {
 
         mBinding.setConnectTransaction(mConnectTransaction);
         mBinding.setHeartRateTransaction(mHeartRateTransaction);
-        mBinding.setAccelerationTransaction(mAccelerationTransaction);
         mBinding.setStepTransaction(mStepTransaction);
+        mBinding.setBatteryTransaction(mBatteryTransaction);
 
         mFabCircle = mBinding.fabProgressCircle;
 
@@ -57,8 +57,8 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.addHandler(mStateUpdateRequest);
         mMessenger.addHandler(mConnectTransaction);
         mMessenger.addHandler(mHeartRateTransaction);
-        mMessenger.addHandler(mAccelerationTransaction);
         mMessenger.addHandler(mStepTransaction);
+        mMessenger.addHandler(mBatteryTransaction);
 
         initBle();
         mStateUpdateRequest.request();
@@ -82,7 +82,7 @@ public final class SportActivity extends AppCompatActivity {
             requestScan();
             return true;
         });
-        exportMenuItem.setIntent(new Intent(this, ExportDataActivity.class));
+//        exportMenuItem.setIntent(new Intent(this, ExportDataActivity.class));
         return ans;
     }
 
@@ -164,8 +164,8 @@ public final class SportActivity extends AppCompatActivity {
                     mMacAddress, BytesUtil.toHexStr(mAuthKey), state));
             mBinding.setConnected(state.isEncrypted());
             mHeartRateTransaction.running.set(state.isMeasuringHeartRate());
-            mAccelerationTransaction.running.set(state.isMeasuringAcceleration());
             mStepTransaction.running.set(state.isMeasuringStep());
+            mBatteryTransaction.running.set(state.isMeasuringBattery());
         }
     };
 
@@ -339,54 +339,50 @@ public final class SportActivity extends AppCompatActivity {
         }
     };
 
-
-    private Transaction mAccelerationTransaction = new Transaction() {
+    //battery;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    private Transaction mBatteryTransaction = new Transaction() {
         @Override public String[] getActions() {
             return new String[] {
-                    Constants.Action.START_ACCELERATION,
-                    Constants.Action.STOP_ACCELERATION,
-                    Constants.Action.BROADCAST_ACCELERATION
+                    Constants.Action.START_BATTERY,
+                    Constants.Action.STOP_BATTERY,
+                    Constants.Action.BROADCAST_BATTERY
             };
         }
 
         @Override public void start() {
-            Intent i = new Intent(SportActivity.this, CommService.class)
-                    .setAction(Constants.Action.START_ACCELERATION);
-            startService(i);
+            Log.i(TAG, "BatteryTransaction starting");
+            CommService.startActionStartBatteryMeasure(SportActivity.this);
         }
 
         @Override public void stop() {
-            Intent i = new Intent(SportActivity.this, CommService.class)
-                    .setAction(Constants.Action.STOP_ACCELERATION);
-            startService(i);
+            Log.i(TAG, "BatteryTransaction stopping");
+            CommService.startActionStopBatteryMeasure(SportActivity.this);
         }
 
         @Override public void handleResponse(Intent response) {
             super.handleResponse(response);
             int status;
             switch (response.getAction()) {
-                case Constants.Action.BROADCAST_ACCELERATION:
-                    float x = response.getFloatExtra(Constants.Extra.ACCELERATION_X, 0);
-                    float y = response.getFloatExtra(Constants.Extra.ACCELERATION_Y, 0);
-                    float z = response.getFloatExtra(Constants.Extra.ACCELERATION_Z, 0);
-                    mBinding.setAccelerationX(x);
-                    mBinding.setAccelerationY(y);
-                    mBinding.setAccelerationZ(z);
-                    Log.i(TAG, "AccelerationTransaction.handleResponse: x=" + x + " y=" + y + " z=" + z);
+                case Constants.Action.BROADCAST_BATTERY:
+                    int info = response.getIntExtra(Constants.Extra.BATTERY, -1);
+                    mBinding.setBattery(info);
+                    Log.i(TAG, "BatteryTransaction.handleResponse: got battery = " + info);
                     break;
-                case Constants.Action.START_ACCELERATION:
+                case Constants.Action.START_BATTERY:
                     status = response.getIntExtra(Constants.Extra.STATUS, Constants.Status.UNKNOWN);
+                    Log.i(TAG, "BatteryTransaction.handleResponse: START_BATTERY status=" + status);
                     boolean success = status == Constants.Status.OK;
                     running.set(success);
                     if (!success)
-                        Snackbar.make(mBinding.getRoot(), R.string.toast_acceleration_on_failed, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mBinding.getRoot(), R.string.toast_battery_on_failed, Snackbar.LENGTH_SHORT).show();
                     break;
-                case Constants.Action.STOP_ACCELERATION:
+                case Constants.Action.STOP_BATTERY:
                     status = response.getIntExtra(Constants.Extra.STATUS, Constants.Status.UNKNOWN);
+                    Log.i(TAG, "BatteryTransaction.handleResponse: START_BATTERY status=" + status);
                     if (status == Constants.Status.OK)
                         running.set(false);
                     else
-                        Snackbar.make(mBinding.getRoot(), R.string.toast_acceleration_off_failed, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mBinding.getRoot(), R.string.toast_battery_off_failed, Snackbar.LENGTH_SHORT).show();
                     break;
             }
         }

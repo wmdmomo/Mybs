@@ -9,15 +9,12 @@
         <variable name="connected" type="boolean" />
         <variable name="heartRate" type="int" />
         <variable name="step" type="int" />
-        <variable name="accelerationX" type="float" />
-        <variable name="accelerationY" type="float" />
-        <variable name="accelerationZ" type="float" />
+        <variable name="battery" type="int" />
 
         <variable name="connectTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
         <variable name="heartRateTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
-        <variable name="accelerationTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
         <variable name="stepTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
-
+        <variable name="batteryTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -75,18 +72,6 @@
                     android:visibility="@{heartRateTransaction.running ? (heartRate > 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
                     tools:text="65" />
 
-                <!--Acceleration -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/label_table_acceleration"
-                    android:padding="16dp"
-
-                    android:text="@{String.format(`x = %+6.1f\ny = %+6.1f\nz = %+6.1f`, accelerationX, accelerationY, accelerationZ)}"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:typeface="monospace"
-                    android:visibility="@{accelerationTransaction.running ? View.VISIBLE : View.GONE}" />
                 <!--STEP-->
                 <TextView
                     android:layout_width="match_parent"
@@ -97,6 +82,18 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display4"
                     android:visibility="@{stepTransaction.running ? (step >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
+                    tools:text="65" />
+
+                <!--BATTERY-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/label_battery"
+                    android:padding="16dp"
+                    android:text="@{Integer.toString(battery)}"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+                    android:visibility="@{batteryTransaction.running ? (battery >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
                     tools:text="65" />
             </LinearLayout>
 
@@ -136,29 +133,6 @@
                         android:switchMinWidth="56dp" />
                 </LinearLayout>
 
-                <!-- Acceleration control -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{accelerationTransaction.running ? @string/switch_acceleration_on : @string/switch_acceleration_off}" />
-
-                    <Switch
-                        android:id="@+id/switch_acceleration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="@{accelerationTransaction.running}"
-                        android:enabled="@{connected}"
-                        android:onCheckedChanged="@{(cb, checked) -> checked ? accelerationTransaction.start() : accelerationTransaction.stop()}"
-                        android:switchMinWidth="56dp" />
-                </LinearLayout>
 
                 <!--step control-->
                 <LinearLayout
@@ -180,6 +154,29 @@
                         android:checked="@{stepTransaction.running}"
                         android:enabled="@{connected}"
                         android:onCheckedChanged="@{(cb, checked) -> checked ? stepTransaction.start() : stepTransaction.stop()}"
+                        android:switchMinWidth="56dp" />
+                </LinearLayout>
+
+                <!--battery control-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@{batteryTransaction.running ? @string/switch_battery_on : @string/switch_battery_off}" />
+
+                    <Switch
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="@{batteryTransaction.running}"
+                        android:enabled="@{connected}"
+                        android:onCheckedChanged="@{(cb, checked) -> checked ? batteryTransaction.start() : batteryTransaction.stop()}"
                         android:switchMinWidth="56dp" />
                 </LinearLayout>
             </LinearLayout>

@@ -16,6 +16,8 @@ public final class BandState {
     public static final int ACCELERATION_MEASURING  = 0b0100000000;
     public static final int STEP_MEASURING          = 0b1000000000;
     public static final int STEP_NOTIFY             = 0b1000000001;
+    public static final int BATTERY_MEASURING       = 0b1000000010;
+    public static final int BATTERY_NOTIFY          = 0b1000000100;
 
     private int mState;
     private long mUpdateTime;
@@ -86,7 +88,10 @@ public final class BandState {
     }
 
     public boolean isMeasuringStep() {
-        return hasAll(BLE_CONNECT | ENCRYPTED | RAW_NOTIFY | STEP_MEASURING);
+        return hasAll(BLE_CONNECT | ENCRYPTED | STEP_NOTIFY | STEP_MEASURING);
+    }
+    public boolean isMeasuringBattery() {
+        return hasAll(BLE_CONNECT | ENCRYPTED | BATTERY_NOTIFY | BATTERY_MEASURING);
     }
 
 
@@ -143,8 +148,16 @@ public final class BandState {
         mState = (mState & (~STEP_NOTIFY)) | (enable ? STEP_NOTIFY : 0);
         mUpdateTime = System.currentTimeMillis();
     }
+    public synchronized void setBatteryNotify(boolean enable) {
+        mState = (mState & (~BATTERY_NOTIFY)) | (enable ? BATTERY_NOTIFY : 0);
+        mUpdateTime = System.currentTimeMillis();
+    }
     public synchronized void setStepMeasuring(boolean yes) {
         mState = (mState & (~STEP_MEASURING)) | (yes ? STEP_MEASURING : 0);
+        mUpdateTime = System.currentTimeMillis();
+    }
+    public synchronized void setBatteryMeasuring(boolean yes) {
+        mState = (mState & (~BATTERY_MEASURING)) | (yes ? BATTERY_MEASURING : 0);
         mUpdateTime = System.currentTimeMillis();
     }
 

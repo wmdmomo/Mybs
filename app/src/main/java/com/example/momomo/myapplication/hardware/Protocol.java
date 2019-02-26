@@ -72,6 +72,7 @@ public final class Protocol {
         public static final int HEART_KEEP_ALIVE_PERIOD = 10000; // 10 s
         public static final int STEP_KEEP_ALIVE_PERIOD = 5000; // 5 s
         public static final int ACCELERATION_PERIOD = 65000; // automatically stop every 70s
+        public static final int BATTERY_KEEP_ALIVE_PERIOD = 5000; //
     }
 
 }
