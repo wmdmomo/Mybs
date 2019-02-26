@@ -42,7 +42,6 @@
         <mapping class="com.example.momomo.myapplication.data_save.punchday"></mapping>
         <mapping class="com.example.momomo.myapplication.data_save.heartData"></mapping>
         <mapping class="com.example.momomo.myapplication.data_save.stepData"></mapping>
-        <mapping class="com.example.momomo.myapplication.data_save.batteryData"></mapping>
 
     </list>
 

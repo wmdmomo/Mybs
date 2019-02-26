@@ -53,7 +53,8 @@
     <string name="label_table_acceleration">Acceleration</string>
 
     <string name="item_pair_band">Pair my band</string>
-    <string name="item_export">Export data</string>
+    <string name="item_export_heart">Export heart data</string>
+    <string name="item_export_step">Export step data</string>
     <string name="item_scan">Scan</string>
     <string name="item_stop_scan">Stop Scanning</string>
 

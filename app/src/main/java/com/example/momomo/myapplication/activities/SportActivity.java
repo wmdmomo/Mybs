@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.clj.fastble.BleManager;
 import com.example.momomo.myapplication.R;
+import com.example.momomo.myapplication.chart_activity.heart_chart;
+import com.example.momomo.myapplication.chart_activity.step_chart;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.databinding.ActivitySportBinding;
 import com.example.momomo.myapplication.hardware.BandState;
@@ -76,13 +78,15 @@ public final class SportActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         MenuItem pairMenuItem = menu.findItem(R.id.start_pair);
-        MenuItem exportMenuItem = menu.findItem(R.id.export_data);
+        MenuItem exportMenuItem1 = menu.findItem(R.id.export_data_heart);
+        MenuItem exportMenuItem2 = menu.findItem(R.id.export_data_step);
 
         pairMenuItem.setOnMenuItemClickListener(menuItem -> {
             requestScan();
             return true;
         });
-//        exportMenuItem.setIntent(new Intent(this, ExportDataActivity.class));
+        exportMenuItem1.setIntent(new Intent(this, heart_chart.class));
+        exportMenuItem2.setIntent(new Intent(this, step_chart.class));
         return ans;
     }
 

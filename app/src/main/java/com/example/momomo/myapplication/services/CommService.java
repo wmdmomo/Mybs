@@ -20,7 +20,6 @@ import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.activities.SportActivity;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.data_save.User;
-import com.example.momomo.myapplication.data_save.batteryData;
 import com.example.momomo.myapplication.data_save.heartData;
 import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.hardware.BandState;
@@ -30,7 +29,6 @@ import com.example.momomo.myapplication.utils.saveVarible;
 
 import org.litepal.LitePal;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,7 +48,6 @@ public final class CommService extends Service {
     private PowerManager.WakeLock mWakeLock;
     private heartData heartData;
     private stepData stepData;
-    private batteryData batteryData;
     private String username;
 
     @Override
@@ -231,7 +228,7 @@ public final class CommService extends Service {
                 success = mBand.startMeasureHeartRate(heartRate -> {
                     heartData=new heartData();
                     heartData.setUser(username);
-                    heartData.setTime(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()));
+                    heartData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     heartData.setHeart(heartRate);
                     heartData.save();
                     Intent i = new Intent(Constants.Action.BROADCAST_HEART_RATE)
@@ -287,7 +284,7 @@ public final class CommService extends Service {
                     stepData=new stepData();
                     stepData.setUser(username);
                     stepData.setStep(step);
-                    stepData.setTime(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()));
+                    stepData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                     stepData.save();
 
                     Intent i = new Intent(Constants.Action.BROADCAST_STEP)
@@ -344,12 +341,6 @@ public final class CommService extends Service {
                 Log.i(TAG, "startBatteryMeasure: already measuring");
             } else {
                 success = mBand.startMeasureBattery(info -> {
-                    batteryData=new batteryData();
-                    batteryData.setUser(username);
-                    batteryData.setBattery(info);
-                    batteryData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-
-
                     Intent i = new Intent(Constants.Action.BROADCAST_BATTERY)
                             .putExtra(Constants.Extra.BATTERY, info);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(i);

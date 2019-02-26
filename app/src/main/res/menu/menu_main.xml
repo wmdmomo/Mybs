@@ -8,8 +8,12 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/export_data"
-        android:title="@string/item_export"
+        android:id="@+id/export_data_heart"
+        android:title="@string/item_export_heart"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/export_data_step"
+        android:title="@string/item_export_step"
         app:showAsAction="never" />
 
 </menu>

@@ -37,7 +37,8 @@
     <string name="label_pair_band">手环配对</string>
     <string name="label_export_data">数据导出</string>
     <string name="item_pair_band">手环配对</string>
-    <string name="item_export">导出数据</string>
+    <string name="item_export_heart">心率图表</string>
+    <string name="item_export_step">步数图表</string>
     <string name="item_scan">扫描</string>
     <string name="item_stop_scan">停止扫描</string>
     <string name="notify_measuring">正在测量</string>
