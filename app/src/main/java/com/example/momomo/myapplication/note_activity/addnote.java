@@ -2,6 +2,7 @@
 package com.example.momomo.myapplication.note_activity;
 
 import android.content.Intent;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +26,7 @@ public class addnote extends AppCompatActivity {
     private EditText noteTitle;
     private EditText noteContent;
     private LinearLayout noteDone;
-    private LinearLayout noteBG;
+    private PercentRelativeLayout noteBG;
     private String title;
     private String content;
     @Override
@@ -34,7 +35,7 @@ public class addnote extends AppCompatActivity {
         setContentView(R.layout.activity_addnote);
         noteTime=(TextView) findViewById(R.id.noteTime);
         noteDone=(LinearLayout) findViewById(R.id.noteDone);
-        noteBG=(LinearLayout) findViewById(R.id.addnotebg);
+        noteBG=(PercentRelativeLayout) findViewById(R.id.addnotebg);
         noteBG.getBackground().setAlpha(80);
         getTime();
         noteDone.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +48,7 @@ public class addnote extends AppCompatActivity {
     private void getTime(){
         long time=System.currentTimeMillis();
         Date date=new Date(time);
-        SimpleDateFormat now=new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 EEEE");
+        SimpleDateFormat now=new SimpleDateFormat("yyyy.MM.dd HH:mm EE");
         now.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
         nowtime=now.format(date);
         noteTime.setText(nowtime);

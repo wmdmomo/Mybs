@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/addnotebg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg3"
-    android:orientation="vertical"
-    android:weightSum="10"
     tools:context=".note_activity.addnote">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
 
         <TextView
+            app:layout_marginTopPercent="8%"
+            android:layout_centerHorizontal="true"
             android:id="@+id/noteTime"
-            android:layout_width="wrap_content"
+            app:layout_widthPercent="60%"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:padding="10dp"
-            android:text="2019年1月9日 14:50 星期三"
+            android:text="2019年1月9日 14:50 星期三ssdwdwqsqwqs"
             android:textSize="20dp" />
-    </LinearLayout>
+
+
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+
+        app:layout_widthPercent="90%"
+        app:layout_heightPercent="15%"
+        android:layout_centerHorizontal="true"
+        app:layout_marginTopPercent="20%"
+        >
 
         <EditText
             android:id="@+id/noteTitle"
@@ -41,9 +39,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="6">
+        app:layout_widthPercent="90%"
+        app:layout_heightPercent="35%"
+        android:layout_centerHorizontal="true"
+        app:layout_marginTopPercent="40%"
+        >
 
         <EditText
             android:id="@+id/noteContent"
@@ -55,17 +55,13 @@
             android:textSize="20dp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/noteDone"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"></LinearLayout>
 
-</LinearLayout>
+</android.support.percent.PercentRelativeLayout>

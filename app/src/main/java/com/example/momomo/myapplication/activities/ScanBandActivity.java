@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,14 +28,14 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.data.BleScanState;
 import com.clj.fastble.scan.BleScanRuleConfig;
 import com.example.momomo.myapplication.R;
+import com.example.momomo.myapplication.chart_activity.heart_chart;
+import com.example.momomo.myapplication.chart_activity.step_chart;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.hardware.Protocol;
 import com.example.momomo.myapplication.services.CommService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 
 public final class ScanBandActivity extends AppCompatActivity {
@@ -45,6 +46,7 @@ public final class ScanBandActivity extends AppCompatActivity {
 
     private DevicesInfoAdapter mDevicesInfoAdapter;
     private MenuItem mScanMenuItem;
+    private Toolbar mtoolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public final class ScanBandActivity extends AppCompatActivity {
         RecyclerView devicesRecyclerView = findViewById(R.id.devices_recycler_view);
         devicesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         devicesRecyclerView.setAdapter(mDevicesInfoAdapter);
-
+        initToolBar();
         CommService.startActionDisconnect(this, false);
         new Handler().postDelayed(this::requestLocationPermissionAndScanBt, 500);
     }
@@ -68,6 +70,13 @@ public final class ScanBandActivity extends AppCompatActivity {
         BleManager bleManager = BleManager.getInstance();
         if (bleManager.getScanSate() == BleScanState.STATE_SCANNING)
             bleManager.cancelScan();
+    }
+
+    private void initToolBar() {
+        mtoolbar=(Toolbar) findViewById(R.id.scan_bar);
+        mtoolbar.setTitle("标题22");
+//        mtoolbar.inflateMenu(R.menu.menu_pairing)
+        setSupportActionBar(mtoolbar);
     }
 
     @Override
@@ -92,7 +101,7 @@ public final class ScanBandActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.toast_need_location_permission, Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "requestLocationPermissionAndScanBt: denied in the past");
             } else {
-                ActivityCompat.requestPermissions(this, new String[] {PERMISSION}, LOCATION_PERMISSION_REQUEST);
+                ActivityCompat.requestPermissions(this, new String[]{PERMISSION}, LOCATION_PERMISSION_REQUEST);
                 Log.i(TAG, "requestLocationPermissionAndScanBt: requesting");
             }
         } else {
@@ -130,17 +139,22 @@ public final class ScanBandActivity extends AppCompatActivity {
                 .setScanTimeOut(SCAN_TIMEOUT)
                 .build());
         bleManager.scan(new BleScanCallback() {
-            @Override public void onScanFinished(List<BleDevice> scanResultList) {
+            @Override
+            public void onScanFinished(List<BleDevice> scanResultList) {
                 mScanMenuItem.setTitle(R.string.item_scan);
                 Log.i(TAG, "onScanFinished");
             }
-            @Override public void onScanStarted(boolean success) {
+
+            @Override
+            public void onScanStarted(boolean success) {
                 mDevicesInfoAdapter.clear();
                 if (success) {
                     mScanMenuItem.setTitle(R.string.item_stop_scan);
                 }
             }
-            @Override public void onScanning(BleDevice device) {
+
+            @Override
+            public void onScanning(BleDevice device) {
                 mDevicesInfoAdapter.addItem(device);
                 Log.i(TAG, String.format("onScanning: find device[name=%s, mac=%s]", device.getName(), device.getMac()));
             }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +24,7 @@ import org.litepal.LitePal;
 
 import java.io.File;
 
-public class mine_set extends TakePhotoActivity {
+public class mine_set extends TakePhotoActivity  {
     private EditText signature;
     private TextView name;
     private EditText weight;
@@ -41,7 +40,7 @@ public class mine_set extends TakePhotoActivity {
     private String hei_s;
     private String imgpath;
 
-    private Button takeFromGalleyBtn;
+
     private de.hdodenhof.circleimageview.CircleImageView imageView;
     //    TakePhoto
     private TakePhoto takePhoto;
@@ -50,7 +49,7 @@ public class mine_set extends TakePhotoActivity {
     private Uri imageUri;  //图片保存路径
     private int userId;
     private User user;
-    private String iconPath;
+    private String iconPath="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +60,8 @@ public class mine_set extends TakePhotoActivity {
         user = LitePal.find(User.class, userId);
         initSet();
         initData();
-        takeFromGalleyBtn = (Button) findViewById(R.id.change_img);
-        takeFromGalleyBtn.setOnClickListener(new View.OnClickListener() {
+        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageUri = getImageCropUri();
@@ -89,6 +88,7 @@ public class mine_set extends TakePhotoActivity {
                     user.setHeight(hei_set);
                 }
                 if (!sign_set.equals("")) user.setSignature(sign_set);
+                //这句有问题 因为之前没有对iconPath 进行初始化
                 if (!iconPath.equals(""))user.setAvatar_path(iconPath);
                 user.save();
                 Intent intent = new Intent(mine_set.this, mine.class);
@@ -103,10 +103,10 @@ public class mine_set extends TakePhotoActivity {
         wei=user.getWeight();
         hei=user.getHeight();
         imgpath=user.getAvatar_path();
-        signature = (EditText) findViewById(R.id.avatar_word_set);
-        name = (TextView) findViewById(R.id.avatar_name_set);
-        weight = (EditText) findViewById(R.id.weight_set);
-        height = (EditText) findViewById(R.id.height_set);
+        signature = (EditText) findViewById(R.id.user_word_set);
+        name = (TextView) findViewById(R.id.user_name_set);
+        weight = (EditText) findViewById(R.id.user_weight_set);
+        height = (EditText) findViewById(R.id.user_height_set);
         imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
         signature.setHint(sign);
         name.setText(nam);

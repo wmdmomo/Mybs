@@ -17,10 +17,12 @@
         android:name=".utils.saveVarible"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".chart_activity.step_chart"></activity>
+        <activity android:name=".mine_activity.about_rank"></activity>
+        <activity android:name=".chart_activity.step_chart" />
         <activity android:name=".activities.SportActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -37,8 +39,6 @@
         <activity android:name=".note_activity.note" />
         <activity android:name=".note_activity.addnote" />
         <activity android:name=".chart_activity.heart_chart" />
-        <activity android:name=".ceshi.running" />
-        <activity android:name=".ceshi.scan_activity" />
         <activity android:name=".mine_activity.mine" />
         <activity android:name=".mine_activity.mine_set" />
         <activity

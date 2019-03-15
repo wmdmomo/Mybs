@@ -5,44 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".food_activity.food">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@mipmap/food_bg"
         android:orientation="horizontal"
-        android:background="@mipmap/bg1"
-        >
+        app:layout_heightPercent="30%">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:text="My plate"
-            android:textStyle="bold"
             android:textSize="20pt"
-            android:layout_weight="3"/>
+            android:textStyle="bold" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
             android:src="@drawable/ic_tixing"
-            android:layout_weight="1"
-            android:layout_gravity="center"/>
+             />
+
         <ImageView
+            android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_tianjia"
-            android:id="@+id/add"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:layout_gravity="center"/>
+            android:src="@drawable/ic_tianjia" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_marginTopPercent="40%"
+        app:layout_heightPercent="65%"
+        app:layout_marginTopPercent="32%"
         android:gravity="center">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>

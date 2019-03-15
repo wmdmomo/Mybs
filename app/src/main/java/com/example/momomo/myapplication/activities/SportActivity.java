@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,6 @@ import com.example.momomo.myapplication.utils.BytesUtil;
 import com.github.jorgecastilloprz.FABProgressCircle;
 
 
-
 public final class SportActivity extends AppCompatActivity {
 
     private static final String TAG = SportActivity.class.getSimpleName();
@@ -41,6 +41,7 @@ public final class SportActivity extends AppCompatActivity {
     private ActivitySportBinding mBinding;
     private Messenger mMessenger;
     private FABProgressCircle mFabCircle;
+    private Toolbar mtoolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +55,14 @@ public final class SportActivity extends AppCompatActivity {
         mBinding.setBatteryTransaction(mBatteryTransaction);
 
         mFabCircle = mBinding.fabProgressCircle;
-
+        mtoolbar = mBinding.mainBar;
         mMessenger = new Messenger(this);
         mMessenger.addHandler(mStateUpdateRequest);
         mMessenger.addHandler(mConnectTransaction);
         mMessenger.addHandler(mHeartRateTransaction);
         mMessenger.addHandler(mStepTransaction);
         mMessenger.addHandler(mBatteryTransaction);
-
+        initToolBar();
         initBle();
         mStateUpdateRequest.request();
     }
@@ -72,22 +73,29 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.unregister();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean ans = super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        MenuItem pairMenuItem = menu.findItem(R.id.start_pair);
-        MenuItem exportMenuItem1 = menu.findItem(R.id.export_data_heart);
-        MenuItem exportMenuItem2 = menu.findItem(R.id.export_data_step);
-
-        pairMenuItem.setOnMenuItemClickListener(menuItem -> {
-            requestScan();
-            return true;
+    private void initToolBar() {
+        mtoolbar.setTitle("标题");
+        mtoolbar.inflateMenu(R.menu.menu_main);
+        mtoolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.start_pair: {
+                        requestScan();
+                        break;
+                    }
+                    case R.id.export_data_heart: {
+                        menuItem.setIntent(new Intent(SportActivity.this, heart_chart.class));
+                        break;
+                    }
+                    case R.id.export_data_step: {
+                        menuItem.setIntent(new Intent(SportActivity.this, step_chart.class));
+                        break;
+                    }
+                }
+                return false;
+            }
         });
-        exportMenuItem1.setIntent(new Intent(this, heart_chart.class));
-        exportMenuItem2.setIntent(new Intent(this, step_chart.class));
-        return ans;
     }
 
     private void initBle() {
@@ -149,17 +157,20 @@ public final class SportActivity extends AppCompatActivity {
     }
 
     private Request mStateUpdateRequest = new Request() {
-        @Override public String[] getActions() {
-            return new String[] { Constants.Action.STATE_UPDATE };
+        @Override
+        public String[] getActions() {
+            return new String[]{Constants.Action.STATE_UPDATE};
         }
 
-        @Override public void request() {
+        @Override
+        public void request() {
             Intent i = new Intent(SportActivity.this, CommService.class)
                     .setAction(Constants.Action.STATE_UPDATE);
             startService(i);
         }
 
-        @Override public void handleResponse(Intent response) {
+        @Override
+        public void handleResponse(Intent response) {
             super.handleResponse(response);
             mMacAddress = response.getStringExtra(Constants.Extra.MAC);
             mAuthKey = response.getByteArrayExtra(Constants.Extra.KEY);
@@ -176,15 +187,17 @@ public final class SportActivity extends AppCompatActivity {
     private Transaction mConnectTransaction = new Transaction() {
         private boolean busy = false;
 
-        @Override public String[] getActions() {
-            return new String[] {
+        @Override
+        public String[] getActions() {
+            return new String[]{
                     Constants.Action.PAIR,
                     Constants.Action.CONNECT,
                     Constants.Action.DISCONNECT
             };
         }
 
-        @Override public void start() {
+        @Override
+        public void start() {
             if (busy) return;
             if (!checkAndEnableBt()) {
                 Log.w(TAG, "ConnectTransaction.start: bluetooth disabled");
@@ -200,7 +213,8 @@ public final class SportActivity extends AppCompatActivity {
             Log.i(TAG, "ConnectTransaction.start: mac=" + mMacAddress + ", authKey=" + BytesUtil.toHexStr(mAuthKey));
         }
 
-        @Override public void stop() {
+        @Override
+        public void stop() {
             if (busy) return;
             mFabCircle.show();
             busy = true;
@@ -208,7 +222,8 @@ public final class SportActivity extends AppCompatActivity {
             Log.i(TAG, "ConnectTransaction.stop: disconnect");
         }
 
-        @Override public void handleResponse(Intent response) {
+        @Override
+        public void handleResponse(Intent response) {
             super.handleResponse(response);
             int status = response.getIntExtra(Constants.Extra.STATUS, Constants.Status.UNKNOWN);
             switch (response.getAction()) {
@@ -247,25 +262,29 @@ public final class SportActivity extends AppCompatActivity {
 
 
     private Transaction mHeartRateTransaction = new Transaction() {
-        @Override public String[] getActions() {
-            return new String[] {
+        @Override
+        public String[] getActions() {
+            return new String[]{
                     Constants.Action.START_HEART_RATE,
                     Constants.Action.STOP_HEART_RATE,
                     Constants.Action.BROADCAST_HEART_RATE
             };
         }
 
-        @Override public void start() {
+        @Override
+        public void start() {
             Log.i(TAG, "HeartRateTransaction starting");
             CommService.startActionStartHeartRateMeasure(SportActivity.this);
         }
 
-        @Override public void stop() {
+        @Override
+        public void stop() {
             Log.i(TAG, "HeartRateTransaction stopping");
             CommService.startActionStopHeartRateMeasure(SportActivity.this);
         }
 
-        @Override public void handleResponse(Intent response) {
+        @Override
+        public void handleResponse(Intent response) {
             super.handleResponse(response);
             int status;
             switch (response.getAction()) {
@@ -296,25 +315,29 @@ public final class SportActivity extends AppCompatActivity {
 
     //step;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     private Transaction mStepTransaction = new Transaction() {
-        @Override public String[] getActions() {
-            return new String[] {
+        @Override
+        public String[] getActions() {
+            return new String[]{
                     Constants.Action.START_STEP,
                     Constants.Action.STOP_STEP,
                     Constants.Action.BROADCAST_STEP
             };
         }
 
-        @Override public void start() {
+        @Override
+        public void start() {
             Log.i(TAG, "StepRateTransaction starting");
             CommService.startActionStartStepMeasure(SportActivity.this);
         }
 
-        @Override public void stop() {
+        @Override
+        public void stop() {
             Log.i(TAG, "StepRateTransaction stopping");
             CommService.startActionStopStepMeasure(SportActivity.this);
         }
 
-        @Override public void handleResponse(Intent response) {
+        @Override
+        public void handleResponse(Intent response) {
             super.handleResponse(response);
             int status;
             switch (response.getAction()) {
@@ -345,25 +368,29 @@ public final class SportActivity extends AppCompatActivity {
 
     //battery;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     private Transaction mBatteryTransaction = new Transaction() {
-        @Override public String[] getActions() {
-            return new String[] {
+        @Override
+        public String[] getActions() {
+            return new String[]{
                     Constants.Action.START_BATTERY,
                     Constants.Action.STOP_BATTERY,
                     Constants.Action.BROADCAST_BATTERY
             };
         }
 
-        @Override public void start() {
+        @Override
+        public void start() {
             Log.i(TAG, "BatteryTransaction starting");
             CommService.startActionStartBatteryMeasure(SportActivity.this);
         }
 
-        @Override public void stop() {
+        @Override
+        public void stop() {
             Log.i(TAG, "BatteryTransaction stopping");
             CommService.startActionStopBatteryMeasure(SportActivity.this);
         }
 
-        @Override public void handleResponse(Intent response) {
+        @Override
+        public void handleResponse(Intent response) {
             super.handleResponse(response);
             int status;
             switch (response.getAction()) {
@@ -400,7 +427,9 @@ public final class SportActivity extends AppCompatActivity {
 
     public static abstract class Transaction extends Messenger.MessageHandler {
         public final ObservableBoolean running = new ObservableBoolean();
+
         public abstract void start();
+
         public abstract void stop();
     }
 }

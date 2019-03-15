@@ -1,10 +1,12 @@
 package com.example.momomo.myapplication.login_activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -90,6 +92,7 @@ public class tologin extends AppCompatActivity {
         });
 
     }
+
     private void getTime(){
         long times=System.currentTimeMillis();
         Date date=new Date(times);

@@ -15,6 +15,8 @@ import org.litepal.LitePal;
 
 import com.example.momomo.myapplication.data_save.User;
 
+import java.util.List;
+
 
 public class login extends AppCompatActivity {
     private EditText user;
@@ -39,6 +41,13 @@ public class login extends AppCompatActivity {
                 username = user.getText().toString();
                 pas1 = pas.getText().toString();
                 pas2 = cpas.getText().toString();
+                List<User> userList = LitePal.findAll(User.class);
+                for (User users : userList) {
+                    if (users.getName().equals(username)) {
+                        Toast.makeText(login.this, "该用户名已存在", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
                 if (pas1.equals("") || pas2.equals("")) {
                     Toast.makeText(login.this, "密码不能为空", Toast.LENGTH_SHORT).show();
                 } else if (pas1.equals(pas2)) {

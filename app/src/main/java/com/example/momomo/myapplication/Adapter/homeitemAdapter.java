@@ -1,5 +1,6 @@
 package com.example.momomo.myapplication.Adapter;
 
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,27 +10,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.momomo.myapplication.R;
+
 import com.example.momomo.myapplication.data_save.homeitem;
+
 
 import java.util.List;
 
 public class homeitemAdapter extends RecyclerView.Adapter<homeitemAdapter.ViewHolder> {
     private List<homeitem> homeitemList;
     private OnhomeClickListener onhomeClickListener;
+
     public homeitemAdapter(List<homeitem> homeitemList) {
         this.homeitemList = homeitemList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         View view;
-        LinearLayout imageView;
+        ImageView imageView;
         TextView textView;
+        LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            imageView = (LinearLayout) view.findViewById(R.id.homeimg);
-            textView=(TextView) view.findViewById(R.id.home_word);
+            imageView = (ImageView) view.findViewById(R.id.homeimg);
+            textView = (TextView) view.findViewById(R.id.home_word);
+            linearLayout = (LinearLayout) view.findViewById(R.id.home_icon);
         }
 
     }
@@ -55,10 +61,11 @@ public class homeitemAdapter extends RecyclerView.Adapter<homeitemAdapter.ViewHo
         holder.imageView.setBackgroundResource(homeitem.getImgid());
         holder.textView.setText(homeitem.getWord());
         if (onhomeClickListener != null) {
-            holder.textView.setOnClickListener(new View.OnClickListener() {
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onhomeClickListener.onClick(position);
+
                 }
             });
         }

@@ -7,7 +7,7 @@
     tools:context=".food_activity.addfood">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        app:layout_heightPercent="30%"
         android:background="@mipmap/bg1"
         >
         <TextView
@@ -20,7 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_marginTopPercent="38%"
+        app:layout_marginTopPercent="25%"
         android:gravity="center">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"
