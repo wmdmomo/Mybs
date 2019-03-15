@@ -74,7 +74,7 @@ public final class SportActivity extends AppCompatActivity {
     }
 
     private void initToolBar() {
-        mtoolbar.setTitle("标题");
+//        mtoolbar.setTitle("标题");
         mtoolbar.inflateMenu(R.menu.menu_main);
         mtoolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

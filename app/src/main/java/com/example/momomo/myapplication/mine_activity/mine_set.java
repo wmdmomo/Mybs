@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.utils.saveVarible;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
@@ -24,23 +26,13 @@ import org.litepal.LitePal;
 
 import java.io.File;
 
-public class mine_set extends TakePhotoActivity  {
-    private EditText signature;
+public class mine_set extends TakePhotoActivity {
+    private EditText signature, weight, height;
     private TextView name;
-    private EditText weight;
-    private EditText height;
-    private String sign;
-    private int wei;
-    private int hei;
-    private String sign_set;
-    private String nam;
-    private int wei_set;
-    private int hei_set;
-    private String wei_s;
-    private String hei_s;
-    private String imgpath;
+    private String sign, sign_set, nam, wei_s, hei_s, imgpath;
+    private int wei, hei, wei_set, hei_set;
 
-
+    private android.support.v7.widget.Toolbar toolbar;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
     //    TakePhoto
     private TakePhoto takePhoto;
@@ -49,7 +41,7 @@ public class mine_set extends TakePhotoActivity  {
     private Uri imageUri;  //图片保存路径
     private int userId;
     private User user;
-    private String iconPath="";
+    private String iconPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +52,7 @@ public class mine_set extends TakePhotoActivity  {
         user = LitePal.find(User.class, userId);
         initSet();
         initData();
+        initBar();
         imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,20 +82,21 @@ public class mine_set extends TakePhotoActivity  {
                 }
                 if (!sign_set.equals("")) user.setSignature(sign_set);
                 //这句有问题 因为之前没有对iconPath 进行初始化
-                if (!iconPath.equals(""))user.setAvatar_path(iconPath);
+                if (!iconPath.equals("")) user.setAvatar_path(iconPath);
                 user.save();
-                Intent intent = new Intent(mine_set.this, mine.class);
+                Intent intent = new Intent(mine_set.this, home.class);
+                intent.putExtra("id",1);
                 startActivity(intent);
             }
         });
     }
 
     private void initSet() {
-        sign=user.getSignature();
-        nam=user.getName();
-        wei=user.getWeight();
-        hei=user.getHeight();
-        imgpath=user.getAvatar_path();
+        sign = user.getSignature();
+        nam = user.getName();
+        wei = user.getWeight();
+        hei = user.getHeight();
+        imgpath = user.getAvatar_path();
         signature = (EditText) findViewById(R.id.user_word_set);
         name = (TextView) findViewById(R.id.user_name_set);
         weight = (EditText) findViewById(R.id.user_weight_set);
@@ -156,5 +150,11 @@ public class mine_set extends TakePhotoActivity  {
         File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         return Uri.fromFile(file);
+    }
+
+    private void initBar() {
+        toolbar = (Toolbar) findViewById(R.id.about_mine_set_bar);
+        TextView textView = (TextView) findViewById(R.id.mine_set_title);
+        textView.setText("我的信息");
     }
 }

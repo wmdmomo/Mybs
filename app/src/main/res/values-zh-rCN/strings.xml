@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FitRecord</string>
     <string name="toast_not_support_ble">您的设备不支持低功耗蓝牙</string>
     <string name="toast_have_to_enable_bt">您需要开启蓝牙</string>
     <string name="toast_bt_enabled">蓝牙打开成功</string>

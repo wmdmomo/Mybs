@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FitRecord</string>
+
 
     <string name="toast_not_support_ble">Your device doesn\'t support BLE!</string>
     <string name="toast_have_to_enable_bt">You have to enable Bluetooth!</string>

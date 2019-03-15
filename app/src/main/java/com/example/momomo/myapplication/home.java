@@ -22,6 +22,7 @@ public class home extends AppCompatActivity {
     private fragment_mine fragmentMine = new fragment_mine();
     private fragment_home fragmentHome = new fragment_home();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,10 @@ public class home extends AppCompatActivity {
                 .addItem(new BottomNavigationItem(R.drawable.ic_note, "计划"))
                 .setFirstSelectedPosition(0)
                 .initialise();
+        int id = getIntent().getIntExtra("id", 0);
+        if(id==1){
+            switchFragment(fragmentMine).commit();
+        }
         bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
