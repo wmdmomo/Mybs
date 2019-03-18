@@ -12,6 +12,15 @@ public class User extends LitePalSupport {
     private int punch;
     private int id;
     private String avatar_path;
+    private int likes;
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
 
     public int getGoal_weight() {
         return goal_weight;

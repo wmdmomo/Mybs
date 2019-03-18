@@ -7,7 +7,7 @@
     tools:context=".mine_activity.fragment_mine">
 
     <LinearLayout
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="140dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,8 +17,7 @@
             android:id="@+id/mine_bg"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginBottom="20dp"
-            android:background="@mipmap/food_bg"
+            android:background="@mipmap/mine_bg"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -32,6 +31,7 @@
                 android:id="@+id/avatar_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="王梦旦" />
 
 
@@ -60,6 +60,7 @@
                         android:id="@+id/my_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:text="45" />
 
                 </LinearLayout>
@@ -80,6 +81,7 @@
                         android:id="@+id/my_height"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:text="162" />
 
                 </LinearLayout>
@@ -101,6 +103,7 @@
                         android:id="@+id/my_goal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:text="47" />
 
                 </LinearLayout>

@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class about_punch extends AppCompatActivity {
     private Button button_punch;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
     private TextView textView;
+    private LinearLayout P1, P2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class about_punch extends AppCompatActivity {
                     user.save();
                     Toast.makeText(about_punch.this, "今日打卡成功", Toast.LENGTH_SHORT).show();
                     textView.setText(String.valueOf(user.getPunch()));
-                }else{
+                } else {
                     Toast.makeText(about_punch.this, "打卡失败", Toast.LENGTH_SHORT).show();
                 }
                 punchday.setFlag(true);
@@ -59,8 +61,12 @@ public class about_punch extends AppCompatActivity {
         button_punch = (Button) findViewById(R.id.punch_day);
         imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.punch_img);
         textView = (TextView) findViewById(R.id.punch_num);
+        P1 = (LinearLayout) findViewById(R.id.p1);
+        P2 = (LinearLayout) findViewById(R.id.p2);
         daycount = user.getPunch();
         imgpath = user.getAvatar_path();
+        P1.getBackground().setAlpha(150);
+        P2.getBackground().setAlpha(150);
     }
 
     private void setData() {

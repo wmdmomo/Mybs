@@ -28,8 +28,6 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.data.BleScanState;
 import com.clj.fastble.scan.BleScanRuleConfig;
 import com.example.momomo.myapplication.R;
-import com.example.momomo.myapplication.chart_activity.heart_chart;
-import com.example.momomo.myapplication.chart_activity.step_chart;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.hardware.Protocol;
 import com.example.momomo.myapplication.services.CommService;

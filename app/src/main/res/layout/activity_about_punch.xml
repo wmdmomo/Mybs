@@ -6,45 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".mine_activity.about_punch">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/about_punch_bar"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/p1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
+        android:background="@mipmap/p1"
+        app:layout_heightPercent="60%"></LinearLayout>
 
-        <TextView
-            android:id="@+id/punch_title"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_marginTopPercent="13%">
+        app:layout_marginTopPercent="20%">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/punch_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/avatar" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/avatar"
+            android:layout_marginBottom="30dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:text="坚持就是胜利！"
-            android:textSize="28dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="已打卡"
-            android:textSize="25dp" />
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:layout_marginBottom="15dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,18 +49,33 @@
                 android:text="15"
                 android:textColor="#FFC674"
                 android:textSize="25dp" />
+
             <TextView
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="次"
                 android:textSize="25dp" />
         </LinearLayout>
     </LinearLayout>
-    <Button
-        android:layout_centerHorizontal="true"
-        app:layout_marginTopPercent="50%"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/punch_day"
-        android:text="开始签到"/>
+
+    <LinearLayout
+        android:id="@+id/p2"
+        app:layout_marginTopPercent="60%"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="40%"
+        android:background="@mipmap/p2"
+        android:gravity="center">
+
+
+        <Button
+            android:id="@+id/punch_day"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/white"
+            android:text="开始签到"
+            android:textColor="@color/white"
+             />
+    </LinearLayout>
 </android.support.percent.PercentRelativeLayout>

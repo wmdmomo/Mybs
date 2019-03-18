@@ -19,50 +19,58 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
     private LayoutInflater layoutInflater;
     private List<User> rankList;
     private rankitemAdapter.OnRankClickListener onRankClickListener;
-    public rankitemAdapter(Context context,List<User> rankList){
-        this.rankList=rankList;
-        this.context=context;
-        layoutInflater=LayoutInflater.from(context);
+
+    public rankitemAdapter(Context context, List<User> rankList) {
+        this.rankList = rankList;
+        this.context = context;
+        layoutInflater = LayoutInflater.from(context);
 
     }
-    public class ViewHolder extends  RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         View view;
         TextView rank_num;
         TextView rank_name;
         TextView rank_start;
+        TextView rank_likes;
         de.hdodenhof.circleimageview.CircleImageView imageView;
         ImageView rank_attention;
-        public ViewHolder(View view){
+
+        public ViewHolder(View view) {
             super(view);
-            this.view=view;
-            rank_num=(TextView) view.findViewById(R.id.rank_num);
-            rank_name=(TextView) view.findViewById(R.id.rank_name);
-            rank_start=(TextView) view.findViewById(R.id.rank_star);
-            rank_attention=(ImageView)view.findViewById(R.id.rank_attention);
-            imageView=(de.hdodenhof.circleimageview.CircleImageView)view.findViewById(R.id.rank_img);
+            this.view = view;
+            rank_num = (TextView) view.findViewById(R.id.rank_num);
+            rank_name = (TextView) view.findViewById(R.id.rank_name);
+            rank_start = (TextView) view.findViewById(R.id.rank_star);
+            rank_likes = (TextView) view.findViewById(R.id.rank_likes);
+            rank_attention = (ImageView) view.findViewById(R.id.rank_attention);
+            imageView = (de.hdodenhof.circleimageview.CircleImageView) view.findViewById(R.id.rank_img);
         }
     }
 
     @Override
     public rankitemAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view=layoutInflater.inflate(R.layout.rank_item,viewGroup,false);
+        View view = layoutInflater.inflate(R.layout.rank_item, viewGroup, false);
         return new rankitemAdapter.ViewHolder(view);
     }
-    public interface OnRankClickListener{
-        void onClick( int position);
+
+    public interface OnRankClickListener {
+        void onClick(int position);
     }
 
     public void setOnRankClickListener(rankitemAdapter.OnRankClickListener
-                                                 onRankClickListener){
-        this.onRankClickListener=onRankClickListener;
+                                               onRankClickListener) {
+        this.onRankClickListener = onRankClickListener;
     }
+
     @Override
     public void onBindViewHolder(rankitemAdapter.ViewHolder viewHolder, final int position) {
-        final User rank=rankList.get(position);
-        viewHolder.rank_num.setText(String.valueOf(position+1));
+        final User rank = rankList.get(position);
+        viewHolder.rank_num.setText(String.valueOf(position + 1));
         viewHolder.rank_name.setText(rank.getName());
         viewHolder.rank_start.setText(String.valueOf(rank.getPunch()));
-        final String imgpath=rank.getAvatar_path();
+        viewHolder.rank_likes.setText(String.valueOf(rank.getLikes()));
+        final String imgpath = rank.getAvatar_path();
         if (!imgpath.equals(" ")) Glide.with(context).load(imgpath).into(viewHolder.imageView);
         else {
             int resourceId = R.mipmap.avatar;
@@ -70,11 +78,14 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
                     .load(resourceId)
                     .into(viewHolder.imageView);
         }
-        if( onRankClickListener!= null) {
+        if (onRankClickListener != null) {
             viewHolder.rank_attention.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    viewHolder.rank_attention.setImageResource(R.drawable.ic_aixinfill);
                     onRankClickListener.onClick(position);
+                    rank.setLikes(rank.getLikes()+1);
+                    rank.save();
                 }
             });
         }

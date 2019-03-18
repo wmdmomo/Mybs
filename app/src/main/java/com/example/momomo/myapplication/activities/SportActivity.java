@@ -11,8 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clj.fastble.BleManager;
@@ -55,7 +55,7 @@ public final class SportActivity extends AppCompatActivity {
         mBinding.setBatteryTransaction(mBatteryTransaction);
 
         mFabCircle = mBinding.fabProgressCircle;
-        mtoolbar = mBinding.mainBar;
+        mtoolbar = mBinding.mineBar;
         mMessenger = new Messenger(this);
         mMessenger.addHandler(mStateUpdateRequest);
         mMessenger.addHandler(mConnectTransaction);
@@ -72,9 +72,9 @@ public final class SportActivity extends AppCompatActivity {
         super.onDestroy();
         mMessenger.unregister();
     }
-
     private void initToolBar() {
-//        mtoolbar.setTitle("标题");
+        TextView textView = (TextView) findViewById(R.id.mine_title);
+        textView.setText("我的运动");
         mtoolbar.inflateMenu(R.menu.menu_main);
         mtoolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

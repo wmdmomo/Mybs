@@ -81,7 +81,7 @@ public class fragment_mine extends Fragment {
 
     private void initview() {
         linearLayout = (LinearLayout) view.findViewById(R.id.mine_bg);
-        linearLayout.getBackground().setAlpha(100);
+        linearLayout.getBackground().setAlpha(150);
         set_mine = (LinearLayout) view.findViewById(R.id.set_mine);
         set_rank = (LinearLayout) view.findViewById(R.id.set_rank);
         set_us = (LinearLayout) view.findViewById(R.id.set_about);

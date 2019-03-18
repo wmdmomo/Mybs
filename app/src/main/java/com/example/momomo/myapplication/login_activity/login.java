@@ -38,15 +38,20 @@ public class login extends AppCompatActivity {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int is_have = 0;
                 username = user.getText().toString();
                 pas1 = pas.getText().toString();
                 pas2 = cpas.getText().toString();
                 List<User> userList = LitePal.findAll(User.class);
                 for (User users : userList) {
                     if (users.getName().equals(username)) {
+                        is_have = 1;
                         Toast.makeText(login.this, "该用户名已存在", Toast.LENGTH_SHORT).show();
                         break;
                     }
+                }
+                if (is_have == 1) {
+                    return;
                 }
                 if (pas1.equals("") || pas2.equals("")) {
                     Toast.makeText(login.this, "密码不能为空", Toast.LENGTH_SHORT).show();
@@ -59,6 +64,7 @@ public class login extends AppCompatActivity {
                     person.setWeight(0);
                     person.setSignature(" ");
                     person.setAvatar_path(" ");
+                    person.setLikes(0);
                     person.save();
                     Intent intentlogin = new Intent(login.this, tologin.class);
                     startActivity(intentlogin);
