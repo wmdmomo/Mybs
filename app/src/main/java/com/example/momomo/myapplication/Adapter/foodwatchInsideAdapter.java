@@ -11,57 +11,68 @@ import com.example.momomo.myapplication.data_save.selectfoods;
 
 import java.util.List;
 
-public class foodwatchInsideAdapter extends RecyclerView.Adapter<foodwatchInsideAdapter.ViewHolder>{
+public class foodwatchInsideAdapter extends RecyclerView.Adapter<foodwatchInsideAdapter.ViewHolder> {
     private List<selectfoods> selectfoodsList;
-//    private OnfoodClickListener onfoodClickListener;
-    public foodwatchInsideAdapter(List<selectfoods> selectfoodsList){
-        this.selectfoodsList=selectfoodsList;
+    private OnfoodClickListener onfoodClickListener;
+
+    public foodwatchInsideAdapter(List<selectfoods> selectfoodsList) {
+        this.selectfoodsList = selectfoodsList;
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         View view;
         ImageView imageView;
-        public ViewHolder(View view){
+
+        public ViewHolder(View view) {
             super(view);
-            this.view=view;
-            imageView=(ImageView) view.findViewById(R.id.infood);
+            this.view = view;
+            imageView = (ImageView) view.findViewById(R.id.infood);
         }
 
     }
+
     public void setCategoryBeans(List<selectfoods> selectfoodsList) {
-        this.selectfoodsList=selectfoodsList;
+        this.selectfoodsList = selectfoodsList;
         notifyDataSetChanged();
     }
-    public int getCal(){
-        int cal=0;
-        for(selectfoods selectfoods:selectfoodsList){
-           cal+=selectfoods.getCal();
+
+    public int getCal() {
+        int cal = 0;
+        for (selectfoods selectfoods : selectfoodsList) {
+            cal += selectfoods.getCal();
         }
         return cal;
     }
-//    public interface OnfoodClickListener{
-//        void onClick( int position);
-//    }
-//    public void setOnfoodClickListener(OnfoodClickListener
-//                                               onfoodClickListener ){
-//        this.onfoodClickListener=onfoodClickListener;
-//    }
+
+    public interface OnfoodClickListener {
+        void onClick(int position);
+    }
+
+    public void setOnfoodClickListener(OnfoodClickListener
+                                               onfoodClickListener) {
+        this.onfoodClickListener = onfoodClickListener;
+    }
+
     @Override
-    public foodwatchInsideAdapter.ViewHolder onCreateViewHolder( ViewGroup viewGroup, int i) {
-        View view=LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.foodinside,viewGroup,false);
+    public foodwatchInsideAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.foodinside, viewGroup, false);
         return new ViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final selectfoods selectfoods=selectfoodsList.get(position);
+        final selectfoods selectfoods = selectfoodsList.get(position);
         holder.imageView.setImageResource(selectfoods.getImgid());
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectfoods.delete();
-                selectfoodsList.remove(position);
-                notifyDataSetChanged();
-            }
-        });
+        if (onfoodClickListener != null) {
+            holder.imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectfoods.delete();
+                    selectfoodsList.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     @Override

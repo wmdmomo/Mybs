@@ -79,6 +79,7 @@ public class tologin extends AppCompatActivity {
                         punchday.setUser(username);
                         punchday.setFlag(false);
                         punchday.setTime(time);
+                        punchday.setCal(0);
                         punchday.save();
                         punchId=punchday.getId();
                         app.setPunchId(punchId);

@@ -27,10 +27,10 @@ import org.litepal.LitePal;
 import java.io.File;
 
 public class mine_set extends TakePhotoActivity {
-    private EditText signature, weight, height;
+    private EditText signature, weight, height, goal_weight;
     private TextView name;
-    private String sign, sign_set, nam, wei_s, hei_s, imgpath;
-    private int wei, hei, wei_set, hei_set;
+    private String sign, sign_set, nam, wei_s, hei_s, imgpath, goal_s;
+    private int wei, hei, goal, wei_set, hei_set, goal_set;
 
     private android.support.v7.widget.Toolbar toolbar;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
@@ -71,7 +71,7 @@ public class mine_set extends TakePhotoActivity {
                 sign_set = signature.getText().toString();
                 wei_s = weight.getText().toString();
                 hei_s = height.getText().toString();
-                sign_set = signature.getText().toString();
+                goal_s = goal_weight.getText().toString();
                 if (!wei_s.equals("")) {
                     wei_set = Integer.parseInt(wei_s);
                     user.setWeight(wei_set);
@@ -80,12 +80,16 @@ public class mine_set extends TakePhotoActivity {
                     hei_set = Integer.parseInt(hei_s);
                     user.setHeight(hei_set);
                 }
+                if (!goal_s.equals("")) {
+                    goal_set = Integer.parseInt(goal_s);
+                    user.setGoal_weight(goal_set);
+                }
                 if (!sign_set.equals("")) user.setSignature(sign_set);
                 //这句有问题 因为之前没有对iconPath 进行初始化
                 if (!iconPath.equals("")) user.setAvatar_path(iconPath);
                 user.save();
                 Intent intent = new Intent(mine_set.this, home.class);
-                intent.putExtra("id",1);
+                intent.putExtra("id", 1);
                 startActivity(intent);
             }
         });
@@ -97,15 +101,18 @@ public class mine_set extends TakePhotoActivity {
         wei = user.getWeight();
         hei = user.getHeight();
         imgpath = user.getAvatar_path();
+        goal = user.getGoal_weight();
         signature = (EditText) findViewById(R.id.user_word_set);
         name = (TextView) findViewById(R.id.user_name_set);
         weight = (EditText) findViewById(R.id.user_weight_set);
         height = (EditText) findViewById(R.id.user_height_set);
         imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
+        goal_weight = (EditText) findViewById(R.id.user_goal_set);
         signature.setHint(sign);
         name.setText(nam);
         weight.setHint(String.valueOf(wei));
         height.setHint(String.valueOf(hei));
+        goal_weight.setHint(String.valueOf(goal));
 
         if (!imgpath.equals(" ")) Glide.with(this).load(imgpath).into(imageView);
         else {
