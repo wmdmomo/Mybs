@@ -5,15 +5,6 @@ public class iconitem {
     private String title;
     private String des;
     private int size;
-    private int jindu;
-
-    public int getJindu() {
-        return jindu;
-    }
-
-    public void setJindu(int jindu) {
-        this.jindu = jindu;
-    }
 
     public int getSize() {
         return size;

@@ -24,7 +24,6 @@ public class homeitem2Adapter extends RecyclerView.Adapter<homeitem2Adapter.View
         TextView item_title;
         TextView item_size;
         TextView item_danwei;
-        com.daimajia.numberprogressbar.NumberProgressBar numberProgressBar;
 
         public ViewHolder(View view) {
             super(view);
@@ -33,13 +32,9 @@ public class homeitem2Adapter extends RecyclerView.Adapter<homeitem2Adapter.View
             item_danwei=(TextView) view.findViewById(R.id.item_danwei);
             item_size=(TextView) view.findViewById(R.id.item_size);
             item_title=(TextView) view.findViewById(R.id.item_title);
-            numberProgressBar=(com.daimajia.numberprogressbar.NumberProgressBar)view.findViewById(R.id.jindu);
         }
 
     }
-
-
-
     @Override
     public homeitem2Adapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.homeicon, viewGroup, false);
@@ -53,7 +48,6 @@ public class homeitem2Adapter extends RecyclerView.Adapter<homeitem2Adapter.View
         holder.item_title.setText(iconitem.getTitle());
         holder.item_danwei.setText(iconitem.getDes());
         holder.item_size.setText(String.valueOf(iconitem.getSize()));
-        holder.numberProgressBar.setProgress(iconitem.getJindu());
     }
 
     @Override

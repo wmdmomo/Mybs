@@ -64,38 +64,10 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="6"
        ></LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="4"
-            android:orientation="vertical"
-            android:paddingLeft="8dp">
-            <com.daimajia.numberprogressbar.NumberProgressBar
-                android:id="@+id/jindu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
 
-                custom:progress_unreached_color="#e7e6e9"
-                custom:progress_reached_color="#9ebebd"
-
-                custom:progress_unreached_bar_height="4dp"
-                custom:progress_reached_bar_height="4dp"
-
-                custom:progress_text_size="15dp"
-                custom:progress_text_color="#c9c9cb"
-                custom:progress_text_offset="0dp"
-                custom:progress_text_visibility="visible"
-
-                custom:progress_max="100"
-                custom:progress_current="5"
-                />
-
-
-        </LinearLayout>
 
 
     </LinearLayout>

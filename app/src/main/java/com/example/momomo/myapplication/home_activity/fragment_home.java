@@ -29,7 +29,6 @@ public class fragment_home extends Fragment{
     private String[] title = {"每日打卡", "热量记录", "体重记录", "步数记录"};
     private String[] danwei = {"天", "千卡", "公斤", "步"};
     private int[] sizes = {0,0,0,0};
-    private int[] jindu = {0,0,0,0};
     private int[] imgid2s = {R.drawable.ic_icon_test, R.drawable.ic_shiwu, R.drawable.ic_tizhongcheng, R.drawable.ic_yundong};
     private View view;
     private LinearLayout linearLayout;
@@ -67,7 +66,6 @@ public class fragment_home extends Fragment{
             iconitem.setTitle(title[i]);
             iconitem.setDes(danwei[i]);
             iconitem.setSize(sizes[i]);
-            iconitem.setJindu(jindu[i]);
             iconitem.setImgid(imgid2s[i]);
             iconitemList.add(iconitem);
         }

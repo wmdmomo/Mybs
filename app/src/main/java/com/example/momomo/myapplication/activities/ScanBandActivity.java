@@ -72,8 +72,8 @@ public final class ScanBandActivity extends AppCompatActivity {
 
     private void initToolBar() {
         mtoolbar=(Toolbar) findViewById(R.id.scan_bar);
-        mtoolbar.setTitle("标题22");
-//        mtoolbar.inflateMenu(R.menu.menu_pairing)
+//        TextView textView = (TextView) findViewById(R.id.scan_title);
+//        textView.setText("设备列表");
         setSupportActionBar(mtoolbar);
     }
 
