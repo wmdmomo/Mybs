@@ -30,7 +30,9 @@ import com.example.momomo.myapplication.utils.saveVarible;
 import org.litepal.LitePal;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public final class CommService extends Service {
@@ -43,11 +45,10 @@ public final class CommService extends Service {
     private static final int HR_MEASURE_NOTIFY = 1;
 
     private MiBand2 mBand;
-    private Thread mHeartRateWorkThread,mStepWorkThread,mBatteryThread;
+    private Thread mHeartRateWorkThread, mStepWorkThread, mBatteryThread;
     private SharedPreferences mSettings;
     private PowerManager.WakeLock mWakeLock;
     private heartData heartData;
-    private stepData stepData;
     private String username;
 
     @Override
@@ -56,13 +57,14 @@ public final class CommService extends Service {
         Log.i(TAG, "onCreate");
         mSettings = getSharedPreferences(Constants.Settings.DEVICE, Context.MODE_PRIVATE);
         mBand = loadBandFromSettings();
-        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "myapp:mywakelocktag");
         final saveVarible app = (saveVarible) getApplication();
         int userId = app.getUserId();
         User user = LitePal.find(User.class, userId);
-        username=user.getName();
+        username = user.getName();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -226,11 +228,27 @@ public final class CommService extends Service {
                 Log.i(TAG, "startHeartRateMeasure: already measuring");
             } else {
                 success = mBand.startMeasureHeartRate(heartRate -> {
-                    heartData=new heartData();
-                    heartData.setUser(username);
-                    heartData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    heartData.setHeart(heartRate);
-                    heartData.save();
+                    List<heartData> heartDataList = new ArrayList<>();
+                    int id;
+                    final saveVarible app = (saveVarible) getApplication();
+                    int userId = app.getUserId();
+                    User user = LitePal.find(User.class, userId);
+                    username = user.getName();
+                    heartDataList = LitePal.where("user=? and date=?", username, new SimpleDateFormat("yyyy-MM-dd").format(new Date())).find(heartData.class);
+                    if (heartDataList.size() != 0) {
+                        id = heartDataList.get(heartDataList.size() - 1).getId();
+                        heartData heartData = LitePal.find(heartData.class, id);
+                        heartData.setHeart(heartRate);
+                        heartData.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        heartData.save();
+                    } else {
+                        heartData heartData = new heartData();
+                        heartData.setUser(username);
+                        heartData.setHeart(heartRate);
+                        heartData.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        heartData.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        heartData.save();
+                    }
                     Intent i = new Intent(Constants.Action.BROADCAST_HEART_RATE)
                             .putExtra(Constants.Extra.HEART_RATE, heartRate);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(i);
@@ -263,6 +281,7 @@ public final class CommService extends Service {
         });
         mHeartRateWorkThread.start();
     }
+
     //test step
     // TODO: to be refactored
     private void startStepMeasure() {
@@ -281,11 +300,28 @@ public final class CommService extends Service {
                 Log.i(TAG, "startStepMeasure: already measuring");
             } else {
                 success = mBand.startMeasureStep(step -> {
-                    stepData=new stepData();
-                    stepData.setUser(username);
-                    stepData.setStep(step);
-                    stepData.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                    stepData.save();
+                    List<stepData> stepDataList = new ArrayList<>();
+                    int id;
+                    final saveVarible app = (saveVarible) getApplication();
+                    int userId = app.getUserId();
+                    User user = LitePal.find(User.class, userId);
+                    username = user.getName();
+                    stepDataList = LitePal.where("user=? and date=?", username, new SimpleDateFormat("yyyy-MM-dd").format(new Date())).find(stepData.class);
+                    if (stepDataList.size() != 0) {
+                        id = stepDataList.get(stepDataList.size() - 1).getId();
+                        stepData stepData = LitePal.find(stepData.class, id);
+                        stepData.setStep(step);
+                        stepData.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        stepData.save();
+                    } else {
+                        stepData stepData = new stepData();
+                        stepData.setUser(username);
+                        stepData.setStep(step);
+                        stepData.setDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                        stepData.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        stepData.save();
+                    }
+
 
                     Intent i = new Intent(Constants.Action.BROADCAST_STEP)
                             .putExtra(Constants.Extra.STEP, step);
@@ -460,18 +496,22 @@ public final class CommService extends Service {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_HEART_RATE);
         context.startService(i);
     }
+
     public static void startActionStartStepMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.START_STEP);
         context.startService(i);
     }
+
     public static void startActionStopStepMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_STEP);
         context.startService(i);
     }
+
     public static void startActionStartBatteryMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.START_BATTERY);
         context.startService(i);
     }
+
     public static void startActionStopBatteryMeasure(Context context) {
         Intent i = new Intent(context, CommService.class).setAction(Constants.Action.STOP_BATTERY);
         context.startService(i);

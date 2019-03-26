@@ -1,12 +1,9 @@
 package com.example.momomo.myapplication.login_activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +19,7 @@ import java.util.TimeZone;
 
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.punchday;
+import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.utils.saveVarible;
 

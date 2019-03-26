@@ -10,6 +10,7 @@ import com.example.momomo.myapplication.data_save.heartData;
 import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.utils.saveVarible;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -32,11 +33,14 @@ public class step_chart extends AppCompatActivity {
         initdata();
         LineChart lineChart=(LineChart)findViewById(R.id.line1);
         lineChart.setDrawBorders(true);
+        Description description=new Description();
+        description.setText("步数统计图");
+        lineChart.setDescription(description);
         List<Entry> lineList=new ArrayList<>();
         List<String> names=new ArrayList<>();
         for(int i=0;i<stepDataList.size();i++){
             lineList.add(new Entry(i,stepDataList.get(i).getStep()));
-            names.add(stepDataList.get(i).getTime());
+            names.add(stepDataList.get(i).getDate());
         }
         XAxis xAxis=lineChart.getXAxis();
         xAxis.setTextColor(Color.parseColor("#333333"));

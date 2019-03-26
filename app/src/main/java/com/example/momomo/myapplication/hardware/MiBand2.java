@@ -482,7 +482,7 @@ public final class MiBand2 {
     //test
     private void parseStep(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
-        int step = (int)data[0] * 0x100 + data[1];
+        int step = data[1];
         Log.i(TAG, "parseStep: step=" + step);
         if (mStepHandler != null) mStepHandler.accept(step);
     }

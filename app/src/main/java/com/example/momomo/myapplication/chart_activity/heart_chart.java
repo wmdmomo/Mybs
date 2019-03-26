@@ -35,7 +35,7 @@ public class heart_chart extends AppCompatActivity {
         List<String> names=new ArrayList<>();
         for(int i=0;i<heartDataList.size();i++){
             lineList.add(new Entry(i,heartDataList.get(i).getHeart()));
-            names.add(heartDataList.get(i).getTime());
+            names.add(heartDataList.get(i).getDate());
         }
         XAxis xAxis=lineChart.getXAxis();
         xAxis.setTextColor(Color.parseColor("#333333"));
