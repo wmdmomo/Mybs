@@ -11,10 +11,10 @@
         <variable name="step" type="int" />
         <variable name="battery" type="int" />
 
-        <variable name="connectTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
-        <variable name="heartRateTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
-        <variable name="stepTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
-        <variable name="batteryTransaction" type="com.example.momomo.myapplication.activities.SportActivity.Transaction" />
+        <variable name="connectTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+        <variable name="heartRateTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+        <variable name="stepTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+        <variable name="batteryTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout

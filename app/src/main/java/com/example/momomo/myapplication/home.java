@@ -10,8 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
-import com.example.momomo.myapplication.activities.SportActivity;
-import com.example.momomo.myapplication.food_activity.food;
+import com.example.momomo.myapplication.food_activity.dish_home;
+import com.example.momomo.myapplication.sports_activity.SportActivity;
 import com.example.momomo.myapplication.home_activity.fragment_home;
 import com.example.momomo.myapplication.mine_activity.fragment_mine;
 import com.example.momomo.myapplication.note_activity.note;
@@ -60,7 +60,7 @@ public class home extends AppCompatActivity {
                         break;
                     }
                     case 3: {
-                        Intent intent = new Intent(home.this, food.class);
+                        Intent intent = new Intent(home.this, dish_home.class);
                         startActivity(intent);
                         break;
                     }

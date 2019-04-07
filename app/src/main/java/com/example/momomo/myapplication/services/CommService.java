@@ -17,7 +17,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.momomo.myapplication.R;
-import com.example.momomo.myapplication.activities.SportActivity;
+import com.example.momomo.myapplication.sports_activity.SportActivity;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.heartData;

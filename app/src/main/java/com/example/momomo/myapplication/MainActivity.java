@@ -6,8 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.momomo.myapplication.Manager.Dish;
 import com.example.momomo.myapplication.login_activity.login;
 import com.example.momomo.myapplication.login_activity.tologin;
+import com.example.momomo.myapplication.utils.saveVarible;
+
+import static com.example.momomo.myapplication.Manager.AuthService.getAuth;
+import static com.example.momomo.myapplication.Manager.Dish.dish;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button sign=(Button) findViewById(R.id.create);
         Button Login=(Button) findViewById(R.id.login);
+
+
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

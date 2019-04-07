@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".activities.ScanBandActivity">
+    tools:context=".sports_activity.ScanBandActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/scan_bar"

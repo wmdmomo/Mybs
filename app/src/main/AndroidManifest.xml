@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -21,11 +22,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mine_activity.about_punch"></activity>
+        <activity android:name=".food_activity.dish_home" />
+        <activity android:name=".mine_activity.about_punch" />
         <activity android:name=".mine_activity.about_us" />
         <activity android:name=".mine_activity.about_rank" />
         <activity android:name=".chart_activity.step_chart" />
-        <activity android:name=".activities.SportActivity" />
+        <activity android:name=".sports_activity.SportActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,17 +38,14 @@
         <activity android:name=".login_activity.login" />
         <activity android:name=".home" />
         <activity android:name=".login_activity.tologin" />
-        <activity android:name=".food_activity.food" />
-        <activity android:name=".food_activity.addfood" />
         <activity android:name=".note_activity.note" />
         <activity android:name=".note_activity.addnote" />
         <activity android:name=".chart_activity.heart_chart" />
-        <activity android:name=".mine_activity.mine" />
         <activity android:name=".mine_activity.mine_set" />
         <activity
-            android:name=".activities.ScanBandActivity"
+            android:name=".sports_activity.ScanBandActivity"
             android:label="@string/label_pair_band"
-            android:parentActivityName=".activities.SportActivity"
+            android:parentActivityName=".sports_activity.SportActivity"
             android:screenOrientation="portrait" />
 
         <service

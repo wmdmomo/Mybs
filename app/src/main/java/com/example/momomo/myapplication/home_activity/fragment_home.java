@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import com.example.momomo.myapplication.Adapter.homeitem2Adapter;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.data_save.foodcal;
 import com.example.momomo.myapplication.data_save.iconitem;
-import com.example.momomo.myapplication.data_save.punchday;
 import com.example.momomo.myapplication.utils.saveVarible;
 
 import org.litepal.LitePal;
@@ -24,21 +24,22 @@ import org.litepal.LitePal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fragment_home extends Fragment{
+public class fragment_home extends Fragment {
     private List<iconitem> iconitemList = new ArrayList<>();
     private String[] title = {"每日打卡", "热量记录", "体重记录", "步数记录"};
-    private String[] danwei = {"天", "千卡", "公斤", "步"};
-    private int[] sizes = {0,0,0,0};
+    private String[] danwei = {"天", "卡", "公斤", "步"};
+    private int[] sizes = {0, 0, 0, 0};
     private int[] imgid2s = {R.drawable.ic_icon_test, R.drawable.ic_shiwu, R.drawable.ic_tizhongcheng, R.drawable.ic_yundong};
     private View view;
     private LinearLayout linearLayout;
-    private punchday punchday;
     private User user;
+    private String username;
+    private double cal;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragmenthome,container,false);
+        view = inflater.inflate(R.layout.fragmenthome, container, false);
         linearLayout = (LinearLayout) view.findViewById(R.id.home_bg);
         linearLayout.getBackground().setAlpha(100);
         RecyclerView recyclerView2 = (RecyclerView) view.findViewById(R.id.homerv2);
@@ -50,16 +51,24 @@ public class fragment_home extends Fragment{
         recyclerView2.setAdapter(homeitem2Adapter);
         return view;
     }
+
     private void initdata() {
         final saveVarible app = (saveVarible) getActivity().getApplication();
-        int punchId = app.getPunchId();
-        int userId= app.getUserId();
-        punchday = LitePal.find(punchday.class, punchId);
+        int userId = app.getUserId();
+
         user = LitePal.find(User.class, userId);
-        sizes[0]=user.getPunch();
-        sizes[1]=punchday.getCal();
-        sizes[2]=user.getWeight();
-        sizes[3]=0;
+        username = user.getName();
+        List<foodcal> foodDataList = new ArrayList<>();
+        foodDataList = LitePal.where("user=?", username).find(foodcal.class);
+        if (foodDataList.size() != 0) {
+            cal = foodDataList.get(foodDataList.size() - 1).getCal();
+        } else {
+            cal=0;
+        }
+        sizes[0] = user.getPunch();
+        sizes[1] = (int) cal;
+        sizes[2] = user.getWeight();
+        sizes[3] = 0;
 
         for (int i = 0; i < 4; i++) {
             iconitem iconitem = new iconitem();

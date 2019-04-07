@@ -48,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
-            android:background="@drawable/shape"
+            android:background="@drawable/sign_button"
             android:text="注册"
             android:layout_marginRight="40dp"
             android:textColor="#ffff"

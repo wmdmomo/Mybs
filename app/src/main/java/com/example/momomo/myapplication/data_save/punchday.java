@@ -8,16 +8,6 @@ public class punchday extends LitePalSupport {
     private String user;
     private Boolean flag;
     private int id;
-    private int cal;
-
-
-    public int getCal() {
-        return cal;
-    }
-
-    public void setCal(int cal) {
-        this.cal = cal;
-    }
 
     public int getId() {
         return id;
