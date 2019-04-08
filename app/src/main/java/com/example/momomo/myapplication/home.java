@@ -33,7 +33,8 @@ public class home extends AppCompatActivity {
         bottomNavigationBar.setBarBackgroundColor(R.color.white);
         bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_icon_home, "主页"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_xinlv, "运动"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_wo, "我的"))
+                .addItem(new BottomNavigationItem(R.drawable.ic_map, "地图"))
+                .addItem(new BottomNavigationItem(R.drawable.ic_wo, "俺的"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_shiwu2, "卡路里"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_note, "计划"))
                 .setFirstSelectedPosition(0)
@@ -56,15 +57,20 @@ public class home extends AppCompatActivity {
                         break;
                     }
                     case 2: {
-                        switchFragment(fragmentMine).commit();
+                        Intent intent = new Intent(home.this, SportActivity.class);
+                        startActivity(intent);
                         break;
                     }
                     case 3: {
+                        switchFragment(fragmentMine).commit();
+                        break;
+                    }
+                    case 4: {
                         Intent intent = new Intent(home.this, dish_home.class);
                         startActivity(intent);
                         break;
                     }
-                    case 4: {
+                    case 5: {
                         Intent intent = new Intent(home.this, note.class);
                         startActivity(intent);
                         break;
