@@ -34,7 +34,7 @@ public class home extends AppCompatActivity {
         bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_icon_home, "主页"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_xinlv, "运动"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_map, "地图"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_wo, "俺的"))
+                .addItem(new BottomNavigationItem(R.drawable.ic_wo, "我的"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_shiwu2, "卡路里"))
                 .addItem(new BottomNavigationItem(R.drawable.ic_note, "计划"))
                 .setFirstSelectedPosition(0)
