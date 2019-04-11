@@ -11,6 +11,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
 import com.example.momomo.myapplication.food_activity.dish_home;
+import com.example.momomo.myapplication.map_activity.MapMainActivity;
 import com.example.momomo.myapplication.sports_activity.SportActivity;
 import com.example.momomo.myapplication.home_activity.fragment_home;
 import com.example.momomo.myapplication.mine_activity.fragment_mine;
@@ -57,7 +58,7 @@ public class home extends AppCompatActivity {
                         break;
                     }
                     case 2: {
-                        Intent intent = new Intent(home.this, SportActivity.class);
+                        Intent intent = new Intent(home.this, MapMainActivity.class);
                         startActivity(intent);
                         break;
                     }
