@@ -1,14 +1,15 @@
-package com.example.momomo.myapplication.mine_activity;
+package com.example.momomo.myapplication.login_activity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -25,15 +26,16 @@ import com.jph.takephoto.model.TResult;
 import org.litepal.LitePal;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-public class mine_set extends TakePhotoActivity {
-    private EditText signature, weight, height, goal_weight;
-    private TextView name;
-    private String sign, sign_set, nam, wei_s, hei_s, imgpath, goal_s;
-    private int wei, hei, goal, wei_set, hei_set, goal_set;
-
-    private android.support.v7.widget.Toolbar toolbar;
+public class login_after extends TakePhotoActivity {
+    private Spinner spinner;
+    private List<String> xingbie=new ArrayList<String>();
+    ArrayAdapter <String> adapter;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
+    private Button button;
+
     //    TakePhoto
     private TakePhoto takePhoto;
     private CropOptions cropOptions;  //裁剪参数
@@ -43,17 +45,33 @@ public class mine_set extends TakePhotoActivity {
     private User user;
     private String iconPath = "";
 
+    private EditText weight,height;
+    private String wei_s,hei_s,sex;
+    private int wei_set,hei_set;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mine_set);
-        final saveVarible app = (saveVarible) getApplication();
-        userId = app.getUserId();
-        user = LitePal.find(User.class, userId);
-        initSet();
+        setContentView(R.layout.activity_login_after);
+        spinner=(Spinner)findViewById(R.id.spinner);
+        spinner.setPrompt("性别");
+        button=(Button)findViewById(R.id.full_done);
         initData();
-        initBar();
-        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
+        initdata();
+        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,xingbie);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(login_after.this,"您选择的月份是："+xingbie.get(position),Toast.LENGTH_SHORT).show();
+                sex=xingbie.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.full_avatar);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,14 +82,11 @@ public class mine_set extends TakePhotoActivity {
                 //takePhoto.onPickFromGallery();
             }
         });
-        Button done = (Button) findViewById(R.id.set_done);
-        done.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sign_set = signature.getText().toString();
                 wei_s = weight.getText().toString();
                 hei_s = height.getText().toString();
-                goal_s = goal_weight.getText().toString();
                 if (!wei_s.equals("")) {
                     wei_set = Integer.parseInt(wei_s);
                     user.setWeight(wei_set);
@@ -80,46 +95,13 @@ public class mine_set extends TakePhotoActivity {
                     hei_set = Integer.parseInt(hei_s);
                     user.setHeight(hei_set);
                 }
-                if (!goal_s.equals("")) {
-                    goal_set = Integer.parseInt(goal_s);
-                    user.setGoal_weight(goal_set);
-                }
-                if (!sign_set.equals("")) user.setSignature(sign_set);
-                //这句有问题 因为之前没有对iconPath 进行初始化
+                user.setSex(sex);
                 if (!iconPath.equals("")) user.setAvatar_path(iconPath);
                 user.save();
-                Intent intent = new Intent(mine_set.this, mine.class);
+                Intent intent=new Intent(login_after.this, home.class);
                 startActivity(intent);
             }
         });
-    }
-
-    private void initSet() {
-        sign = user.getSignature();
-        nam = user.getName();
-        wei = user.getWeight();
-        hei = user.getHeight();
-        imgpath = user.getAvatar_path();
-        goal = user.getGoal_weight();
-        signature = (EditText) findViewById(R.id.user_word_set);
-        name = (TextView) findViewById(R.id.user_name_set);
-        weight = (EditText) findViewById(R.id.user_weight_set);
-        height = (EditText) findViewById(R.id.user_height_set);
-        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.user_img_set);
-        goal_weight = (EditText) findViewById(R.id.user_goal_set);
-        signature.setHint(sign);
-        name.setText(nam);
-        weight.setHint(String.valueOf(wei));
-        height.setHint(String.valueOf(hei));
-        goal_weight.setHint(String.valueOf(goal));
-
-        if (!imgpath.equals(" ")) Glide.with(this).load(imgpath).into(imageView);
-        else {
-            int resourceId = R.mipmap.avatar;
-            Glide.with(this)
-                    .load(resourceId)
-                    .into(imageView);
-        }
     }
 
     @Override
@@ -134,14 +116,13 @@ public class mine_set extends TakePhotoActivity {
     @Override
     public void takeFail(TResult result, String msg) {
         super.takeFail(result, msg);
-        Toast.makeText(mine_set.this, "Error:" + msg, Toast.LENGTH_SHORT).show();
+        Toast.makeText(login_after.this, "Error:" + msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void takeCancel() {
         super.takeCancel();
     }
-
     private void initData() {
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
@@ -151,16 +132,19 @@ public class mine_set extends TakePhotoActivity {
         compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
     }
+    private void initdata(){
+        xingbie.add("男");
+        xingbie.add("女");
+        weight=(EditText)findViewById(R.id.full_weight);
+        height=(EditText)findViewById(R.id.full_height);
+        final saveVarible app = (saveVarible) getApplication();
+        userId = app.getUserId();
+        user = LitePal.find(User.class, userId);
+    }
 
     private Uri getImageCropUri() {
         File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         return Uri.fromFile(file);
-    }
-
-    private void initBar() {
-        toolbar = (Toolbar) findViewById(R.id.about_mine_set_bar);
-        TextView textView = (TextView) findViewById(R.id.mine_set_title);
-        textView.setText("我的信息");
     }
 }

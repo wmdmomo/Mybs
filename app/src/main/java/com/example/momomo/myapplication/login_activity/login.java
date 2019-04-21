@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.momomo.myapplication.Manager.ActivityCollector;
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.R;
 
 import org.litepal.LitePal;
@@ -18,7 +20,7 @@ import com.example.momomo.myapplication.data_save.User;
 import java.util.List;
 
 
-public class login extends AppCompatActivity {
+public class login extends BaseActivity {
     private EditText user;
     private EditText pas;
     private EditText cpas;
@@ -67,6 +69,7 @@ public class login extends AppCompatActivity {
                     person.setLikes(0);
                     person.save();
                     Intent intentlogin = new Intent(login.this, tologin.class);
+                    intentlogin.putExtra("isFirst",1);
                     startActivity(intentlogin);
                 } else {
                     Toast.makeText(login.this, "两次密码不相同", Toast.LENGTH_SHORT).show();

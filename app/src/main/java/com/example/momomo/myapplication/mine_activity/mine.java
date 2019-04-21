@@ -1,42 +1,39 @@
 package com.example.momomo.myapplication.mine_activity;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.momomo.myapplication.Manager.ActivityCollector;
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
-import com.example.momomo.myapplication.data_save.punchday;
+import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.login_activity.login;
 import com.example.momomo.myapplication.utils.saveVarible;
 
 import org.litepal.LitePal;
 
-public class fragment_mine extends Fragment {
-    private View view;
+public class mine extends BaseActivity {
     private LinearLayout linearLayout;
     private User user;
     private int userId;
-    private int punchId;
-    private punchday punchday;
     private LinearLayout set_punch, set_mine, set_rank, set_us,set_back;
     private TextView my_name, my_weight, my_height, my_goal;
     private String name, imgpath;
     private int weight, height, goal;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_fragment_mine, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mine);
         initview();
         initdata();
         initEdit();
@@ -44,59 +41,58 @@ public class fragment_mine extends Fragment {
         set_mine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), mine_set.class);
+                Intent intent = new Intent(mine.this, mine_set.class);
                 startActivity(intent);
             }
         });
         set_rank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), about_rank.class);
+                Intent intent = new Intent(mine.this, about_rank.class);
                 startActivity(intent);
             }
         });
         set_us.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), about_us.class);
+                Intent intent = new Intent(mine.this, about_us.class);
                 startActivity(intent);
             }
         });
         set_punch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), about_punch.class);
+                Intent intent = new Intent(mine.this, about_punch.class);
                 startActivity(intent);
             }
         });
         set_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), login.class);
+                Intent intent = new Intent(mine.this, login.class);
                 startActivity(intent);
             }
         });
-        return view;
     }
 
     private void initview() {
-        linearLayout = (LinearLayout) view.findViewById(R.id.mine_bg);
+        linearLayout = (LinearLayout) findViewById(R.id.mine_bg);
         linearLayout.getBackground().setAlpha(150);
-        set_mine = (LinearLayout) view.findViewById(R.id.set_mine);
-        set_rank = (LinearLayout) view.findViewById(R.id.set_rank);
-        set_us = (LinearLayout) view.findViewById(R.id.set_about);
-        set_punch = (LinearLayout) view.findViewById(R.id.set_punch);
-        set_back = (LinearLayout) view.findViewById(R.id.set_back);
-        my_name = (TextView) view.findViewById(R.id.avatar_name);
-        my_weight = (TextView) view.findViewById(R.id.my_weight);
-        my_height = (TextView) view.findViewById(R.id.my_height);
-        my_goal = (TextView) view.findViewById(R.id.my_goal);
-        imageView = (de.hdodenhof.circleimageview.CircleImageView) view.findViewById(R.id.my_img);
+        set_mine = (LinearLayout) findViewById(R.id.set_mine);
+        set_rank = (LinearLayout)findViewById(R.id.set_rank);
+        set_us = (LinearLayout) findViewById(R.id.set_about);
+        set_punch = (LinearLayout) findViewById(R.id.set_punch);
+        set_back = (LinearLayout)findViewById(R.id.set_back);
+        my_name = (TextView) findViewById(R.id.avatar_name);
+        my_weight = (TextView) findViewById(R.id.my_weight);
+        my_height = (TextView) findViewById(R.id.my_height);
+        my_goal = (TextView) findViewById(R.id.my_goal);
+        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.my_img);
 
     }
 
     private void initdata() {
-        final saveVarible app = (saveVarible) getActivity().getApplication();
+        final saveVarible app = (saveVarible) getApplication();
         userId = app.getUserId();
         user = LitePal.find(User.class, userId);
 
@@ -122,4 +118,11 @@ public class fragment_mine extends Fragment {
                     .into(imageView);
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(mine.this, home.class);
+        startActivity(intent);
+    }
+
 }

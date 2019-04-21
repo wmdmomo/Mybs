@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.Manager.Dish;
 import com.example.momomo.myapplication.login_activity.login;
 import com.example.momomo.myapplication.login_activity.tologin;
@@ -15,7 +16,7 @@ import static com.example.momomo.myapplication.Manager.AuthService.getAuth;
 import static com.example.momomo.myapplication.Manager.Dish.dish;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,4 +42,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 }

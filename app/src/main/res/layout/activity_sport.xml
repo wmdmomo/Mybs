@@ -4,197 +4,307 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
-        <variable name="connected" type="boolean" />
-        <variable name="heartRate" type="int" />
-        <variable name="step" type="int" />
-        <variable name="battery" type="int" />
+        <variable
+            name="connected"
+            type="boolean" />
 
-        <variable name="connectTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
-        <variable name="heartRateTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
-        <variable name="stepTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
-        <variable name="batteryTransaction" type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+        <variable
+            name="heartRate"
+            type="int" />
+
+        <variable
+            name="step"
+            type="int" />
+
+        <variable
+            name="battery"
+            type="int" />
+
+        <variable
+            name="connectTransaction"
+            type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+
+        <variable
+            name="heartRateTransaction"
+            type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+
+        <variable
+            name="stepTransaction"
+            type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
+
+        <variable
+            name="batteryTransaction"
+            type="com.example.momomo.myapplication.sports_activity.SportActivity.Transaction" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <android.support.v7.widget.Toolbar
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/mine_bar"
-            android:elevation="4dp"
-            >
-            <TextView
-                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:id="@+id/mine_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-        </android.support.v7.widget.Toolbar>
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            app:layout_anchor="@id/control_panel"
-            app:layout_anchorGravity="top|start">
-
-            <com.github.jorgecastilloprz.FABProgressCircle
-                android:id="@+id/fab_progress_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:arcColor="@color/purple"
-                app:reusable="true">
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="32dp"
-                    android:onClick="@{() -> connected ? connectTransaction.stop() : connectTransaction.start()}"
-                    android:src="@{connected ? @drawable/ic_bluetooth_connected_white_24dp : @drawable/ic_bluetooth_disabled_white_24dp}" />
-
-            </com.github.jorgecastilloprz.FABProgressCircle>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!-- information view -->
+            <!--背景图-->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:visibility="@{connected ? View.VISIBLE : View.INVISIBLE}">
+                android:id="@+id/sports_bg"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@mipmap/sports_bg">
 
-                <!-- Heart rate view -->
-                <TextView
+                <android.support.v7.widget.Toolbar
+                    android:layout_marginBottom="30dp"
+                    android:id="@+id/mine_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/label_heart_rate"
-                    android:padding="16dp"
-                    android:text="@{Integer.toString(heartRate)}"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-                    android:visibility="@{heartRateTransaction.running ? (heartRate > 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
-                    tools:text="65" />
+                    android:elevation="4dp">
 
-                <!--STEP-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/label_step_rate"
-                    android:padding="16dp"
-                    android:text="@{Integer.toString(step)}"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-                    android:visibility="@{stepTransaction.running ? (step >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
-                    tools:text="65" />
-
-                <!--BATTERY-->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/label_battery"
-                    android:padding="16dp"
-                    android:text="@{Integer.toString(battery)}"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-                    android:visibility="@{batteryTransaction.running ? (battery >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
-                    tools:text="65" />
+                    <TextView
+                        android:id="@+id/mine_title"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="#575455" />
+                </android.support.v7.widget.Toolbar>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_gravity="center"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:id="@+id/sports_avatar"
+                    android:src="@mipmap/avatar"/>
             </LinearLayout>
 
+
             <LinearLayout
-                android:id="@+id/control_panel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/white"
-                android:elevation="10dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingStart="32dp"
-                android:paddingTop="40dp"
-                android:paddingEnd="32dp"
-                android:paddingBottom="16dp">
+               android:padding="20dp"
+               >
 
-                <!-- Heart rate control -->
                 <LinearLayout
+                    android:id="@+id/control_panel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+<!--当前蓝牙状态-->
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{heartRateTransaction.running ? @string/switch_heart_rate_on : @string/switch_heart_rate_off}" />
+                        android:layout_marginBottom="20dp"
+                        android:padding="10dp"
+                        card_view:cardCornerRadius="10dp"
+                        card_view:cardElevation="6dp">
 
-                    <Switch
-                        android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_marginRight="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_blue"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{connected ? @string/switch_on : @string/switch_off}" />
+                            <com.github.jorgecastilloprz.FABProgressCircle
+                                android:id="@+id/fab_progress_circle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
+                                app:arcColor="#000000"
+                                app:reusable="true">
+
+                                <android.support.design.widget.FloatingActionButton
+                                    android:id="@+id/fab"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onClick="@{() -> connected ? connectTransaction.stop() : connectTransaction.start()}"
+                                    android:src="@{connected ? @drawable/ic_bluetooth_connected_white_24dp : @drawable/ic_bluetooth_disabled_white_24dp}"
+                                    app:backgroundTint="@color/crop__button_text" />
+
+                            </com.github.jorgecastilloprz.FABProgressCircle>
+
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+
+
+                    <!-- Heart rate control -->
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="@{heartRateTransaction.running}"
-                        android:enabled="@{connected}"
-                        android:onCheckedChanged="@{(cb, checked) -> checked ? heartRateTransaction.start() : heartRateTransaction.stop()}"
-                        android:switchMinWidth="56dp" />
+                        android:layout_marginBottom="20dp"
+                        android:padding="10dp"
+                        card_view:cardCornerRadius="10dp"
+                        card_view:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_marginRight="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_xl"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{heartRateTransaction.running ? @string/switch_heart_rate_on : @string/switch_heart_rate_off}" />
+                            <!-- Heart rate view -->
+                            <TextView
+                                android:textStyle="bold"
+                                android:textSize="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/label_heart_rate"
+                                android:padding="16dp"
+                                android:text="@{Integer.toString(heartRate)}"
+                                android:textAlignment="center"
+                                android:visibility="@{heartRateTransaction.running ? (heartRate > 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
+                                tools:text="65" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="@{heartRateTransaction.running}"
+                                android:enabled="@{connected}"
+                                android:onCheckedChanged="@{(cb, checked) -> checked ? heartRateTransaction.start() : heartRateTransaction.stop()}"
+                                android:switchMinWidth="56dp" />
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+                    <!--step control-->
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:padding="10dp"
+                        card_view:cardCornerRadius="10dp"
+                        card_view:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_marginRight="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_yundong"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{stepTransaction.running ? @string/switch_step_on : @string/switch_step_off}" />
+
+                            <!--STEP-->
+                            <TextView
+                                android:textStyle="bold"
+                                android:textSize="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/label_step_rate"
+                                android:padding="16dp"
+                                android:text="@{Integer.toString(step)}"
+                                android:textAlignment="center"
+                                android:visibility="@{stepTransaction.running ? (step >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
+                                tools:text="65" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="@{stepTransaction.running}"
+                                android:enabled="@{connected}"
+                                android:onCheckedChanged="@{(cb, checked) -> checked ? stepTransaction.start() : stepTransaction.stop()}"
+                                android:switchMinWidth="56dp" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                    <!--battery control-->
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:padding="10dp"
+                        card_view:cardCornerRadius="10dp"
+                        card_view:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_marginRight="10dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic__dianliangbuzu"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@{batteryTransaction.running ? @string/switch_battery_on : @string/switch_battery_off}" />
+                            <!--BATTERY-->
+                            <TextView
+                                android:textStyle="bold"
+                                android:textSize="23dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/label_battery"
+                                android:padding="16dp"
+                                android:text="@{Integer.toString(battery)}"
+                                android:textAlignment="center"
+                                android:visibility="@{batteryTransaction.running ? (battery >= 0 ? View.VISIBLE : View.INVISIBLE) : View.GONE}"
+                                tools:text="65" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="@{batteryTransaction.running}"
+                                android:enabled="@{connected}"
+                                android:onCheckedChanged="@{(cb, checked) -> checked ? batteryTransaction.start() : batteryTransaction.stop()}"
+                                android:switchMinWidth="56dp" />
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
                 </LinearLayout>
 
-
-                <!--step control-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{stepTransaction.running ? @string/switch_step_on : @string/switch_step_off}" />
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="@{stepTransaction.running}"
-                        android:enabled="@{connected}"
-                        android:onCheckedChanged="@{(cb, checked) -> checked ? stepTransaction.start() : stepTransaction.stop()}"
-                        android:switchMinWidth="56dp" />
-                </LinearLayout>
-
-                <!--battery control-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@{batteryTransaction.running ? @string/switch_battery_on : @string/switch_battery_off}" />
-
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="@{batteryTransaction.running}"
-                        android:enabled="@{connected}"
-                        android:onCheckedChanged="@{(cb, checked) -> checked ? batteryTransaction.start() : batteryTransaction.stop()}"
-                        android:switchMinWidth="56dp" />
-                </LinearLayout>
             </LinearLayout>
+        </LinearLayout>
+        </ScrollView>
 
-        </RelativeLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 </layout>

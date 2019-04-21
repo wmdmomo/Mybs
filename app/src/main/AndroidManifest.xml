@@ -22,6 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Manager.BaseActivity"></activity>
+        <activity android:name=".login_activity.login_after" />
         <activity android:name=".food_activity.dish_home" />
         <activity android:name=".mine_activity.about_punch" />
         <activity android:name=".mine_activity.about_us" />
@@ -41,7 +43,9 @@
         <activity android:name=".note_activity.note" />
         <activity android:name=".note_activity.addnote" />
         <activity android:name=".chart_activity.heart_chart" />
+
         <activity android:name=".mine_activity.mine_set" />
+        <activity android:name=".mine_activity.mine" />
         <activity
             android:name=".sports_activity.ScanBandActivity"
             android:label="@string/label_pair_band"

@@ -13,6 +13,15 @@ public class User extends LitePalSupport {
     private int id;
     private String avatar_path;
     private int likes;
+    private String sex;
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
     public int getLikes() {
         return likes;

@@ -40,7 +40,8 @@
     <string name="switch_step_off">Live step rate measurement off</string>
     <string name="switch_battery_on">Live battery measurement on</string>
     <string name="switch_battery_off">Live battery measurement off</string>
-
+    <string name="switch_on">Live bluetooth measurement on</string>
+    <string name="switch_off">Live bluetooth measurement off</string>
     <string name="label_fitness_recorder">Fitness Recorder</string>
     <string name="label_pair_band">Pair My Band</string>
     <string name="label_export_data">Export Data</string>

@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -15,8 +20,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="opacityPercent" value="80" />
-                            <entry key="outputName" value="ic_foods" />
-                            <entry key="sourceFile" value="E:\yasuobao\foods.svg" />
+                            <entry key="outputName" value="ic_blue" />
+                            <entry key="sourceFile" value="E:\yasuobao\blue.svg" />
                           </map>
                         </option>
                       </PersistentState>

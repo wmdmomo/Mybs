@@ -32,7 +32,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class MiBand2 {
 
-    public interface TriFloatConsumer { void accept(float x, float y, float z); }
+    public interface TriFloatConsumer {
+        void accept(float x, float y, float z);
+    }
 
     private static final int REFRESH_TIMEOUT = 100; // 100ms
     private static final int USR_INTERACTION_TIMEOUT = 20000; // 20s
@@ -48,8 +50,9 @@ public final class MiBand2 {
     private IntConsumer mHeartRateHandler;
     private IntConsumer mStepHandler;
     private IntConsumer mBatteryHandler;
-    private Timer mHeartRatePingTimer,mStepTimer,mBatteryTimer;
-    private Boolean battery_flag=false;
+    private Timer mHeartRatePingTimer, mStepTimer, mBatteryTimer;
+    private Boolean battery_flag = false;
+    private Boolean step_flag = false;
 
     public MiBand2(@Nullable String macAddress, @Nullable byte[] key) {
         mBleDevice = macAddress == null
@@ -136,8 +139,8 @@ public final class MiBand2 {
     public void disconnect() {
         // TODO: stop working task
         if (mState.isMeasuringHeartRate()) stopMeasureHeartRate();
-        if(mState.isMeasuringBattery()) stopMeasureBattery();
-        if(mState.isMeasuringStep()) stopMeasureStep();
+        if (mState.isMeasuringBattery()) stopMeasureBattery();
+        if (mState.isMeasuringStep()) stopMeasureStep();
         BleManager.getInstance().disconnect(mBleDevice);
     }
 
@@ -168,6 +171,7 @@ public final class MiBand2 {
         disableHeartRatePing();
         return disableHeartRateContinuousMonitor() && turnOffHeartRateNotify();
     }
+
     //test
     public boolean startMeasureStep(IntConsumer stepHandler) {
         mStepHandler = stepHandler;
@@ -177,6 +181,8 @@ public final class MiBand2 {
             Log.e(TAG, "enableStep: failed to turn on Step notification");
             return false;
         }
+        if (!step_flag) enableStep();
+
         return true;
     }
 
@@ -189,10 +195,11 @@ public final class MiBand2 {
         disableStep();
         return turnOffStepNotify();
     }
+
     ///battery
     //test
     public boolean startMeasureBattery(IntConsumer batteryHandler) {
-        mBatteryHandler=batteryHandler;
+        mBatteryHandler = batteryHandler;
 
         // TODO: check and stop related operations first
 
@@ -200,7 +207,7 @@ public final class MiBand2 {
             Log.e(TAG, "enableBattery: failed to turn on Battery notification");
             return false;
         }
-        if(!battery_flag) enableBattery();
+        if (!battery_flag) enableBattery();
         return true;
     }
 
@@ -246,15 +253,23 @@ public final class MiBand2 {
 
     private void bleConnect() {
         BleManager.getInstance().connect(getMacAddress(), new BleGattCallback() {
-            @Override public void onStartConnect() {}
-            @Override public void onConnectFail(BleDevice bleDevice, BleException exception) {
+            @Override
+            public void onStartConnect() {
+            }
+
+            @Override
+            public void onConnectFail(BleDevice bleDevice, BleException exception) {
                 mState.setBleConnected(false);
             }
-            @Override public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+
+            @Override
+            public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 mBleDevice = bleDevice;
                 mState.setBleConnected(true);
             }
-            @Override public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+
+            @Override
+            public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
                 mState.setBleConnected(false);
                 if (mDisconnectHandler != null) mDisconnectHandler.accept(mState);
             }
@@ -263,18 +278,23 @@ public final class MiBand2 {
 
     private void turnOnAuthNotify() {
         BleManager.getInstance().notify(mBleDevice, Protocol.Service.AUTH, Protocol.Characteristic.AUTH, new BleNotifyCallback() {
-            @Override public void onNotifySuccess() {
+            @Override
+            public void onNotifySuccess() {
                 if (!mState.isAuthNotifyOn()) {
                     mState.setAuthNotify(true);
                     Log.i(TAG, "turnOnAuthNotify: succeeded, or turnOffAuthNotify");
                 }
             }
-            @Override public void onNotifyFailure(BleException exception) { // FIXME: may have bug
+
+            @Override
+            public void onNotifyFailure(BleException exception) { // FIXME: may have bug
                 if (mState.isAuthNotifyOn()) mState.setAuthNotify(false);
 //                mState.setAuthNotify(false);
                 Log.i(TAG, "turnOnAuthNotify: failed");
             }
-            @Override public void onCharacteristicChanged(byte[] data) {
+
+            @Override
+            public void onCharacteristicChanged(byte[] data) {
                 handleAuthNotification(data);
             }
         });
@@ -295,10 +315,13 @@ public final class MiBand2 {
         BleManager.getInstance().write(mBleDevice, Protocol.Service.AUTH, Protocol.Characteristic.AUTH,
                 BytesUtil.combine(Protocol.Command.SEND_KEY, mAuthKey),
                 new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
                         Log.i(TAG, "onWriteSuccess: wrote=" + BytesUtil.toHexStr(justWrite));
                     }
-                    @Override public void onWriteFailure(BleException exception) {
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
                         mState.setKeyGot(false);
                     }
                 });
@@ -308,8 +331,12 @@ public final class MiBand2 {
         BleManager.getInstance().write(mBleDevice, Protocol.Service.AUTH, Protocol.Characteristic.AUTH,
                 Protocol.Command.RAND_REQUEST,
                 new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {}
-                    @Override public void onWriteFailure(BleException exception) {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                    }
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
                         mState.setRandRequested(false);
                     }
                 });
@@ -320,8 +347,12 @@ public final class MiBand2 {
         BleManager.getInstance().write(mBleDevice, Protocol.Service.AUTH, Protocol.Characteristic.AUTH,
                 BytesUtil.combine(Protocol.Command.SEND_ENCRYPTED, encrypted),
                 new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {}
-                    @Override public void onWriteFailure(BleException exception) {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                    }
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
                         mState.setEncrypted(false);
                     }
                 });
@@ -345,18 +376,19 @@ public final class MiBand2 {
             Log.w(TAG, "handleAuthNotification: data length < 3!");
             return;
         }
-        int head = (int)notice[0] << 16 | (int)notice[1] << 8 | (int)notice[2];
+        int head = (int) notice[0] << 16 | (int) notice[1] << 8 | (int) notice[2];
         byte[] body = Arrays.copyOfRange(notice, 3, notice.length);
         Consumer<byte[]> noticeConsumer = mNoticeConsumers.get(head);
         if (noticeConsumer != null) noticeConsumer.accept(body);
-        else Log.i(TAG, String.format("handleAuthNotification: unknown auth response header: %04x", head));
+        else
+            Log.i(TAG, String.format("handleAuthNotification: unknown auth response header: %04x", head));
     }
 
     private void waitForStateUpdate() {
         try {
             BandState oldState = new BandState(mState);
             long startTime = System.currentTimeMillis();
-            for (;;) {
+            for (; ; ) {
                 Thread.sleep(REFRESH_TIMEOUT);
                 if (mState.isNewerThan(oldState)) break;
                 if (System.currentTimeMillis() - startTime > USR_INTERACTION_TIMEOUT) break;
@@ -372,17 +404,22 @@ public final class MiBand2 {
         BleManager.getInstance().notify(
                 mBleDevice, Protocol.Service.HEART_RATE, Protocol.Characteristic.HEART_RATE_MEASURE,
                 new BleNotifyCallback() {
-                    @Override public void onNotifySuccess() {
+                    @Override
+                    public void onNotifySuccess() {
                         if (!mState.isMeasuringHeartRate()) mState.setHeartNotify(true);
                         waiter.ok();
                         Log.i(TAG, "turnOnHeartRateNotify: succeed");
                     }
-                    @Override public void onNotifyFailure(BleException exception) {
+
+                    @Override
+                    public void onNotifyFailure(BleException exception) {
                         waiter.fail();
                         mState.setHeartNotify(false);
                         Log.i(TAG, "turnOnHearRateNotify: failed");
                     }
-                    @Override public void onCharacteristicChanged(byte[] data) {
+
+                    @Override
+                    public void onCharacteristicChanged(byte[] data) {
                         mState.setHeartMeasuring(true);
                         parseHeartRate(data);
                     }
@@ -390,6 +427,7 @@ public final class MiBand2 {
         );
         return waiter.work();
     }
+
     //test
     private boolean turnOnStepNotify() {
         Log.i(TAG, "turning on step notification");
@@ -397,19 +435,24 @@ public final class MiBand2 {
         BleManager.getInstance().notify(
                 mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.STEPS,
                 new BleNotifyCallback() {
-                    @Override public void onNotifySuccess() {
+                    @Override
+                    public void onNotifySuccess() {
                         if (!mState.isMeasuringStep()) mState.setStepNotify(true);
                         waiter.ok();
                         Log.i(TAG, "turnOnStepNotify: succeed");
                     }
-                    @Override public void onNotifyFailure(BleException exception) {
+
+                    @Override
+                    public void onNotifyFailure(BleException exception) {
                         waiter.fail();
                         mState.setStepNotify(false);
                         Log.i(TAG, "turnOnStepNotify: failed");
                     }
-                    @Override public void onCharacteristicChanged(byte[] data) {
+
+                    @Override
+                    public void onCharacteristicChanged(byte[] data) {
                         mState.setStepMeasuring(true);
-                        Log.i("STEPSTEP", "步数："+data);
+                        Log.i("STEPSTEP", "步数：" + data);
                         parseStep(data);
                     }
                 }
@@ -423,22 +466,27 @@ public final class MiBand2 {
         Log.i(TAG, "turning on Battery notification");
         ResponseWaiter waiter = new ResponseWaiter(REFRESH_TIMEOUT);
         BleManager.getInstance().notify(
-                            mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY,
+                mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY,
                 new BleNotifyCallback() {
-                        @Override public void onNotifySuccess() {
+                    @Override
+                    public void onNotifySuccess() {
 //                            if (!mState.isMeasuringBattery())
-                            mState.setBatteryNotify(true);
-                            waiter.ok();
-                            Log.i(TAG, "turnOnBatteryNotify: succeed");
-                        }
-                        @Override public void onNotifyFailure(BleException exception) {
+                        mState.setBatteryNotify(true);
+                        waiter.ok();
+                        Log.i(TAG, "turnOnBatteryNotify: succeed");
+                    }
+
+                    @Override
+                    public void onNotifyFailure(BleException exception) {
                         waiter.fail();
                         mState.setBatteryNotify(false);
                         Log.i(TAG, "turnOnBatteryNotify: failed");
                     }
-                    @Override public void onCharacteristicChanged(byte[] data) {
+
+                    @Override
+                    public void onCharacteristicChanged(byte[] data) {
                         mState.setBatteryMeasuring(true);
-                        Log.i(TAG, "电量："+data);
+                        Log.i(TAG, "电量：" + data);
                         parseBattery(data);
                     }
                 }
@@ -454,6 +502,7 @@ public final class MiBand2 {
         if (success) mState.setHeartNotify(false);
         return success;
     }
+
     //offff
     private boolean turnOffStepNotify() {
         Log.i(TAG, "turning off step notification");
@@ -462,6 +511,7 @@ public final class MiBand2 {
         if (success) mState.setStepNotify(false);
         return success;
     }
+
     //pppppp
     //offff
     private boolean turnOffBatteryNotify() {
@@ -475,10 +525,11 @@ public final class MiBand2 {
 
     private void parseHeartRate(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
-        int heartRate = (int)data[0] * 0x100 + data[1];
+        int heartRate = (int) data[0] * 0x100 + data[1];
         Log.i(TAG, "parseHeartRate: heartRate=" + heartRate);
         if (mHeartRateHandler != null) mHeartRateHandler.accept(heartRate);
     }
+
     //test
     private void parseStep(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
@@ -486,11 +537,12 @@ public final class MiBand2 {
         Log.i(TAG, "parseStep: step=" + step);
         if (mStepHandler != null) mStepHandler.accept(step);
     }
+
     private void parseBattery(byte[] data) {
         // In most cases, only data[1] contributes, not sure about data[0], which is usually 0
         int info = data[1];
         Log.i(TAG, "parseBattery: Battery=" + info);
-        if (mBatteryHandler != null)mBatteryHandler.accept(info);
+        if (mBatteryHandler != null) mBatteryHandler.accept(info);
     }
 
     private boolean enableHeartRateContinuousMonitor() {
@@ -501,11 +553,14 @@ public final class MiBand2 {
                 Protocol.Service.HEART_RATE, Protocol.Characteristic.HEART_RATE_CONTROL,
                 Protocol.Command.HEART_START_CONTINUOUS,
                 new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
                         waiter.ok();
                         Log.i(TAG, "enableHeartRateContinuousMonitor: succeed");
                     }
-                    @Override public void onWriteFailure(BleException exception) {
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
                         waiter.fail();
                         Log.i(TAG, "enableHeartRateContinuousMonitor: failed");
                     }
@@ -521,12 +576,15 @@ public final class MiBand2 {
                 Protocol.Service.HEART_RATE, Protocol.Characteristic.HEART_RATE_CONTROL,
                 Protocol.Command.HEART_STOP_CONTINUOUS,
                 new BleWriteCallback() {
-                    @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
                         mState.setHeartMeasuring(false);
                         waiter.ok();
                         Log.i(TAG, "disableHeartRateContinuousMonitor: succeed");
                     }
-                    @Override public void onWriteFailure(BleException exception) {
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
                         waiter.fail();
                         Log.i(TAG, "disableHeartRateContinuousMonitor: failed");
                     }
@@ -542,11 +600,14 @@ public final class MiBand2 {
                     Protocol.Service.HEART_RATE, Protocol.Characteristic.HEART_RATE_CONTROL,
                     Protocol.Command.HEART_KEEP_ALIVE,
                     new BleWriteCallback() {
-                        @Override public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                        @Override
+                        public void onWriteSuccess(int current, int total, byte[] justWrite) {
                             Log.i(TAG, "pingHeartRate :)");
                             mState.setHeartMeasuring(true);
                         }
-                        @Override public void onWriteFailure(BleException exception) {
+
+                        @Override
+                        public void onWriteFailure(BleException exception) {
                             Log.i(TAG, "pingHeartRate :(");
                             mState.setHeartMeasuring(false);
                         }
@@ -554,20 +615,38 @@ public final class MiBand2 {
         });
     }
 
-private void enableBattery() {
-           BleManager.getInstance().read(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY, new BleReadCallback() {
-               @Override
-               public void onReadSuccess(byte[] data) {
-                   Log.i(TAG, "电量读取成功："+data);
-                   parseBattery(data);
-                   battery_flag=true;
+    private void enableBattery() {
+        BleManager.getInstance().read(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.BATTERY, new BleReadCallback() {
+            @Override
+            public void onReadSuccess(byte[] data) {
+                Log.i(TAG, "电量读取成功：" + data);
+                parseBattery(data);
+                battery_flag = true;
 
-               }
-               @Override
-               public void onReadFailure(BleException exception) {
-                   Log.i(TAG, "电量读取失败");
-               }
-           });
+            }
+
+            @Override
+            public void onReadFailure(BleException exception) {
+                Log.i(TAG, "电量读取失败");
+            }
+        });
+    }
+
+    private void enableStep() {
+        BleManager.getInstance().read(mBleDevice, Protocol.Service.BASIC, Protocol.Characteristic.STEPS, new BleReadCallback() {
+            @Override
+            public void onReadSuccess(byte[] data) {
+                Log.i(TAG, "步数读取成功：" + data);
+                parseStep(data);
+                step_flag = true;
+
+            }
+
+            @Override
+            public void onReadFailure(BleException exception) {
+                Log.i(TAG, "步数读取失败");
+            }
+        });
     }
 
     private void disableHeartRatePing() {
@@ -577,6 +656,7 @@ private void enableBattery() {
             mState.setHeartMeasuring(false);
         }
     }
+
     private void disableStep() {
         if (mStepTimer != null) {
             mStepTimer.cancel();
@@ -584,6 +664,7 @@ private void enableBattery() {
             mState.setStepMeasuring(false);
         }
     }
+
     private void disableBattery() {
         if (mBatteryTimer != null) {
             mBatteryTimer.cancel();

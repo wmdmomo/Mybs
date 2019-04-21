@@ -12,19 +12,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.clj.fastble.BleManager;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.chart_activity.heart_chart;
 import com.example.momomo.myapplication.chart_activity.step_chart;
 import com.example.momomo.myapplication.config.Constants;
+import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.databinding.ActivitySportBinding;
 import com.example.momomo.myapplication.hardware.BandState;
 import com.example.momomo.myapplication.services.CommService;
 import com.example.momomo.myapplication.utils.BytesUtil;
+import com.example.momomo.myapplication.utils.saveVarible;
 import com.github.jorgecastilloprz.FABProgressCircle;
+
+import org.litepal.LitePal;
 
 
 public final class SportActivity extends AppCompatActivity {
@@ -42,6 +48,7 @@ public final class SportActivity extends AppCompatActivity {
     private Messenger mMessenger;
     private FABProgressCircle mFabCircle;
     private Toolbar mtoolbar;
+    private de.hdodenhof.circleimageview.CircleImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +80,20 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.unregister();
     }
     private void initToolBar() {
+        final saveVarible app = (saveVarible) getApplication();
+        int userId = app.getUserId();
+        User user = LitePal.find(User.class, userId);
+        String imgpath = user.getAvatar_path();
+        imageView = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.sports_avatar);
+        if (!imgpath.equals(" ")) Glide.with(this).load(imgpath).into(imageView);
+        else {
+            int resourceId = R.mipmap.avatar;
+            Glide.with(this)
+                    .load(resourceId)
+                    .into(imageView);
+        }
+        LinearLayout linearLayout=(LinearLayout)findViewById(R.id.sports_bg);
+        linearLayout.getBackground().setAlpha(120);
         TextView textView = (TextView) findViewById(R.id.mine_title);
         textView.setText("我的运动");
         mtoolbar.inflateMenu(R.menu.menu_main);

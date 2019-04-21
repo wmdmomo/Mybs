@@ -11,16 +11,19 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.momomo.myapplication.Adapter.noteAdapter;
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.Manager.myItemTouchHelperCallBack;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.Notes;
+import com.example.momomo.myapplication.home;
+import com.example.momomo.myapplication.mine_activity.mine;
 
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class note extends AppCompatActivity {
+public class note extends BaseActivity {
     List<Notes> notesList = new ArrayList<>();
     private noteAdapter noteAdapter;
     private Button addnote;
@@ -64,6 +67,12 @@ public class note extends AppCompatActivity {
             ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             touchHelper.attachToRecyclerView(recyclerView);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(note.this, home.class);
+        startActivity(intent);
     }
 }
 

@@ -5,104 +5,171 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 
+import com.example.momomo.myapplication.Adapter.homeitem2Adapter;
+import com.example.momomo.myapplication.Manager.ActivityCollector;
+import com.example.momomo.myapplication.Manager.BaseActivity;
+import com.example.momomo.myapplication.data_save.User;
+import com.example.momomo.myapplication.data_save.foodcal;
+import com.example.momomo.myapplication.data_save.iconitem;
+import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.food_activity.dish_home;
 import com.example.momomo.myapplication.sports_activity.SportActivity;
-import com.example.momomo.myapplication.home_activity.fragment_home;
-import com.example.momomo.myapplication.mine_activity.fragment_mine;
+import com.example.momomo.myapplication.mine_activity.mine;
 import com.example.momomo.myapplication.note_activity.note;
+import com.example.momomo.myapplication.utils.saveVarible;
+
+import org.litepal.LitePal;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 
-public class home extends AppCompatActivity {
-    private Fragment currentFragment = new Fragment();
-    private fragment_mine fragmentMine = new fragment_mine();
-    private fragment_home fragmentHome = new fragment_home();
+public class home extends BaseActivity {
+    private List<iconitem> iconitemList = new ArrayList<>();
+    private String[] title = {"每日打卡", "热量记录", "体重记录", "步数记录"};
+    private String[] danwei = {"天", "卡", "公斤", "步"};
+    private int[] sizes = {0, 0, 0, 0};
+    private int[] imgid2s = {R.drawable.ic_icon_test, R.drawable.ic_shiwu, R.drawable.ic_tizhongcheng, R.drawable.ic_yundong};
+    private LinearLayout linearLayout;
+    private User user;
+    private String username;
+    private double cal;
+    private LinearLayout l1, l2, l3, l4, l5;
+    private int step;
+    private String time;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        switchFragment(fragmentHome).commit();
-        BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottomBar);
-        bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        bottomNavigationBar.setBarBackgroundColor(R.color.white);
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_icon_home, "主页"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_xinlv, "运动"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_wo, "我的"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_shiwu2, "卡路里"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_note, "计划"))
-                .setFirstSelectedPosition(0)
-                .initialise();
-        int id = getIntent().getIntExtra("id", 0);
-        if(id==1){
-            switchFragment(fragmentMine).commit();
-        }
-        bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+        setContentView(R.layout.fragmenthome);
+        linearLayout = (LinearLayout) findViewById(R.id.home_bg);
+        linearLayout.getBackground().setAlpha(100);
+        RecyclerView recyclerView2 = (RecyclerView) findViewById(R.id.homerv2);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView2.setLayoutManager(linearLayoutManager);
+        initdata();
+        homeitem2Adapter homeitem2Adapter = new homeitem2Adapter(iconitemList);
+        recyclerView2.setAdapter(homeitem2Adapter);
+        l2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(int position) {
-                switch (position) {
-                    case 0: {
-                        switchFragment(fragmentHome).commit();
-                        break;
-                    }
-                    case 1: {
-                        Intent intent = new Intent(home.this, SportActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case 2: {
-                        switchFragment(fragmentMine).commit();
-                        break;
-                    }
-                    case 3: {
-                        Intent intent = new Intent(home.this, dish_home.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    case 4: {
-                        Intent intent = new Intent(home.this, note.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(int position) {
-
-            }
-
-            @Override
-            public void onTabReselected(int position) {
-
+            public void onClick(View v) {
+                Intent intent = new Intent(home.this, SportActivity.class);
+                startActivity(intent);
             }
         });
+        l3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(home.this, mine.class);
+                startActivity(intent);
+            }
+        });
+        l4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(home.this, dish_home.class);
+                startActivity(intent);
+            }
+        });
+        l5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(home.this, note.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
-    private FragmentTransaction switchFragment(Fragment targetFragment) {
 
-        FragmentTransaction transaction = getSupportFragmentManager()
-                .beginTransaction();
-        if (!targetFragment.isAdded()) {
-            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
-            if (currentFragment != null) {
-                transaction.hide(currentFragment);
-            }
-            transaction.add(R.id.fragment, targetFragment, targetFragment.getClass().getName());
+    //    private FragmentTransaction switchFragment(Fragment targetFragment) {
+//
+//        FragmentTransaction transaction = getSupportFragmentManager()
+//                .beginTransaction();
+//        if (!targetFragment.isAdded()) {
+//            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
+//            if (currentFragment != null) {
+//                transaction.hide(currentFragment);
+//            }
+//            transaction.add(R.id.fragment, targetFragment, targetFragment.getClass().getName());
+//
+//        } else {
+//            transaction
+//                    .hide(currentFragment)
+//                    .show(targetFragment);
+//        }
+//        currentFragment = targetFragment;
+//        return transaction;
+//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.i("ttt", "5555");
+        ActivityCollector.finishAll();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 
+    private void initdata() {
+        l1 = (LinearLayout) findViewById(R.id.tab1);
+        l2 = (LinearLayout) findViewById(R.id.tab2);
+        l3 = (LinearLayout) findViewById(R.id.tab3);
+        l4 = (LinearLayout) findViewById(R.id.tab4);
+        l5=(LinearLayout) findViewById(R.id.tab5);
+
+        final saveVarible app = (saveVarible) getApplication();
+        int userId = app.getUserId();
+        getTime();
+        user = LitePal.find(User.class, userId);
+        username = user.getName();
+        List<foodcal> foodDataList = new ArrayList<>();
+        foodDataList = LitePal.where("user=? and time=?", username,time).find(foodcal.class);
+        if (foodDataList.size() != 0) {
+            cal = foodDataList.get(foodDataList.size() - 1).getCal();
         } else {
-            transaction
-                    .hide(currentFragment)
-                    .show(targetFragment);
+            cal = 0;
         }
-        currentFragment = targetFragment;
-        return transaction;
+        List<stepData> stepDataList = new ArrayList<>();
+        stepDataList = LitePal.where("user=? and date=?", username,time).find(stepData.class);
+        if (stepDataList.size() != 0) {
+            step = stepDataList.get(stepDataList.size() - 1).getStep();
+        } else {
+            step = 0;
+        }
+        sizes[0] = user.getPunch();
+        sizes[1] = (int) cal;
+        sizes[2] = user.getWeight();
+        sizes[3] = step;
+
+        for (int i = 0; i < 4; i++) {
+            iconitem iconitem = new iconitem();
+            iconitem.setTitle(title[i]);
+            iconitem.setDes(danwei[i]);
+            iconitem.setSize(sizes[i]);
+            iconitem.setImgid(imgid2s[i]);
+            iconitemList.add(iconitem);
+        }
+    }
+    private void getTime() {
+        long times = System.currentTimeMillis();
+        Date date = new Date(times);
+        SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd");
+        now.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
+        time = now.format(date);
     }
 
 }

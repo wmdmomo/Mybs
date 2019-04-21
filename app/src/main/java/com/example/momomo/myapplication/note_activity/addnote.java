@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.Notes;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class addnote extends AppCompatActivity {
+public class addnote extends BaseActivity {
     private TextView noteTime;
     private String nowtime;
     private EditText noteTitle;
