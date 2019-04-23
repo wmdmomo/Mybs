@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.clj.fastble.BleManager;
 import com.example.momomo.myapplication.R;
-import com.example.momomo.myapplication.chart_activity.heart_chart;
 import com.example.momomo.myapplication.chart_activity.step_chart;
 import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.data_save.User;
@@ -105,10 +104,10 @@ public final class SportActivity extends AppCompatActivity {
                         requestScan();
                         break;
                     }
-                    case R.id.export_data_heart: {
-                        menuItem.setIntent(new Intent(SportActivity.this, heart_chart.class));
-                        break;
-                    }
+//                    case R.id.export_data_heart: {
+//                        menuItem.setIntent(new Intent(SportActivity.this, heart_chart.class));
+//                        break;
+//                    }
                     case R.id.export_data_step: {
                         menuItem.setIntent(new Intent(SportActivity.this, step_chart.class));
                         break;

@@ -42,7 +42,6 @@
         <activity android:name=".login_activity.tologin" />
         <activity android:name=".note_activity.note" />
         <activity android:name=".note_activity.addnote" />
-        <activity android:name=".chart_activity.heart_chart" />
 
         <activity android:name=".mine_activity.mine_set" />
         <activity android:name=".mine_activity.mine" />
