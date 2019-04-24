@@ -22,8 +22,8 @@
     <string name="toast_acceleration_off_failed">Failed to turn off acceleration measurement!</string>
 
     <string name="export_tip">Your data will be exported to\n%1$s</string>
-    <string name="default_heart_rate"> </string>
-    <string name="loading_heart_rate">&#8230;</string>
+    <string name="default_heart_rate" translatable="false"> </string>
+    <string name="loading_heart_rate" translatable="false">&#8230;</string>
     <string name="toast_step_on_failed">Failed to measure step rate!</string>
     <string name="toast_step_off_failed">Failed to turn off step rate measurement!</string>
 
@@ -59,8 +59,9 @@
     <string name="item_stop_scan">Stop Scanning</string>
 
     <string name="notify_measuring">Measuring</string>
-    <string name="title_activity_test">test</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_test" translatable="false">test</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_notifications" translatable="false">Notifications</string>
+
 </resources>

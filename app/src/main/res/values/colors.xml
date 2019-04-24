@@ -7,4 +7,7 @@
     <color name="background_light">#fafafa</color>
     <color name="white">#ffffff</color>
     <color name="purple">#bf80ff</color>
+    <color name="blue">#87CEFA</color>
+    <color name="cyan">#00FFFF</color>
+
 </resources>

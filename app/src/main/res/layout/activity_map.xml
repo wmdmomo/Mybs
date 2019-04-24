@@ -14,12 +14,56 @@
         android:id="@+id/beginrun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
         android:text="开始跑步"
         android:onClick="onclick"/>
     <Button
         android:id="@+id/endrun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
         android:text="结束跑步"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/road"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跑步路线"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/nonoise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="无噪声路线"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/noise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="有噪声路线"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/timedialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置时间"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/datedialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置日期"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/begindialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置开始时间"
+        android:onClick="onclick"/>
+    <Button
+        android:id="@+id/enddialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置结束时间"
         android:onClick="onclick"/>
 </RelativeLayout>
