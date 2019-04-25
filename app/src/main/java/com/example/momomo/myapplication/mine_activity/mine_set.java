@@ -30,8 +30,8 @@ public class mine_set extends TakePhotoActivity {
     private EditText signature, weight, height, goal_weight;
     private TextView name;
     private String sign, sign_set, nam, wei_s, hei_s, imgpath, goal_s;
-    private int wei, hei, goal, wei_set, hei_set, goal_set;
-
+    private int hei,  hei_set;
+    private double wei,goal,wei_set,goal_set;
     private android.support.v7.widget.Toolbar toolbar;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
     //    TakePhoto
@@ -73,15 +73,16 @@ public class mine_set extends TakePhotoActivity {
                 hei_s = height.getText().toString();
                 goal_s = goal_weight.getText().toString();
                 if (!wei_s.equals("")) {
-                    wei_set = Integer.parseInt(wei_s);
-                    user.setWeight(wei_set);
+                    wei_set = Double.parseDouble(wei_s);
+
+                    user.setNow_weight(wei_set);
                 }
                 if (!hei_s.equals("")) {
                     hei_set = Integer.parseInt(hei_s);
                     user.setHeight(hei_set);
                 }
                 if (!goal_s.equals("")) {
-                    goal_set = Integer.parseInt(goal_s);
+                    goal_set = Double.parseDouble(goal_s);
                     user.setGoal_weight(goal_set);
                 }
                 if (!sign_set.equals("")) user.setSignature(sign_set);
@@ -97,7 +98,7 @@ public class mine_set extends TakePhotoActivity {
     private void initSet() {
         sign = user.getSignature();
         nam = user.getName();
-        wei = user.getWeight();
+        wei = user.getNow_weight();
         hei = user.getHeight();
         imgpath = user.getAvatar_path();
         goal = user.getGoal_weight();

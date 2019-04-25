@@ -27,6 +27,7 @@ import com.example.momomo.myapplication.sports_activity.SportActivity;
 import com.example.momomo.myapplication.mine_activity.mine;
 import com.example.momomo.myapplication.note_activity.note;
 import com.example.momomo.myapplication.utils.saveVarible;
+import com.github.lzyzsd.circleprogress.ArcProgress;
 
 import org.litepal.LitePal;
 
@@ -51,6 +52,15 @@ public class home extends BaseActivity {
     private int step;
     private String time;
 
+    private int age;
+    private String sex;
+    private double weight;
+    private  int height;
+    private double bmr;
+    private double origin_weight ,goal_weight;
+
+    private ArcProgress arcProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,7 @@ public class home extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(home.this, SportActivity.class);
+                intent.putExtra("BMR",bmr);
                 startActivity(intent);
             }
         });
@@ -130,11 +141,30 @@ public class home extends BaseActivity {
         l3 = (LinearLayout) findViewById(R.id.tab3);
         l4 = (LinearLayout) findViewById(R.id.tab4);
         l5=(LinearLayout) findViewById(R.id.tab5);
+        arcProgress=(ArcProgress) findViewById(R.id.arc_progress);
 
         final saveVarible app = (saveVarible) getApplication();
         int userId = app.getUserId();
         getTime();
         user = LitePal.find(User.class, userId);
+
+
+        //计算用户的BMR
+        age=user.getAge();
+        sex=user.getSex();
+        height=user.getHeight();
+        weight=user.getNow_weight();
+        goal_weight=user.getGoal_weight();
+        origin_weight=user.getWeight();
+        if(sex.equals("男")){
+            bmr=(13.7*weight)+(5.0*height)-(6.8*age)+66;
+        }else{
+            bmr=(9.6*weight)+(1.8*height)-(4.7*age)+655;
+        }
+
+        int jindu;
+        jindu=(int)((origin_weight-weight)/(origin_weight-goal_weight)*100);
+        arcProgress.setProgress(jindu);
         username = user.getName();
         List<foodcal> foodDataList = new ArrayList<>();
         foodDataList = LitePal.where("user=? and time=?", username,time).find(foodcal.class);
@@ -152,7 +182,7 @@ public class home extends BaseActivity {
         }
         sizes[0] = user.getPunch();
         sizes[1] = (int) cal;
-        sizes[2] = user.getWeight();
+        sizes[2] = (int)weight;
         sizes[3] = step;
 
         for (int i = 0; i < 4; i++) {

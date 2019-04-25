@@ -6,14 +6,32 @@ public class User extends LitePalSupport {
     private String name;
     private String password;
     private int height;
-    private int weight;
-    private int goal_weight;
+    private double weight;
+    private double goal_weight;
     private String signature;
     private int punch;
     private int id;
     private String avatar_path;
     private int likes;
     private String sex;
+    private int age;
+    private double now_weight;
+
+    public double getNow_weight() {
+        return now_weight;
+    }
+
+    public void setNow_weight(double now_weight) {
+        this.now_weight = now_weight;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public String getSex() {
         return sex;
@@ -31,11 +49,11 @@ public class User extends LitePalSupport {
         this.likes = likes;
     }
 
-    public int getGoal_weight() {
+    public double getGoal_weight() {
         return goal_weight;
     }
 
-    public void setGoal_weight(int goal_weight) {
+    public void setGoal_weight(double goal_weight) {
         this.goal_weight = goal_weight;
     }
 
@@ -79,7 +97,7 @@ public class User extends LitePalSupport {
         return punch;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -99,7 +117,7 @@ public class User extends LitePalSupport {
         this.signature = signature;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 }

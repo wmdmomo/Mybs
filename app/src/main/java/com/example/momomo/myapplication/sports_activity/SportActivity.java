@@ -48,6 +48,7 @@ public final class SportActivity extends AppCompatActivity {
     private FABProgressCircle mFabCircle;
     private Toolbar mtoolbar;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
+    private double bmr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,9 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.addHandler(mHeartRateTransaction);
         mMessenger.addHandler(mStepTransaction);
         mMessenger.addHandler(mBatteryTransaction);
+        Intent intent=getIntent();
+        bmr=intent.getDoubleExtra("BMR",0);
+        Log.i("mmmm","拿到bmr的值"+bmr);
         initToolBar();
         initBle();
         mStateUpdateRequest.request();

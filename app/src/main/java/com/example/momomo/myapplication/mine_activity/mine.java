@@ -24,10 +24,11 @@ public class mine extends BaseActivity {
     private LinearLayout linearLayout;
     private User user;
     private int userId;
-    private LinearLayout set_punch, set_mine, set_rank, set_us,set_back;
+    private LinearLayout set_punch, set_mine, set_rank, set_us;
     private TextView my_name, my_weight, my_height, my_goal;
     private String name, imgpath;
-    private int weight, height, goal;
+    private int  height;
+    private double weight,goal;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
 
     @Override
@@ -66,13 +67,6 @@ public class mine extends BaseActivity {
                 startActivity(intent);
             }
         });
-        set_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mine.this, login.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initview() {
@@ -82,7 +76,6 @@ public class mine extends BaseActivity {
         set_rank = (LinearLayout)findViewById(R.id.set_rank);
         set_us = (LinearLayout) findViewById(R.id.set_about);
         set_punch = (LinearLayout) findViewById(R.id.set_punch);
-        set_back = (LinearLayout)findViewById(R.id.set_back);
         my_name = (TextView) findViewById(R.id.avatar_name);
         my_weight = (TextView) findViewById(R.id.my_weight);
         my_height = (TextView) findViewById(R.id.my_height);
@@ -101,7 +94,7 @@ public class mine extends BaseActivity {
     private void initEdit() {
         name = user.getName();
         height = user.getHeight();
-        weight = user.getWeight();
+        weight = user.getNow_weight();
         goal = user.getGoal_weight();
         imgpath = user.getAvatar_path();
     }

@@ -42,9 +42,10 @@
             android:layout_height="wrap_content"
             android:text="取啥名"/>
         <TextView
+            android:fontFamily="sans-serif-condensed-light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="拥有一个更健康的生活"/>
+            android:text="让你拥有一个更轻盈的生活"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

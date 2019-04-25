@@ -45,9 +45,9 @@ public class login_after extends TakePhotoActivity {
     private User user;
     private String iconPath = "";
 
-    private EditText weight,height;
-    private String wei_s,hei_s,sex;
-    private int wei_set,hei_set;
+    private EditText weight,height,age;
+    private String wei_s,hei_s,sex,age_s;
+    private int wei_set,hei_set,age_set;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +87,7 @@ public class login_after extends TakePhotoActivity {
             public void onClick(View v) {
                 wei_s = weight.getText().toString();
                 hei_s = height.getText().toString();
+                age_s=age.getText().toString();
                 if (!wei_s.equals("")) {
                     wei_set = Integer.parseInt(wei_s);
                     user.setWeight(wei_set);
@@ -94,6 +95,10 @@ public class login_after extends TakePhotoActivity {
                 if (!hei_s.equals("")) {
                     hei_set = Integer.parseInt(hei_s);
                     user.setHeight(hei_set);
+                }
+                if (!age_s.equals("")) {
+                    age_set = Integer.parseInt(age_s);
+                    user.setAge(age_set);
                 }
                 user.setSex(sex);
                 if (!iconPath.equals("")) user.setAvatar_path(iconPath);
@@ -137,6 +142,7 @@ public class login_after extends TakePhotoActivity {
         xingbie.add("女");
         weight=(EditText)findViewById(R.id.full_weight);
         height=(EditText)findViewById(R.id.full_height);
+        age=(EditText)findViewById(R.id.full_age);
         final saveVarible app = (saveVarible) getApplication();
         userId = app.getUserId();
         user = LitePal.find(User.class, userId);

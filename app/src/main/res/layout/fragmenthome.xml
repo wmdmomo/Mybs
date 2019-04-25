@@ -26,7 +26,7 @@
                 android:id="@+id/arc_progress"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                custom:arc_bottom_text="推荐消耗卡路里"
+                custom:arc_bottom_text="减肥目标已完成"
                 custom:arc_finished_color="#83FFFFFF"
                 custom:arc_progress="55"
                 custom:arc_stroke_width="10dp"

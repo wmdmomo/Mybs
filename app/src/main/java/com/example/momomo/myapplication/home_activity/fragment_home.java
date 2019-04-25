@@ -66,7 +66,7 @@ public class fragment_home extends AppCompatActivity {
         }
         sizes[0] = user.getPunch();
         sizes[1] = (int) cal;
-        sizes[2] = user.getWeight();
+        sizes[2] = (int)user.getWeight();
         sizes[3] = 0;
 
         for (int i = 0; i < 4; i++) {
