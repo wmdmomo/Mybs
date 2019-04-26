@@ -39,16 +39,16 @@ public abstract class DemoBase extends AppCompatActivity implements ActivityComp
 
     private static final int PERMISSION_STORAGE = 0;
 
-    protected Typeface tfRegular;
-    protected Typeface tfLight;
+//    protected Typeface tfRegular;
+//    protected Typeface tfLight;
     protected Typeface tfItalic;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        tfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
-        tfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
+//        tfRegular = Typeface.createFromAsset(getAssets(), "OpenSans-Regular.ttf");
+//        tfLight = Typeface.createFromAsset(getAssets(), "OpenSans-Light.ttf");
         tfItalic = Typeface.createFromAsset(getAssets(), "OpenSans-Italic.ttf");
     }
 

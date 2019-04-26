@@ -1,9 +1,10 @@
 package com.example.momomo.myapplication.chart_activity;
 
+import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -29,57 +30,74 @@ import java.util.List;
 
 public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListener {
     private String username;
-    private List<stepData> stepDataList=new ArrayList<>();
+    private List<stepData> stepDataList = new ArrayList<>();
     private SeekBar seekBarX;
     private BarChart chart;
     private TextView tvX;
     private XAxis xAxis;
-    List<String> names=new ArrayList<>();
+    List<String> names = new ArrayList<>();
+    private int step, a_step = 0;
+
+    private double bmr, cal;
+    private TextView Bmr, Cal, Avearge_step, Today_step,fenxi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_chart_test);
+
+        Intent intent = getIntent();
+        bmr = intent.getDoubleExtra("BMR", 0);
+        cal = intent.getDoubleExtra("CAL", 0);
+        step = intent.getIntExtra("STEP", 0);
         initdata();
-//        LineChart lineChart=(LineChart)findViewById(R.id.line1);
-//        lineChart.setDrawBorders(true);
-//        Description description=new Description();
-//        description.setText("步数统计图");
-//        lineChart.setDescription(description);
-//        List<Entry> lineList=new ArrayList<>();
-//        List<String> names=new ArrayList<>();
-//        for(int i=0;i<stepDataList.size();i++){
-//            lineList.add(new Entry(i,stepDataList.get(i).getStep()));
-//            names.add(stepDataList.get(i).getDate());
-//        }
-//        XAxis xAxis=lineChart.getXAxis();
-//        xAxis.setTextColor(Color.parseColor("#333333"));
-//        xAxis.setTextSize(11f);
-//        xAxis.setAxisMinimum(0f);
-//        xAxis.setDrawAxisLine(true);//是否绘制轴线
-//        xAxis.setDrawGridLines(false);//设置x轴上每个点对应的线
-//        xAxis.setDrawLabels(true);//绘制标签  指x轴上的对应数值
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置x轴的显示位置
-//        xAxis.setGranularity(1f);//禁止放大后x轴标签重绘
-//        xAxis.setValueFormatter(new IndexAxisValueFormatter(names));
-//
-//        LineDataSet lineDataSet=new LineDataSet(lineList,"步数数据");
-//        LineData data=new LineData(lineDataSet);
-//        lineChart.setData(data);
     }
-    private void initdata(){
+
+    private void initdata() {
+        Bmr = (TextView) findViewById(R.id.bmr);
+        Cal = (TextView) findViewById(R.id.cal);
+        Avearge_step = (TextView) findViewById(R.id.average_step);
+        Today_step = (TextView) findViewById(R.id.today_step);
+        fenxi=(TextView) findViewById(R.id.today_fenxi);
+
+
         final saveVarible app = (saveVarible) getApplication();
         int userId = app.getUserId();
         User user = LitePal.find(User.class, userId);
-        username=user.getName();
-        stepDataList = LitePal.where("user=?",username).find(stepData.class);
+        username = user.getName();
+
+        fenxi.setTypeface(tfItalic);
+        Bmr.setTypeface(tfItalic);
+        Bmr.setText(String.valueOf(bmr));
+        Cal.setTypeface(tfItalic);
+        if (cal > 0) {
+            Cal.setText("今日你的食物摄入卡路里为" + String.valueOf(cal));
+        } else {
+            Cal.setText("今日你还未摄入食物");
+        }
+        Today_step.setTypeface(tfItalic);
+        if (step > 0) {
+            Today_step.setText("今日你的步数为" + String.valueOf(step));
+        } else {
+            Today_step.setText("今日你还未产生步数");
+        }
+        double consumption=0;
+        consumption=bmr+step*0.04;
+        if(consumption>=cal){
+            fenxi.setText("您今天运动状况良好，请继续坚持~");
+        }else{
+            int suggest=(int)((cal-consumption)/0.04);
+            fenxi.setText("您今天运动状况还需继续努力，建议再走"+suggest+"步");
+        }
+
+        stepDataList = LitePal.where("user=?", username).find(stepData.class);
         tvX = findViewById(R.id.tvXMax);
 
 
         seekBarX = findViewById(R.id.seekBar1);
         seekBarX.setOnSeekBarChangeListener(this);
-
 
 
         chart = findViewById(R.id.chart1);
@@ -99,9 +117,9 @@ public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListe
 
 
         xAxis = chart.getXAxis();
-        YAxis left=chart.getAxisLeft();
+        YAxis left = chart.getAxisLeft();
         left.setTypeface(tfItalic);
-        YAxis right=chart.getAxisRight();
+        YAxis right = chart.getAxisRight();
         right.setTypeface(tfItalic);
         xAxis.setTypeface(tfItalic);
         xAxis.setTextColor(Color.parseColor("#333333"));
@@ -112,7 +130,6 @@ public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListe
 //        xAxis.setDrawLabels(true);//绘制标签  指x轴上的对应数值
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置x轴的显示位置
         xAxis.setGranularity(1f);//禁止放大后x轴标签重绘
-
 
 
         chart.getAxisLeft().setDrawGridLines(false);
@@ -126,20 +143,27 @@ public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListe
 
         chart.getLegend().setEnabled(false);
     }
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        tvX.setText("显示"+String.valueOf(seekBarX.getProgress())+"天的步数");
+        tvX.setText("显示" + String.valueOf(seekBarX.getProgress()) + "天的步数");
+        tvX.setTypeface(tfItalic);
 
         ArrayList<BarEntry> values = new ArrayList<>();
 
-//        List<Entry> lineList=new ArrayList<>();
-
-        int min=Math.min(seekBarX.getProgress(),stepDataList.size());
-        for(int i=0;i<min;i++){
-            values.add(new BarEntry(i,stepDataList.get(i).getStep()));
+        a_step=0;
+        int min = Math.min(seekBarX.getProgress(), stepDataList.size());
+        for (int i = 0; i < min; i++) {
+            a_step += stepDataList.get(i).getStep();
+            values.add(new BarEntry(i, stepDataList.get(i).getStep()));
             names.add(stepDataList.get(i).getDate());
         }
+        if (min > 0) {
+            a_step /= min;
+        }
+        Avearge_step.setTypeface(tfItalic);
+        Avearge_step.setText(String.valueOf(a_step));
         xAxis.setValueFormatter(new IndexAxisValueFormatter(names));
 
 
@@ -168,15 +192,18 @@ public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListe
 
         chart.invalidate();
     }
+
     @Override
     protected void saveToGallery() {
         saveToGallery(chart, "AnotherBarActivity");
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
 
 }

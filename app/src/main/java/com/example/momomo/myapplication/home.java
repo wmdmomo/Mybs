@@ -80,6 +80,8 @@ public class home extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(home.this, SportActivity.class);
                 intent.putExtra("BMR",bmr);
+                intent.putExtra("CAL",cal);
+                intent.putExtra("STEP",step);
                 startActivity(intent);
             }
         });
@@ -147,15 +149,15 @@ public class home extends BaseActivity {
         int userId = app.getUserId();
         getTime();
         user = LitePal.find(User.class, userId);
-
+        goal_weight=user.getGoal_weight();
+        origin_weight=user.getWeight();
 
         //计算用户的BMR
         age=user.getAge();
         sex=user.getSex();
         height=user.getHeight();
         weight=user.getNow_weight();
-        goal_weight=user.getGoal_weight();
-        origin_weight=user.getWeight();
+
         if(sex.equals("男")){
             bmr=(13.7*weight)+(5.0*height)-(6.8*age)+66;
         }else{

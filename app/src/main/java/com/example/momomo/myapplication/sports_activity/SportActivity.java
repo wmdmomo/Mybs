@@ -48,7 +48,8 @@ public final class SportActivity extends AppCompatActivity {
     private FABProgressCircle mFabCircle;
     private Toolbar mtoolbar;
     private de.hdodenhof.circleimageview.CircleImageView imageView;
-    private double bmr;
+    private double bmr,cal;
+    private int step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,8 @@ public final class SportActivity extends AppCompatActivity {
         mMessenger.addHandler(mBatteryTransaction);
         Intent intent=getIntent();
         bmr=intent.getDoubleExtra("BMR",0);
-        Log.i("mmmm","拿到bmr的值"+bmr);
+        cal=intent.getDoubleExtra("CAL",0);
+        step=intent.getIntExtra("STEP",0);
         initToolBar();
         initBle();
         mStateUpdateRequest.request();
@@ -113,7 +115,12 @@ public final class SportActivity extends AppCompatActivity {
 //                        break;
 //                    }
                     case R.id.export_data_step: {
-                        menuItem.setIntent(new Intent(SportActivity.this, step_chart.class));
+                        Intent intent=new Intent(SportActivity.this,step_chart.class);
+                        intent.putExtra("BMR",bmr);
+                        intent.putExtra("CAL",cal);
+                        intent.putExtra("STEP",step);
+                        startActivity(intent);
+//                        menuItem.setIntent(new Intent(SportActivity.this, step_chart.class));
                         break;
                     }
                 }

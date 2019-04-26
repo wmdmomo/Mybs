@@ -5,19 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".chart_activity.heart_chart">
+    tools:context=".chart_activity.step_chart">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart1"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        />
+        android:layout_height="280dp" />
 
 
     <LinearLayout
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <SeekBar
@@ -30,13 +29,133 @@
             android:max="10" />
 
         <TextView
-            android:layout_weight="2"
             android:id="@+id/tvXMax"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
 
             android:text="显示3天的步数"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_shujufenxi"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="运动建议：" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_ren"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您的基础代谢率为"
+                />
+            <TextView
+                android:id="@+id/bmr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2344"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_ren"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您今天的食物摄入卡路里为2344"
+                />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_rili"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您的每天平均步数为"/>
+            <TextView
+                android:id="@+id/average_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1111"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_shijian"
+                android:layout_marginRight="10dp"/>
+            <TextView
+                android:id="@+id/today_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您今天的步数为"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/today_fenxi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="您今天运动情况良好，请继续坚持~"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
