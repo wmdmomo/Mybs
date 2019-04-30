@@ -15,8 +15,10 @@ import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.Manager.myItemTouchHelperCallBack;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.Notes;
+import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.mine_activity.mine;
+import com.example.momomo.myapplication.utils.saveVarible;
 
 import org.litepal.LitePal;
 
@@ -28,6 +30,7 @@ public class note extends BaseActivity {
     private noteAdapter noteAdapter;
     private Button addnote;
     private LinearLayout enternote;
+    private String username;
 //    private Notes notes;
 
     @Override
@@ -42,6 +45,7 @@ public class note extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(note.this, addnote.class);
+                intent.putExtra("user",username);
                 startActivity(intent);
             }
         });
@@ -56,7 +60,11 @@ public class note extends BaseActivity {
     }
 
     private void initdata() {
-        notesList = LitePal.findAll(Notes.class);
+        final saveVarible app = (saveVarible) getApplication();
+        int userId = app.getUserId();
+        User user=LitePal.find(User.class, userId);
+        username=user.getName();
+        notesList = LitePal.where("username=?", username).find(Notes.class);
         if (notesList != null) {
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.noterv);
             GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
@@ -72,6 +80,7 @@ public class note extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent=new Intent(note.this, home.class);
+
         startActivity(intent);
     }
 }

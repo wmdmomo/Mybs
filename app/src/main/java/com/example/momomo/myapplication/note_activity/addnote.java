@@ -30,10 +30,13 @@ public class addnote extends BaseActivity {
     private PercentRelativeLayout noteBG;
     private String title;
     private String content;
+    private String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addnote);
+        Intent intent=getIntent();
+        username=intent.getStringExtra("user");
         noteTime=(TextView) findViewById(R.id.noteTime);
         noteDone=(LinearLayout) findViewById(R.id.noteDone);
         noteBG=(PercentRelativeLayout) findViewById(R.id.addnotebg);
@@ -60,6 +63,7 @@ public class addnote extends BaseActivity {
         title=noteTitle.getText().toString();
         content=noteContent.getText().toString();
         Notes notes=new Notes();
+        notes.setUsername(username);
         notes.setTime(nowtime);
         notes.setTitle(title);
         notes.setContent(content);

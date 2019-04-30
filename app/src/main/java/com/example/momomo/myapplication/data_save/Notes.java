@@ -8,21 +8,36 @@ public class Notes extends LitePalSupport implements Serializable {
     private String time;
     private String title;
     private String content;
+    private String username;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     public void setTime(String time) {
         this.time = time;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
+
     public String getTime() {
         return time;
     }
+
     public String getContent() {
         return content;
     }
+
     public String getTitle() {
         return title;
     }

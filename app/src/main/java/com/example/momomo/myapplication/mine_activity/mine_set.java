@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.home;
@@ -26,7 +27,7 @@ import org.litepal.LitePal;
 
 import java.io.File;
 
-public class mine_set extends TakePhotoActivity {
+public class mine_set extends BaseActivity {
     private EditText signature, weight, height, goal_weight;
     private TextView name;
     private String sign, sign_set, nam, wei_s, hei_s, imgpath, goal_s;

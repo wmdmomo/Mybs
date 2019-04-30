@@ -5,8 +5,9 @@ import android.os.Bundle;
 
 import com.annimon.stream.function.ThrowableIntSupplier;
 import com.example.momomo.myapplication.R;
+import com.jph.takephoto.app.TakePhotoActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends TakePhotoActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
