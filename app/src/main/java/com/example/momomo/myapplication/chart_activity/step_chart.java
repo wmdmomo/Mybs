@@ -84,7 +84,7 @@ public class step_chart extends DemoBase implements SeekBar.OnSeekBarChangeListe
             Today_step.setText("今日你还未产生步数");
         }
         double consumption=0;
-        consumption=bmr+step*0.04;
+        consumption=bmr+step*0.04+cal*0.1;
         if(consumption>=cal){
             fenxi.setText("您今天运动状况良好，请继续坚持~");
         }else{

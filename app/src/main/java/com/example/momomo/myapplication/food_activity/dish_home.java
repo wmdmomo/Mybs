@@ -106,14 +106,13 @@ public class dish_home extends TakePhotoActivity {
                             suc_flag = false;
                         }
 
-//                        接口返回了5个数据 供用户选择 单位是KJ/100G 这里转成大卡了
+//                        接口返回了5个数据 供用户选择 单位是KJ/100G 这里转成大卡了 貌似不用转
                         else {
                             suc_flag = true;
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject object = array.getJSONObject(i);
                                 String food_name = object.getString("name");
                                 double calorie = object.getDouble("calorie");
-                                calorie*=0.239;
                                 foods[i] = food_name;
                                 selectfoods selectfoods = new selectfoods();
                                 selectfoods.setCal(calorie);
