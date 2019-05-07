@@ -2,6 +2,7 @@ package com.example.momomo.myapplication.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,13 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
         View view = layoutInflater.inflate(R.layout.rank_item, viewGroup, false);
         return new rankitemAdapter.ViewHolder(view);
     }
-
+    private int thisposition=-1;
+    public int getThisposition(){
+        return thisposition;
+    }
+    public void setThisposition(int thisposition){
+        this.thisposition=thisposition;
+    }
     public interface OnRankClickListener {
         void onClick(int position);
     }
@@ -70,6 +77,11 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
         viewHolder.rank_name.setText(rank.getName());
         viewHolder.rank_start.setText(String.valueOf(rank.getPunch()));
         viewHolder.rank_likes.setText(String.valueOf(rank.getLikes()));
+        if(thisposition==position){
+            viewHolder.rank_attention.setImageResource(R.drawable.ic_aixinfill);
+        }else{
+            viewHolder.rank_attention.setImageResource(R.drawable.ic_aixin2);
+        }
         final String imgpath = rank.getAvatar_path();
         if (!imgpath.equals(" ")) Glide.with(context).load(imgpath).into(viewHolder.imageView);
         else {
@@ -82,7 +94,6 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
             viewHolder.rank_attention.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    viewHolder.rank_attention.setImageResource(R.drawable.ic_aixinfill);
                     onRankClickListener.onClick(position);
                     rank.setLikes(rank.getLikes()+1);
                     rank.save();

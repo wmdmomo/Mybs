@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.selectfoods;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class fooddetailAdapter extends RecyclerView.Adapter<fooddetailAdapter.ViewHolder> {
@@ -53,7 +54,9 @@ public class fooddetailAdapter extends RecyclerView.Adapter<fooddetailAdapter.Vi
         for (selectfoods selectfoods : selectfoodsList) {
             cal += selectfoods.getCal();
         }
-        return cal;
+        BigDecimal bigDecimal=new BigDecimal(cal);
+        double total1=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return total1;
     }
 
     public interface OnfoodClickListener {

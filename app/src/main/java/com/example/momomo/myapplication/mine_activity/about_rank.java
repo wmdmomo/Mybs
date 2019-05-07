@@ -45,6 +45,7 @@ public class about_rank extends AppCompatActivity {
         rankitemAdapter.setOnRankClickListener(new rankitemAdapter.OnRankClickListener() {
             @Override
             public void onClick(int position) {
+                rankitemAdapter.setThisposition(position);
                 rankitemAdapter.notifyDataSetChanged();
             }
         });

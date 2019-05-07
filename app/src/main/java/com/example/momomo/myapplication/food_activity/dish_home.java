@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +18,6 @@ import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.foodcal;
 import com.example.momomo.myapplication.data_save.selectfoods;
-import com.example.momomo.myapplication.data_save.stepData;
 import com.example.momomo.myapplication.utils.LocalTime;
 import com.example.momomo.myapplication.utils.saveVarible;
 import com.jph.takephoto.app.TakePhoto;
@@ -34,9 +32,8 @@ import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class dish_home extends TakePhotoActivity {
@@ -209,7 +206,9 @@ public class dish_home extends TakePhotoActivity {
         for (selectfoods selectfoods : surefoodsList) {
             total += selectfoods.getCal();
         }
-        return total;
+        BigDecimal bigDecimal=new BigDecimal(total);
+        double total1=bigDecimal.setScale(3,BigDecimal.ROUND_HALF_UP).doubleValue();
+        return total1;
     }
 
     private class foodclick implements DialogInterface.OnClickListener {
