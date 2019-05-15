@@ -57,47 +57,52 @@ public class tologin extends BaseActivity {
             public void onClick(View v) {
                 username = user.getText().toString();
                 pass = pas.getText().toString();
-                List<User> userList = LitePal.findAll(User.class);
-                for (User users : userList) {
-                    if (users.getName().equals(username) && users.getPassword().equals(pass)) {
-                        flag = true;
-                        userId = users.getId();
-                        app.setUserId(userId);
-                        break;
-                    }
+                if(username.equals("")||pass.equals("")){
+                    Toast.makeText(tologin.this, "信息不完整", Toast.LENGTH_SHORT).show();
                 }
-                if (flag) {
-                    getTime();
-                    List<punchday> punchdayList = LitePal.findAll(punchday.class);
-                    if (punchdayList != null) {
-                        for (punchday punchdays : punchdayList) {
-                            if (punchdays.getUser() != null & punchdays.getTime() != null) {
-                                if (punchdays.getUser().equals(username) && punchdays.getTime().equals(time)) {
-                                    Flag = true;
-                                    punchId = punchdays.getId();
-                                    app.setPunchId(punchId);
-                                    break;
+                else {
+                    List<User> userList = LitePal.findAll(User.class);
+                    for (User users : userList) {
+                        if (users.getName().equals(username) && users.getPassword().equals(pass)) {
+                            flag = true;
+                            userId = users.getId();
+                            app.setUserId(userId);
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        getTime();
+                        List<punchday> punchdayList = LitePal.findAll(punchday.class);
+                        if (punchdayList != null) {
+                            for (punchday punchdays : punchdayList) {
+                                if (punchdays.getUser() != null & punchdays.getTime() != null) {
+                                    if (punchdays.getUser().equals(username) && punchdays.getTime().equals(time)) {
+                                        Flag = true;
+                                        punchId = punchdays.getId();
+                                        app.setPunchId(punchId);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (Flag == false) {
-                        punchday = new punchday();
-                        punchday.setUser(username);
-                        punchday.setFlag(false);
-                        punchday.setTime(time);
-                        punchday.save();
-                        punchId = punchday.getId();
-                        app.setPunchId(punchId);
-                    }
-                    if (isFirst == 1) {
-                        intentlogin = new Intent(tologin.this, login_after.class);
+                        if (Flag == false) {
+                            punchday = new punchday();
+                            punchday.setUser(username);
+                            punchday.setFlag(false);
+                            punchday.setTime(time);
+                            punchday.save();
+                            punchId = punchday.getId();
+                            app.setPunchId(punchId);
+                        }
+                        if (isFirst == 1) {
+                            intentlogin = new Intent(tologin.this, login_after.class);
+                        } else {
+                            intentlogin = new Intent(tologin.this, home.class);
+                        }
+                        startActivity(intentlogin);
                     } else {
-                        intentlogin = new Intent(tologin.this, home.class);
+                        Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();
                     }
-                    startActivity(intentlogin);
-                } else {
-                    Toast.makeText(tologin.this, "用户名或者密码错误", Toast.LENGTH_SHORT).show();
                 }
             }
         });

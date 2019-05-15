@@ -17,6 +17,7 @@ public class User extends LitePalSupport {
     private int age;
     private double now_weight;
 
+
     public double getNow_weight() {
         return now_weight;
     }

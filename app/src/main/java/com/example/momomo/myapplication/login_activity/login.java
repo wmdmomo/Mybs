@@ -55,8 +55,8 @@ public class login extends BaseActivity {
                 if (is_have == 1) {
                     return;
                 }
-                if (pas1.equals("") || pas2.equals("")) {
-                    Toast.makeText(login.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                if (pas1.equals("") || pas2.equals("")||username.equals("")) {
+                    Toast.makeText(login.this, "信息不完整", Toast.LENGTH_SHORT).show();
                 } else if (pas1.equals(pas2)) {
                     User person = new User();
                     person.setName(username);

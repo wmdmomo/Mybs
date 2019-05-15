@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.momomo.myapplication.Manager.BaseActivity;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.Notes;
+import com.example.momomo.myapplication.login_activity.tologin;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,13 +64,18 @@ public class addnote extends BaseActivity {
         noteContent=(EditText)findViewById(R.id.noteContent);
         title=noteTitle.getText().toString();
         content=noteContent.getText().toString();
-        Notes notes=new Notes();
-        notes.setUsername(username);
-        notes.setTime(nowtime);
-        notes.setTitle(title);
-        notes.setContent(content);
-        notes.save();
-        Intent intent=new Intent(addnote.this,note.class);
-        startActivity(intent);
+        if(title.equals("")||content.equals("")){
+            Toast.makeText(addnote.this, "计划不完整", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Notes notes = new Notes();
+            notes.setUsername(username);
+            notes.setTime(nowtime);
+            notes.setTitle(title);
+            notes.setContent(content);
+            notes.save();
+            Intent intent = new Intent(addnote.this, note.class);
+            startActivity(intent);
+        }
     }
 }

@@ -26,7 +26,7 @@ public class about_rank extends AppCompatActivity {
     List<User> userList = new ArrayList<>();
     private int userId;
     private User user;
-
+    private int[] flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +40,19 @@ public class about_rank extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
         userList = LitePal.order("punch desc").find(User.class);
+        flag=new int[userList.size()];
+        for(int i=0;i<userList.size();i++){
+            flag[i]=0;
+        }
         rankitemAdapter = new rankitemAdapter(this, userList);
         recyclerView.setAdapter(rankitemAdapter);
         rankitemAdapter.setOnRankClickListener(new rankitemAdapter.OnRankClickListener() {
             @Override
             public void onClick(int position) {
+                if(flag[position]==0) {
+                    flag[position]=1;
+                }else flag[position]=0;
+                rankitemAdapter.setFlag(flag);
                 rankitemAdapter.setThisposition(position);
                 rankitemAdapter.notifyDataSetChanged();
             }

@@ -20,10 +20,15 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
     private LayoutInflater layoutInflater;
     private List<User> rankList;
     private rankitemAdapter.OnRankClickListener onRankClickListener;
+    private int flag[];
 
     public rankitemAdapter(Context context, List<User> rankList) {
         this.rankList = rankList;
         this.context = context;
+        this.flag=new int[rankList.size()];
+        for(int i=0;i<rankList.size();i++){
+            this.flag[i]=0;
+        }
         layoutInflater = LayoutInflater.from(context);
 
     }
@@ -55,8 +60,8 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
         return new rankitemAdapter.ViewHolder(view);
     }
     private int thisposition=-1;
-    public int getThisposition(){
-        return thisposition;
+    public void setFlag(int[] flag){
+        this.flag=flag;
     }
     public void setThisposition(int thisposition){
         this.thisposition=thisposition;
@@ -77,11 +82,11 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
         viewHolder.rank_name.setText(rank.getName());
         viewHolder.rank_start.setText(String.valueOf(rank.getPunch()));
         viewHolder.rank_likes.setText(String.valueOf(rank.getLikes()));
-        if(thisposition==position){
-            viewHolder.rank_attention.setImageResource(R.drawable.ic_aixinfill);
-        }else{
-            viewHolder.rank_attention.setImageResource(R.drawable.ic_aixin2);
-        }
+        if(flag[position]==1){
+                viewHolder.rank_attention.setImageResource(R.drawable.ic_aixinfill);
+            }else{
+                viewHolder.rank_attention.setImageResource(R.drawable.ic_aixin2);
+            }
         final String imgpath = rank.getAvatar_path();
         if (!imgpath.equals(" ")) Glide.with(context).load(imgpath).into(viewHolder.imageView);
         else {
@@ -95,7 +100,9 @@ public class rankitemAdapter extends RecyclerView.Adapter<rankitemAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     onRankClickListener.onClick(position);
-                    rank.setLikes(rank.getLikes()+1);
+                    if(flag[position]==1)
+                    {rank.setLikes(rank.getLikes()+1);}
+                    else  {rank.setLikes(rank.getLikes()-1);}
                     rank.save();
                 }
             });
