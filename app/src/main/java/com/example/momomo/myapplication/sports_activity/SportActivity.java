@@ -24,6 +24,7 @@ import com.example.momomo.myapplication.config.Constants;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.databinding.ActivitySportBinding;
 import com.example.momomo.myapplication.hardware.BandState;
+import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.services.CommService;
 import com.example.momomo.myapplication.utils.BytesUtil;
 import com.example.momomo.myapplication.utils.saveVarible;
@@ -462,5 +463,11 @@ public final class SportActivity extends AppCompatActivity {
         public abstract void start();
 
         public abstract void stop();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(SportActivity.this, home.class);
+        startActivity(intent);
     }
 }

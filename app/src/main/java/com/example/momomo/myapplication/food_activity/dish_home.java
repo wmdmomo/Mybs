@@ -2,22 +2,26 @@ package com.example.momomo.myapplication.food_activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.momomo.myapplication.Adapter.fooddayAdapter;
+import com.example.momomo.myapplication.Manager.ActivityCollector;
 import com.example.momomo.myapplication.Manager.Dish;
 import com.example.momomo.myapplication.Manager.Fooddatas;
 import com.example.momomo.myapplication.R;
 import com.example.momomo.myapplication.data_save.User;
 import com.example.momomo.myapplication.data_save.foodcal;
 import com.example.momomo.myapplication.data_save.selectfoods;
+import com.example.momomo.myapplication.home;
 import com.example.momomo.myapplication.utils.LocalTime;
 import com.example.momomo.myapplication.utils.saveVarible;
 import com.jph.takephoto.app.TakePhoto;
@@ -263,5 +267,11 @@ public class dish_home extends TakePhotoActivity {
                 fooddayAdapter.setCategoryBean(fooddatas);
             }
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(dish_home.this, home.class);
+        startActivity(intent);
     }
 }

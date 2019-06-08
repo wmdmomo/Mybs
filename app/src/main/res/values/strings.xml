@@ -1,6 +1,6 @@
 <resources>
 
-
+    <string name="app_name">健康APP</string>
     <string name="toast_not_support_ble">Your device doesn\'t support BLE!</string>
     <string name="toast_have_to_enable_bt">You have to enable Bluetooth!</string>
     <string name="toast_bt_enabled">Bluetooth enabled.</string>
